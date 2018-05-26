@@ -4,18 +4,23 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 // TODO Falta la relacion con el usuario registrante
 // TODO Falta la relacion con los fenotipos
 // TODO Falta el campo genotipo (como lo modelamos)
-// TODO Faltan las validaciones
 @Entity
 public class Patient {
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotEmpty
 	private String name;
-  private String surname;
-  private String dni;
+	@NotEmpty
+	private String surname;
+	@NotEmpty
+	private String dni;
+	@Email
   private String email;
 
 	private Patient() {

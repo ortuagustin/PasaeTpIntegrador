@@ -1,10 +1,17 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
 public class PatientDTO {
 	private Long id;
+	@NotEmpty
 	private String name;
-  private String surname;
-  private String dni;
+	@NotEmpty
+	private String surname;
+	@NotEmpty
+	private String dni;
+	@Email
   private String email;
 
 	public PatientDTO(Long id, String name, String surname, String dni, String email) {
