@@ -26,20 +26,20 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public PatientDTO findByNameAndSurname(String name, String surname) throws EntityNotFoundException {
-		final Patient Patient = this.getRepository().findByNameAndSurname(name, surname)
+		final Patient patient = this.getRepository().findByNameAndSurname(name, surname)
 				.orElseThrow(() -> new EntityNotFoundException(
 						MessageFormat.format("No Patient found with name {0} and surname {1}", name, surname)));
 
-		return this.getTransformer().toDTO(Patient);
+		return this.getTransformer().toDTO(patient);
 	}
 
 	@Override
 	public PatientDTO findByDNI(String dni) throws EntityNotFoundException {
-		final Patient Patient = this.getRepository().findByDni(dni)
+		final Patient patient = this.getRepository().findByDni(dni)
 				.orElseThrow(() -> new EntityNotFoundException(
 						MessageFormat.format("No Patient found with DNI {0}", dni)));
 
-		return this.getTransformer().toDTO(Patient);
+		return this.getTransformer().toDTO(patient);
 	}
 
 	@Override
@@ -48,15 +48,17 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public void update(PatientDTO Patient) {
-		this.getRepository().save(this.getTransformer().toEntity(Patient));
+	public PatientDTO update(PatientDTO Patient) {
+		Patient patient = this.getRepository().save(this.getTransformer().toEntity(Patient));
+
+		return this.getTransformer().toDTO(patient);
 	}
 
 	@Override
 	public PatientDTO create(PatientDTO PatientDTO) {
-		Patient Patient = this.getRepository().save(this.getTransformer().toEntity(PatientDTO));
+		Patient patient = this.getRepository().save(this.getTransformer().toEntity(PatientDTO));
 
-		return this.getTransformer().toDTO(Patient);
+		return this.getTransformer().toDTO(patient);
 	}
 
 	@Override

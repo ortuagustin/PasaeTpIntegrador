@@ -13,6 +13,6 @@ public interface PatientService {
 	Stream<PatientDTO> list();
 	PatientDTO create(PatientDTO Patient);
 	Integer count();
-	void update(PatientDTO Patient);
+	PatientDTO update(PatientDTO Patient);
 	void delete(Long id);
 }
