@@ -29,6 +29,10 @@ public class PatientDTO {
 		this.setSurname(surname);
 		this.setDni(dni);
 		this.setEmail(email);
+	}
+
+	private PatientDTO() {
+		super();
   }
 
 	/**
