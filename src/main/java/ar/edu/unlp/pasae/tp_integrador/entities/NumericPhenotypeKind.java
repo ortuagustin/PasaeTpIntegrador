@@ -17,7 +17,7 @@ public class NumericPhenotypeKind extends PhenotypeKind {
 	/**
 	 * @param value the value to set
 	 */
-	public void setValue(String value) {
+  public void setValue(String value) {
     this.value = Integer.parseInt(value);
   }
 }

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 // TODO modelar relacion OneToOne con PhenotypeKind
 @Entity
 public class Phenotype {
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotEmpty
 	private String name;
@@ -33,6 +33,7 @@ public class Phenotype {
 	private Phenotype() {
 		super();
   }
+
 	/**
 	 * @return the id
 	 */

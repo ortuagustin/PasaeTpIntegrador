@@ -47,7 +47,7 @@ public class Pathology {
 	 */
 	public void setId(Long id) {
 		this.id = id;
-  }
+  	}
 
 	/**
 	 * @param name the name to set
