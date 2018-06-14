@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 // TODO Falta el campo genotipo (como lo modelamos)
 @Entity
 public class Patient {
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotEmpty
 	private String name;
