@@ -38,13 +38,13 @@ public class CustomUser implements UserDetails {
 	
 	public CustomUser() {};
 	
-	public CustomUser(String username, String password, String email, String firstName, String lastName, List<Role> roles) {
+	public CustomUser(String username, String password, String email, String firstName, String lastName, List<Role> authorities) {
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.setAuthorities(roles);
+		this.setAuthorities(authorities);
 	}
 	
 	public String getUsername() {
