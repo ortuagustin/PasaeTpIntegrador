@@ -12,7 +12,11 @@ import ar.edu.unlp.pasae.tp_integrador.entities.RoleName;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	@Autowired AppAuthenticationProvider authProvider;
+	@Autowired
+	AppAuthenticationProvider authProvider;
+	
+	@Autowired
+	MySimpleUrlAuthenticationSuccessHandler myAuthenticationSuccessHandler;
 
 	@Autowired
 	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
@@ -31,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// Dejo las siguientes dos linea como ejemplo de la funcion "access()"        
 		//.antMatchers("/admin/**").access("hasRole('ADMIN')")
 		//.antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
-		.and().formLogin()
+		.and().formLogin().successHandler(myAuthenticationSuccessHandler)
 		.and().exceptionHandling().accessDeniedPage("/Access_Denied");
 
 	}

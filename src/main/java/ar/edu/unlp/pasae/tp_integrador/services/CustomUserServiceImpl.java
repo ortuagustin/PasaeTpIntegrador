@@ -26,7 +26,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		CustomUser user = this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario"));
+		CustomUser user = this.getUserRepository().findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario"));
 		return user;
 	}	
 

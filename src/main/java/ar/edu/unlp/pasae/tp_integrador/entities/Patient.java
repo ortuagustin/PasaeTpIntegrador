@@ -23,7 +23,7 @@ public class Patient {
 	@Email
   private String email;
 
-	private Patient() {
+	public Patient() {
 		super();
 	}
 

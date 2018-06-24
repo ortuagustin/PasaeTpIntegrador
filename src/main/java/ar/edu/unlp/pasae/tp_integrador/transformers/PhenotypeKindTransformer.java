@@ -10,11 +10,13 @@ import ar.edu.unlp.pasae.tp_integrador.entities.PhenotypeKind;
 public class PhenotypeKindTransformer implements Transformer<PhenotypeKind, PhenotypeKindDTO> {
 	@Override
 	public PhenotypeKind toEntity(PhenotypeKindDTO dto) {
-		return new PhenotypeKind(dto.getId(), dto.getName());
+		return null;
+//		return new PhenotypeKind(dto.getId(), dto.getName());
 	}
 
 	@Override
 	public PhenotypeKindDTO toDTO(PhenotypeKind entity) {
-		return new PhenotypeKindDTO(entity.getId(), entity.getName());
+		return null;
+//		return new PhenotypeKindDTO(entity.getId(), entity.getName());
 	}
 }

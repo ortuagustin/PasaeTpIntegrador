@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,7 @@ public class Phenotype {
 	@NotEmpty
 	private String name;
 	@NotNull
+	@OneToOne
 	private PhenotypeKind kind;
 
 	public Phenotype(Long id, String name, PhenotypeKind kind) {
@@ -30,9 +32,9 @@ public class Phenotype {
 		this.setKind(kind);
 	}
 
-	private Phenotype() {
+	public Phenotype() {
 		super();
-  }
+	}
 
 	/**
 	 * @return the id
@@ -53,26 +55,26 @@ public class Phenotype {
 	 */
 	public PhenotypeKind getKind() {
 		return kind;
-  }
+	}
 
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
-  }
+	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
-  }
+	}
 
 	/**
 	 * @param kind the kind to set
 	 */
 	public void setKind(PhenotypeKind kind) {
 		this.kind = kind;
-  }
+	}
 }

@@ -8,8 +8,9 @@ import javax.validation.constraints.NotEmpty;
 
 // TODO mapear jerarquia (numerico - lista de valores)
 @Entity
-public abstract class PhenotypeKind {
-  @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PhenotypeKind {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@NotEmpty
 	private String name;
@@ -56,14 +57,4 @@ public abstract class PhenotypeKind {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	/**
-	 * @return the value
-	 */
-	public abstract String getValue();
-
-	/**
-	 * @param value the value to set
-	 */
-	public abstract void setValue(String value);
 }
