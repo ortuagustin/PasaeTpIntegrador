@@ -29,12 +29,16 @@ public class PatientDTO {
 		this.setSurname(surname);
 		this.setDni(dni);
 		this.setEmail(email);
-  }
+	}
+
+	private PatientDTO() {
+		super();
+  	}
 
 	/**
 	 * @return the id
 	 */
-	public Long getId() {
+  public Long getId() {
 		return id;
 	}
 
@@ -50,7 +54,7 @@ public class PatientDTO {
 	 */
 	public String getSurname() {
 		return surname;
-  }
+  	}
 
 	/**
 	 * @return the dni
@@ -71,28 +75,28 @@ public class PatientDTO {
 	 */
 	public void setId(Long id) {
 		this.id = id;
-  }
+  	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
-  }
+  	}
 
 	/**
-	 * @param surname the surname to set
-	 */
+	* @param surname the surname to set
+	*/
 	public void setSurname(String surname) {
 		this.surname = surname;
-  }
+	}
 
-  /**
-   * @param dni the dni to set
-   */
-  public void setDni(String dni) {
-    this.dni = dni;
-  }
+	/**
+	* @param dni the dni to set
+	*/
+	public void setDni(String dni) {
+		this.dni = dni;
+	}
 
 	/**
 	 * @param email the email to set
