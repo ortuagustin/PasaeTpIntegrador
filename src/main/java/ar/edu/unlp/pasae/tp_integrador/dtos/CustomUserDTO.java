@@ -1,5 +1,6 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
@@ -26,9 +27,14 @@ public class CustomUserDTO {
 	private boolean credentialsNonExpired = true;
 	private boolean enabled = true;
 	
+	public CustomUserDTO() {
+		super();
+		this.authorities = new ArrayList<Role>();
+	}
 	
-	public CustomUserDTO(String username, String email, String firstName, String lastName,
+	public CustomUserDTO(Long id, String username, String email, String firstName, String lastName,
 			List<Role> authorities) {
+		this.id = id;
 		this.username = username;
 		this.email = email;
 		this.firstName = firstName;

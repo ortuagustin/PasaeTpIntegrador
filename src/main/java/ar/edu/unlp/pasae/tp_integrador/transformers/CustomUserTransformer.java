@@ -18,7 +18,7 @@ public class CustomUserTransformer implements Transformer<CustomUser, CustomUser
 
 	@Override
 	public CustomUserDTO toDTO(CustomUser entity) {
-		return new CustomUserDTO(entity.getUsername(), entity.getEmail(), entity.getFirstName(), entity.getLastName(), entity.getAuthorities());
+		return new CustomUserDTO(entity.getId(), entity.getUsername(), entity.getEmail(), entity.getFirstName(), entity.getLastName(), entity.getAuthorities());
 	}
 
 	public List<CustomUserDTO> transform(List<CustomUser> usersList) {

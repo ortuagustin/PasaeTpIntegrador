@@ -16,7 +16,7 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
 import ar.edu.unlp.pasae.tp_integrador.services.CustomUserService;
 
 @RestController
-@RequestMapping(path = "/admin", produces = "application/json")
+@RequestMapping(path = "/admin", produces="application/json")
 public class AdminController {
 	@Autowired
 	private CustomUserService customUserService;
@@ -31,7 +31,7 @@ public class AdminController {
 		this.getCustomUserService().create(person);
 	}
 
-	@DeleteMapping(path = "/user-remove", consumes="application/x-www-form-urlencoded")
+	@DeleteMapping(path = "/user-remove", consumes="application/json")
 	public void addAction(@RequestBody Long id) {
 		this.getCustomUserService().delete(id);
 	}

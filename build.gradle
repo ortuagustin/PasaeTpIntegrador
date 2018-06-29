@@ -23,6 +23,7 @@ repositories {
 	mavenCentral()
 }
 
+sourceSets.main.java.srcDir 'src/main/webapp'
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-aop')

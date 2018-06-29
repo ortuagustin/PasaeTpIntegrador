@@ -108,4 +108,8 @@ public class CustomUser implements UserDetails {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
+
+	public Long getId() {
+		return this.id;
+	}
 }
