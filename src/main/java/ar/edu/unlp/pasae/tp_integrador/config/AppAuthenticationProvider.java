@@ -1,4 +1,4 @@
-package ar.edu.unlp.pasae.tp_integrador;
+package ar.edu.unlp.pasae.tp_integrador.config;
 
 import java.util.Collection;
 

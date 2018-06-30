@@ -3,10 +3,13 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var deleteBundlesRootPath = path.resolve(__dirname,
-		'../src/main/webapp/static/');
-var bundlesSrcPath = path.resolve(__dirname, '../src/main/webapp/static/dist');
+		//'../src/main/webapp/static/');
+		'../src/resources/webapp/static/');
+//var bundlesSrcPath = path.resolve(__dirname, '../src/main/webapp/static/dist');
+var bundlesSrcPath = path.resolve(__dirname, '../src/main/resources/static/dist');
 var templateSrcServerPath = path.resolve(__dirname,
-		'../src/main/webapp/templates/');
+		//'../src/main/webapp/templates/');
+		'../src/main/resources/templates/');
 const webpack = require('webpack');
 module.exports = {
 	entry : './src/app.js',

@@ -23,16 +23,15 @@ repositories {
 	mavenCentral()
 }
 
-sourceSets.main.java.srcDir 'src/main/webapp'
-
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-aop')
 	compile('org.hibernate.validator:hibernate-validator')
 	compile('org.springframework.boot:spring-boot-starter-data-elasticsearch')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile 'org.springframework.security:spring-security-web:5.0.5.RELEASE'
-	compile 'org.springframework.security:spring-security-config:5.0.5.RELEASE'
+	compile('org.springframework.security:spring-security-web:5.0.5.RELEASE')
+	compile('org.springframework.security:spring-security-config:5.0.5.RELEASE')
+	compile('org.springframework.boot:spring-boot-starter-thymeleaf')
 	runtime('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

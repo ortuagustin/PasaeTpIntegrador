@@ -1,4 +1,4 @@
-package ar.edu.unlp.pasae.tp_integrador;
+package ar.edu.unlp.pasae.tp_integrador.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.cors().and()
 		.csrf().disable() // Necesario porque sino ignora los request que no son GET (ncesita el CRSF token)
 		.authorizeRequests()
-//		.antMatchers("/**").authenticated() 
+		.antMatchers("/**").authenticated() 
 		.antMatchers("/scientist/**").hasAuthority(RoleName.SCIENTIST.toString())
 //		.antMatchers("/admin/**").hasAuthority(RoleName.ADMIN.toString())
 		.antMatchers("/admin/**").permitAll()

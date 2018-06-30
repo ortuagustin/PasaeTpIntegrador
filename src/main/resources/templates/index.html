@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Prueba redireccion</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+<meta charset="UTF-8" />
 </head>
 <body>
-    <h1>Hola!</h1>
+	<form th:action="@{/logout}" method="post" id="logoutform">
+		<input type="submit" value="LOGOUT"> <input type="hidden"/>
+	</form>
+	<div id="react"></div>
+	<script src="../dist/bundle.js"></script>
 </body>
 </html>
