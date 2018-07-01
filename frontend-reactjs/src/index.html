@@ -4,10 +4,6 @@
 <meta charset="UTF-8" />
 </head>
 <body>
-	<form th:action="@{/logout}" method="post" id="logoutform">
-		<input type="submit" value="LOGOUT"> <input type="hidden"
-			th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-	</form>
 	<div id="react"></div>
 	<script src="../dist/bundle.js"></script>
 </body>
