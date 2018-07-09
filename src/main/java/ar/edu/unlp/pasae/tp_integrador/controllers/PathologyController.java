@@ -22,7 +22,7 @@ import ar.edu.unlp.pasae.tp_integrador.services.PathologyService;
 @RequestMapping("/pathologies")
 public class PathologyController {
   @Autowired
-  PathologyService phenotypesService;
+  PathologyService pathologiesService;
 
   @GetMapping(path = "/", produces = "application/json")
   public Collection<PathologyDTO> index() {
@@ -50,6 +50,6 @@ public class PathologyController {
   }
 
   private PathologyService getPathologysService() {
-    return this.phenotypesService;
+    return this.pathologiesService;
   }
 }
