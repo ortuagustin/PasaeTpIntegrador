@@ -2,6 +2,9 @@ package ar.edu.unlp.pasae.tp_integrador.dtos;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 
 public class PatientDTO {
 	private Long id;
@@ -12,28 +15,39 @@ public class PatientDTO {
 	@NotEmpty
 	private String dni;
 	@Email
-  private String email;
+	private String email;
+	@NotNull
+	private CustomUser user;
 
-	public PatientDTO(Long id, String name, String surname, String dni, String email) {
+	public PatientDTO(Long id, String name, String surname, String dni, String email, CustomUser user) {
 		super();
 		this.setId(id);
 		this.setName(name);
 		this.setSurname(surname);
 		this.setDni(dni);
 		this.setEmail(email);
+		this.setUser(user);
 	}
 
-	public PatientDTO(String name, String surname, String dni, String email) {
+	public PatientDTO(String name, String surname, String dni, String email, CustomUser user) {
 		super();
 		this.setName(name);
 		this.setSurname(surname);
 		this.setDni(dni);
 		this.setEmail(email);
+		this.setUser(user);
 	}
 
 	private PatientDTO() {
 		super();
-  	}
+	}
+
+	/**
+	 * @return the user
+	 */
+	public CustomUser getUser() {
+		return user;
+	}
 
 	/**
 	 * @return the id
@@ -103,5 +117,12 @@ public class PatientDTO {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(CustomUser user) {
+		this.user = user;
 	}
 }

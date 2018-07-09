@@ -1,13 +1,14 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-// TODO Falta la relacion con el usuario registrante
 // TODO Falta la relacion con los fenotipos
 // TODO Falta el campo genotipo (como lo modelamos)
 @Entity
@@ -21,19 +22,22 @@ public class Patient {
 	@NotEmpty
 	private String dni;
 	@Email
-  private String email;
+	private String email;
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	private CustomUser user;
 
 	public Patient() {
 		super();
 	}
 
-	public Patient(Long id, String name, String surname, String dni, String email) {
+	public Patient(Long id, String name, String surname, String dni, String email, CustomUser user) {
 		super();
 		this.setId(id);
 		this.setName(name);
 		this.setSurname(surname);
 		this.setDni(dni);
 		this.setEmail(email);
+		this.setUser(user);
   }
 
 	/**
@@ -72,6 +76,13 @@ public class Patient {
 	}
 
 	/**
+	 * @return the user
+	 */
+	public CustomUser getUser() {
+		return user;
+	}
+
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(Long id) {
@@ -104,5 +115,12 @@ public class Patient {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(CustomUser user) {
+		this.user = user;
 	}
 }
