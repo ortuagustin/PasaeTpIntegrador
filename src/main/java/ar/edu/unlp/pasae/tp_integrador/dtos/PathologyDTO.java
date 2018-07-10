@@ -20,6 +20,11 @@ public class PathologyDTO {
 		this.setNumericPhenotypes(numericPhenotypes);
 	}
 
+	public PathologyDTO(String name) {
+		super();
+		this.setName(name);
+	}
+
 	private PathologyDTO() {
 		super();
 	}
@@ -78,10 +83,5 @@ public class PathologyDTO {
 	 */
 	public void setNumericPhenotypes(Set<NumericPhenotypeDTO> numericPhenotypes) {
 		this.numericPhenotypes = numericPhenotypes;
-	}
-
-	public PathologyDTO(String name) {
-		super();
-		this.setName(name);
 	}
 }
