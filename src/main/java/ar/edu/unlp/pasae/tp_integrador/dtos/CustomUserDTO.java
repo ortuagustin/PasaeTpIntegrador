@@ -21,6 +21,7 @@ public class CustomUserDTO {
 	private String lastName;
 
 	/* Spring Security related fields*/
+	@NotEmpty
 	private List<Role> authorities;
 	private boolean accountNonExpired = true;
 	private boolean accountNonLocked = true;
