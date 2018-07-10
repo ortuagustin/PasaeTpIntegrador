@@ -1,80 +1,69 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-// TODO modelar relacion OneToOne con PhenotypeKind
-@Entity
-public class Phenotype {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	@NotEmpty
-	private String name;
-	@NotNull
-	@OneToOne
-	private PhenotypeKind kind;
+@MappedSuperclass
+public abstract class Phenotype {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  @NotEmpty
+  private String name;
 
-	public Phenotype(Long id, String name, PhenotypeKind kind) {
-		super();
-		this.setId(id);
-		this.setName(name);
-		this.setKind(kind);
-	}
+  public Phenotype(Long id, String name) {
+    super();
+    this.setId(id);
+    this.setName(name);
+  }
 
-	public Phenotype(String name, PhenotypeKind kind) {
-		super();
-		this.setName(name);
-		this.setKind(kind);
-	}
+  public Phenotype(String name) {
+    super();
+    this.setId(id);
+    this.setName(name);
+  }
 
-	public Phenotype() {
-		super();
-	}
+  protected Phenotype() {
+    super();
+  }
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
+  /**
+   * Checks if the value to assign is valid in the Phenotype
+   *
+   * @param vale the value to set
+   *
+   * @return True if the validation passes; False otherwise
+   */
+  public abstract Boolean validate(String value);
 
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
+  /**
+   * @return the id
+   */
+  public Long getId() {
+    return id;
+  }
 
-	/**
-	 * @return the kind
-	 */
-	public PhenotypeKind getKind() {
-		return kind;
-	}
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+  /**
+   * @param id the id to set
+   */
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * @param kind the kind to set
-	 */
-	public void setKind(PhenotypeKind kind) {
-		this.kind = kind;
-	}
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
 }

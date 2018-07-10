@@ -15,22 +15,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.PhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.services.PhenotypeService;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.services.CategoricPhenotypeService;
 
 @RestController
-@RequestMapping("/phenotypes")
-public class PhenotypeController {
+@RequestMapping("/categoric-phenotypes")
+public class CategoricPhenotypeController {
   @Autowired
-  PhenotypeService phenotypesService;
+  CategoricPhenotypeService phenotypesService;
 
   @GetMapping(path = "/", produces = "application/json")
-  public Collection<PhenotypeDTO> index() {
+  public Collection<CategoricPhenotypeDTO> index() {
     return this.getPhenotypesService().list().collect(Collectors.toList());
   }
 
   @GetMapping(path = "/{id}", produces = "application/json")
-  public PhenotypeDTO show(@PathVariable(value = "id") Long id) {
+  public CategoricPhenotypeDTO show(@PathVariable(value = "id") Long id) {
     return this.getPhenotypesService().find(id);
   }
 
@@ -40,16 +40,16 @@ public class PhenotypeController {
   }
 
   @PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-  public PhenotypeDTO create(@RequestBody @Valid PhenotypeDTO patient) {
-      return this.getPhenotypesService().create(patient);
+  public CategoricPhenotypeDTO create(@RequestBody @Valid CategoricPhenotypeDTO phenotype) {
+      return this.getPhenotypesService().create(phenotype);
   }
 
   @PatchMapping(path = "/", consumes = "application/json")
-  public PhenotypeDTO update(@RequestBody @Valid PhenotypeDTO patient) {
-    return this.getPhenotypesService().update(patient);
+  public CategoricPhenotypeDTO update(@RequestBody @Valid CategoricPhenotypeDTO phenotype) {
+    return this.getPhenotypesService().update(phenotype);
   }
 
-  private PhenotypeService getPhenotypesService() {
+  private CategoricPhenotypeService getPhenotypesService() {
     return this.phenotypesService;
   }
 }
