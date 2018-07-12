@@ -1,5 +1,6 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,38 +34,27 @@ public class CustomUserServiceImpl implements CustomUserService {
 		CustomUser user = this.getUserRepository().findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario"));
 		return user;
 	}	
+	
+	
+	private List<Role> getRoles(List<Role> userAuthorities) {
+		List<String> rolesToSearch = new ArrayList<String>(); // Lista con los nombres de los roles
+
+		// Obtengo los nombre de los roles 
+		for (Role role : userAuthorities) {
+			rolesToSearch.add(role.getName());
+		}
+		
+		return this.getRoleRepository().findAllByNameIn(rolesToSearch);
+	}
 
 	@Override
 	public CustomUserDTO create(CustomUserDTO userDto) {
-		// PREGUNTAR: como hago para no tener que guardar instancias nuevas de Roles
-		// cada vez que agrego una persona. O es buena practica hacerlo asi?
-//		List<String> rolesToSearch = new ArrayList<String>(); // Lista con los nombres de los roles
-//
-//		// Obtengo los nombre de los roles 
-//		for (Role role : userDto.getAuthorities()) {
-//			rolesToSearch.add(role.getName());
-//		}
-//		
-//		List<Role> roles = this.getRoleRepository().findAllByNameIn(rolesToSearch);
-//		CustomUser user = this.getTransformer().toEntity(userDto);
-//		user.setAuthorities(roles);
-//		List<Role> roles = thsis.getRoleRepository().findAllByNameIn(user.getAuthorities())
+		List<Role> roles = this.getRoles(userDto.getAuthorities());
 		CustomUser user = this.getTransformer().toEntity(userDto);
-		this.saveRoles(user);
+		user.setAuthorities(roles); // Asigno los roles
 		
 		this.getUserRepository().save(user);
 		return this.getTransformer().toDTO(user); // Devuelvo a DTO el usuario recien creado
-	}
-
-	/**
-	 * Guarda en la DB los roles
-	 * @param user Usuario al que se le va a pedir los roles para guardar
-	 */
-	private void saveRoles(CustomUser user) {
-		List<Role> roles = user.getAuthorities();
-		for (Role role : roles) {
-			this.getRoleRepository().save(role);
-		}
 	}
 
 	@Override
@@ -76,8 +66,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 		u.setEmail(user.getEmail());
 		u.setFirstName(user.getFirstName());
 		u.setLastName(user.getLastName());
-		u.setAuthorities(user.getAuthorities());
-		this.saveRoles(u); // Guardo los roles
+		u.setAuthorities(this.getRoles(user.getAuthorities()));
 		this.getUserRepository().save(u);
 		return this.getTransformer().toDTO(u);
 	}
