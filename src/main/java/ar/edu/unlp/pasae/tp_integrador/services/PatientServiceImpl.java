@@ -1,12 +1,15 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
+import ar.edu.unlp.pasae.tp_integrador.entities.Genotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import javax.persistence.EntityNotFoundException;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PatientRepository;
@@ -18,10 +21,12 @@ public class PatientServiceImpl implements PatientService {
 	private PatientRepository repository;
 	@Autowired
 	private Transformer<Patient, PatientDTO> transformer;
+	@Autowired
+	private Transformer<Genotype, GenotypeDTO> genotypeTransformer;
 
 	@Override
-	public PatientDTO find(Long id) {
-		return this.getTransformer().toDTO(this.getRepository().findById(id).get());
+	public PatientDTO find(Long patientId) {
+		return this.getTransformer().toDTO(this.getRepository().findById(patientId).get());
 	}
 
 	@Override
@@ -48,27 +53,34 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public PatientDTO update(PatientDTO Patient) {
-		Patient patient = this.getRepository().save(this.getTransformer().toEntity(Patient));
+	public PatientDTO update(PatientDTO patient) {
+		Patient entity = this.getRepository().save(this.getTransformer().toEntity(patient));
+
+		return this.getTransformer().toDTO(entity);
+	}
+
+	@Override
+	public PatientDTO create(PatientDTO patientDTO) {
+		Patient patient = this.getRepository().save(this.getTransformer().toEntity(patientDTO));
 
 		return this.getTransformer().toDTO(patient);
 	}
 
 	@Override
-	public PatientDTO create(PatientDTO PatientDTO) {
-		Patient patient = this.getRepository().save(this.getTransformer().toEntity(PatientDTO));
-
-		return this.getTransformer().toDTO(patient);
-	}
-
-	@Override
-	public void delete(Long id) {
-		this.getRepository().deleteById(id);
+	public void delete(Long patientId) {
+		this.getRepository().deleteById(patientId);
 	}
 
 	@Override
 	public Integer count() {
 		return (int) this.getRepository().count();
+	}
+
+	@Override
+	public void setPatientGenotype(Long patientId, List<GenotypeDTO> genotypes) {
+		final Patient patient = this.getRepository().getOne(patientId);
+		patient.setGenotypes(this.getGenotypeTransformer().manyToEntity(genotypes));
+		this.getRepository().save(patient);
 	}
 
 	private PatientRepository getRepository() {
@@ -85,5 +97,19 @@ public class PatientServiceImpl implements PatientService {
 
 	private void setTransformer(Transformer<Patient, PatientDTO> transformer) {
 		this.transformer = transformer;
+	}
+
+	/**
+	 * @return the genotypeTransformer
+	 */
+	public Transformer<Genotype, GenotypeDTO> getGenotypeTransformer() {
+		return genotypeTransformer;
+	}
+
+	/**
+	 * @param genotypeTransformer the genotypeTransformer to set
+	 */
+	public void setGenotypeTransformer(Transformer<Genotype, GenotypeDTO> genotypeTransformer) {
+		this.genotypeTransformer = genotypeTransformer;
 	}
 }

@@ -1,6 +1,9 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 
 import javax.persistence.CascadeType;
@@ -13,7 +16,6 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
-// TODO Falta el campo genotipo (como lo modelamos)
 @Entity
 public class Patient {
 	@Id
@@ -29,6 +31,8 @@ public class Patient {
 	private String email;
 	@OneToOne
 	private CustomUser user;
+	@OneToMany
+	private List<Genotype> genotypes = new ArrayList<Genotype>();
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<NumericPhenotype> numericPhenotypes = new HashSet<NumericPhenotype>();
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -46,6 +50,30 @@ public class Patient {
 		this.setDni(dni);
 		this.setEmail(email);
 		this.setUser(user);
+	}
+
+	public Patient(Long id, String name, String surname, String dni, String email, CustomUser user, List<Genotype> genotypes) {
+		super();
+		this.setId(id);
+		this.setName(name);
+		this.setSurname(surname);
+		this.setDni(dni);
+		this.setEmail(email);
+		this.setUser(user);
+		this.setGenotypes(genotypes);
+	}
+
+	/**
+	 * Adds the genotype to the collection
+	 *
+	 * @param genotype the genotype to add
+	 *
+	 * @return this
+	 */
+	public Patient addGenotype(Genotype genotype) {
+		this.getGenotypes().add(genotype);
+
+		return this;
 	}
 
 	/**
@@ -72,6 +100,13 @@ public class Patient {
 		this.getCategoricPhenotypes().add(phenotype);
 
 		return this;
+	}
+
+	/**
+	 * @return the genotype
+	 */
+	public Collection<Genotype> getGenotypes() {
+		return genotypes;
 	}
 
 	/**
@@ -121,6 +156,14 @@ public class Patient {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @param genotypes the genotype list to set
+	 */
+	public void setGenotypes(Collection<Genotype> genotypes) {
+		this.genotypes.clear();
+		this.genotypes.addAll(genotypes);
 	}
 
 	/**
