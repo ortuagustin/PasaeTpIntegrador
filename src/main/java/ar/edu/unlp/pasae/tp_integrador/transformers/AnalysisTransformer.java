@@ -6,7 +6,7 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
 
 @Service
-public class AnalysisTransformer implements Transformer<Analysis, AnalysisDTO> {
+public class AnalysisTransformer extends BaseTransformer<Analysis, AnalysisDTO> {
 	@Override
 	public Analysis toEntity(AnalysisDTO dto) {
 		return new Analysis(dto.getId(), dto.getDate(), dto.getState());

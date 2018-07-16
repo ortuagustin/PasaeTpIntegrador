@@ -13,7 +13,7 @@ import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 
 @Service
-public class PatientTransformer implements Transformer<Patient, PatientDTO> {
+public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
 	@Autowired
 	private PhenotypeTransformer phenotypeTransformer;
 

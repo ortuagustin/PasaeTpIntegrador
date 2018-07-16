@@ -13,7 +13,7 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyDTO;
 
 @Service
-public class PathologyTransformer implements Transformer<Pathology, PathologyDTO> {
+public class PathologyTransformer extends BaseTransformer<Pathology, PathologyDTO> {
 	@Autowired
 	private PhenotypeTransformer phenotypeTransformer;
 

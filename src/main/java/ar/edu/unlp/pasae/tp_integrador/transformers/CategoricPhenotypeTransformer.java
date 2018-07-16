@@ -6,7 +6,7 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
 
 @Service
-public class CategoricPhenotypeTransformer implements Transformer<CategoricPhenotype, CategoricPhenotypeDTO> {
+public class CategoricPhenotypeTransformer extends BaseTransformer<CategoricPhenotype, CategoricPhenotypeDTO> {
 	@Override
 	public CategoricPhenotype toEntity(CategoricPhenotypeDTO dto) {
 		return new CategoricPhenotype(dto.getId(), dto.getName(), dto.getValues());
