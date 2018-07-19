@@ -1,25 +1,18 @@
 package ar.edu.unlp.pasae.tp_integrador.transformers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.Set;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.PhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.PhenotypeKindDTO;
-import ar.edu.unlp.pasae.tp_integrador.entities.Phenotype;
-import ar.edu.unlp.pasae.tp_integrador.entities.PhenotypeKind;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 
-@Service
-public class PhenotypeTransformer implements Transformer<Phenotype, PhenotypeDTO> {
-	@Autowired
-	private Transformer<PhenotypeKind, PhenotypeKindDTO> kindTransformer;
+public interface PhenotypeTransformer {
+    Set<NumericPhenotypeDTO> numericToDtos(Set<NumericPhenotype> phenotypes);
 
-	@Override
-	public Phenotype toEntity(PhenotypeDTO dto) {
-		return new Phenotype(dto.getId(), dto.getName(), kindTransformer.toEntity(dto.getKind()));
-	}
+    Set<CategoricPhenotypeDTO> categoricToDtos(Set<CategoricPhenotype> phenotypes);
 
-	@Override
-	public PhenotypeDTO toDTO(Phenotype entity) {
-		return new PhenotypeDTO(entity.getId(), entity.getName(), kindTransformer.toDTO(entity.getKind()));
-	}
+    Set<CategoricPhenotype> categoricToEntities(Set<CategoricPhenotypeDTO> phenotypes);
+
+    Set<NumericPhenotype> numericToEntities(Set<NumericPhenotypeDTO> phenotypes);
 }

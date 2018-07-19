@@ -9,7 +9,7 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 
 @Component
-public class CustomUserTransformer implements Transformer<CustomUser, CustomUserDTO> {
+public class CustomUserTransformer extends BaseTransformer<CustomUser, CustomUserDTO> {
 
 	@Override
 	public CustomUser toEntity(CustomUserDTO dto) {
@@ -28,5 +28,4 @@ public class CustomUserTransformer implements Transformer<CustomUser, CustomUser
 		}
 		return listAns;
 	}
-
 }
