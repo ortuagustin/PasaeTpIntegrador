@@ -33,6 +33,7 @@ class AddUserModal extends React.Component {
 
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.handleChange = this.handleChange.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
         this.saveUser = this.saveUser.bind(this);
     }
 
@@ -105,10 +106,27 @@ class AddUserModal extends React.Component {
     }
 
     /**
+     * Maneja el evento cuando se presiona una tecla en el 
+     * formualario
+     * @param {Event} e Evento de la presion de la tecla
+     */
+    handleKeyPress(e) {
+        // Si presiona enter hacemos el submit
+        if (e.which == 13) {
+            this.saveUser();
+        }
+    }
+
+    /**
      * Hace un request al server para agregar un usuario
      */
     saveUser() {
         let self = this;
+        // Si el formulario es invalido no hago nada
+        if (!self.isFormValid()) {
+            return;
+        }
+
         let idUser = self.action == 'edit' ? self.selectedUser.id : ''; // Id para editar el usuario 
         $.ajax({
             url: 'http://localhost:8080/admin/users/' + idUser,
@@ -150,6 +168,19 @@ class AddUserModal extends React.Component {
         });
     }
 
+    /**
+     * Valida el formulario
+     * @returns True si el formulario es valido, false caso contrario
+     */
+    isFormValid() {
+        return !this.state.adding
+                && this.state.username
+                && this.state.password
+                && this.state.firstname
+                && this.state.lastname
+                && this.state.selectedRole;
+    }
+
     render() {
         // Armo una lista con las opciones
         let rolesList = this.state.roles.map((rol) => {
@@ -157,12 +188,7 @@ class AddUserModal extends React.Component {
         });
 
         // Verifico que no este cargando y que el formulario sea valido
-        let isValid = !this.state.adding 
-                        && this.state.username
-                        && this.state.password
-                        && this.state.firstname
-                        && this.state.lastname
-                        && this.state.selectedRole;
+        let isValid = this.isFormValid();
         return(
             <div className="modal fade" id={this.modalId} tabIndex="-1" role="dialog" aria-labelledby={this.modalId} aria-hidden="true">
                 <div className="modal-dialog" role="document">
@@ -177,21 +203,21 @@ class AddUserModal extends React.Component {
                             <div className="form-row">
                                 <div className="col">
                                     <label htmlFor="username-input">Nombre de usuario</label>
-                                    <input type="text" id="username-input" name="username" value={this.state.username} className="form-control" onChange={this.handleChange} />
+                                    <input type="text" id="username-input" name="username" value={this.state.username} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
                                 </div>
                                 <div className="col">
                                     <label htmlFor="password-input">Contraseña</label>
-                                    <input type="password" id="password-input" name="password" value={this.state.password} className="form-control" onChange={this.handleChange} />
+                                    <input type="password" id="password-input" name="password" value={this.state.password} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
                                 </div>
                             </div> 
                             <div className="form-row">
                                 <div className="col">
                                     <label htmlFor="firstname-input">Nombre</label>
-                                    <input type="text" id="firstname-input" name="firstname" value={this.state.firstname} className="form-control"onChange={this.handleChange} />
+                                    <input type="text" id="firstname-input" name="firstname" value={this.state.firstname} className="form-control"onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
                                 </div>
                                 <div className="col">
                                     <label htmlFor="lastname-input">Apellido</label>
-                                    <input type="text" id="lastname-input" name="lastname" value={this.state.lastname} className="form-control" onChange={this.handleChange} />
+                                    <input type="text" id="lastname-input" name="lastname" value={this.state.lastname} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
                                 </div>
                             </div> 
                             <div className="form-row">
