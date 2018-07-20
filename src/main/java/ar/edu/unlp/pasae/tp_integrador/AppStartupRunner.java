@@ -39,7 +39,7 @@ public class AppStartupRunner implements ApplicationRunner {
 		this.getRoleRepository().save(r2);
 		this.getUserRepository().save(new CustomUser("genaro", "prueba", "genarocamele@hotmail.com", "genaro", "camele", roles));
 		this.getUserRepository().save(new CustomUser("admin", "admin", "admin@hotmail.com", "admin", "admin", roles2));
-		this.getUserRepository().save(new CustomUser("admin2", "admin2", "admin2@hotmail.com", "admin2", "admin2", roles2));
+//		this.getUserRepository().save(new CustomUser("admin2", "admin2", "admin2@hotmail.com", "admin2", "admin2", roles2));
 	}
 
 	private CustomUserRepository getUserRepository() {

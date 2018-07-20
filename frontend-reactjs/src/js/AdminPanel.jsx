@@ -7,6 +7,7 @@ import AddUserModal from './AddUserModal.jsx';
 import BootstrapTable from 'react-bootstrap-table-next'; // Tabla
 import paginationFactory from 'react-bootstrap-table2-paginator'; // Paginacion en tabla
 import overlayFactory from 'react-bootstrap-table2-overlay'; // Para la animacion de carga
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'; // Para filtrar los usuarios
 
 // Estilos
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'; // Estilos de la tabla
@@ -22,46 +23,32 @@ class AdminPanel extends React.Component {
             users: [],
             page: 0,
             sizePerPage: 10,
-            totalSize: 0
+            totalSize: 0,
+            selectedRow: [],
+            selectedUser: null,
+            action: null
         };
 
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.getUsers = this.getUsers.bind(this);
     }
 
+    /**
+     * Metodo que se ejecuta cuando termina de 
+     * renderizar el componente
+     */
     componentDidMount() {
         this.getUsers();
     }
 
     /**
-     * Obtiene los usuarios via AJAX
+     * Muestra/esconde un modal especifico
+     * @param {string} modalId Modal del id que se va a abrir
+     * @param {string} modalAction 'show' o 'hide' para mostrar/esconder el modal
      */
-    // getUsers() {
-    //     var self = this;
-    //     fetch('http://localhost:8080/admin/users/', {
-    //         method: 'GET',
-    //         credentials: 'same-origin'
-    //     })
-    //     .then((response) => {
-    //         // console.log(response);
-    //         if (response.status >= 400) {
-    //             throw new Error("Bad response from server");
-    //         }
-    //         let responseAns = null;
-    //         try {
-    //             responseAns = response.json();
-    //         } catch (ex) {
-    //             console.log("Ocurrió un error al parsear la respuesta", ex);
-    //         }
-    //         return responseAns;
-    //     })
-    //     .then((usersData) => {
-    //         // Si todo salio bien actualizo el estado
-    //         if (usersData) {
-    //             self.setState({ users: usersData });
-    //         }
-    //     });
-    // }
+    actionModal(modalId, modalAction) {
+        $('#' + modalId).modal(modalAction);
+    }
     
     /**
      * Obtiene los usuarios via AJAX.
@@ -71,13 +58,16 @@ class AdminPanel extends React.Component {
      */
     getUsers(actionType = '', newState = {}) {
         let self = this;
+        // Genero los parametros del request
         let pageNumber = newState.page ? newState.page - 1 : self.state.page;
+        let sizePerPage = newState.sizePerPage ? newState.sizePerPage : self.state.sizePerPage;
+
         self.setState({ loading: true });
         $.ajax({
             url: 'http://localhost:8080/admin/users/',
             data: {
                 newestPage: pageNumber,
-                newestSizePerPage: newState.sizePerPage,
+                newestSizePerPage: sizePerPage,
                 newestSortField: newState.sortField,
                 newestSortOrder: newState.sortOrder
             }
@@ -85,7 +75,7 @@ class AdminPanel extends React.Component {
             if (jqXHR.status == 200) {
                 self.setState({
                     users: jsonReponse.content,
-                    page: jsonReponse.number - 1,
+                    page: pageNumber,
                     sizePerPage: jsonReponse.size,
                     totalSize: jsonReponse.totalElements
                 });
@@ -97,13 +87,32 @@ class AdminPanel extends React.Component {
         });
     }
 
+    selectRow(row, isSelect) {
+        if (isSelect) {
+            this.setState({
+                selectedRow: [row.id], // Solo selecciono uno a la vez, pero debe ser un arreglo para la libreria
+                selectedUser: row
+            });
+        } else {
+            // Si limpia borro los datos
+            this.setState({
+                selectedRow: [],
+                selectedUser: null
+            });
+        }
+    }
+
     /**
-     * Muestra/oculta un modal en particular
-     * @param {string} modalId Id del modal que se quiere mostrar/esconder
-     * @param {*} action Accion a ejecutar 'show' o 'hide'
+     * Cambia el estado de la accion que estamos realizando
+     * (agregando o editando un usuario) para poder reutilizar
+     * el modal de alta de usuario
+     * @param {string} action 'add' o 'edit' para el modal
      */
-    accionModal(modalId, action) {
-        $('#' + modalId).modal(action);
+    changeAction(action) {
+        this.setState({ action: action }, () => {
+            // Una vez que cambiamos de accion, abrimos el modal de alta/edicion
+            this.actionModal(this.addUserModalId, 'show');
+        });
     }
 
     render() {
@@ -111,7 +120,7 @@ class AdminPanel extends React.Component {
         const columns = [{
                 dataField: 'username',
                 text: 'Usuario',
-                sort: true
+                sort: true,
             }, {
                 dataField: 'email',
                 text: 'Mail',
@@ -124,16 +133,43 @@ class AdminPanel extends React.Component {
                 dataField: 'lastName',
                 text: 'Apellido',
                 sort: true
+            }, {
+                dataField: 'authorities',
+                text: 'Rol',
+                sort: true,
+                formatter: (cell, row, rowIndex, formatExtraData) => {
+                    return cell.map(function (role) {
+                        return role.name;
+                    }).join(", ");
+                }
+                // filter: textFilter()
             }
         ];
+
+        const selectRow = {
+            mode: 'radio',
+            clickToSelect: true,
+            selected: this.state.selectedRow,
+            onSelect: (row, isSelect) => {
+                this.selectRow(row, isSelect);
+            },
+            selectionHeaderRenderer: () => <span title="Limpiar" className="cursor-pointer">X</span>
+        };
             
         return(
             <div className="container">
+                <div className="row">
+                    <div className="col col-md-12 button-col">
+                        <h4>Acciones</h4>
+                        <button type="button" className="btn btn-success" onClick={() => this.changeAction('add')}>Agregar</button>
+                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedUser}>Editar</button>
+                    </div>
+                </div>
                 <div id="admin-panel" className="row">
-                    <div className="col col-10">
+                    <div className="col col-md-12">
                         <h4>Usuarios</h4>
                         <BootstrapTable
-                            remote={{ pagination: true }}
+                            remote={{ pagination: true, filter: true }}
                             keyField='id'
                             data={this.state.users}
                             columns={columns}
@@ -143,7 +179,9 @@ class AdminPanel extends React.Component {
                             noDataIndication="No hay información para mostrar"
                             onTableChange={this.getUsers}
                             pagination={ paginationFactory() }
+                            filter={ filterFactory() }
                             loading={this.state.loading}
+                            selectRow={ selectRow }
                             overlay={
                                 overlayFactory({
                                     spinner: true,
@@ -152,15 +190,15 @@ class AdminPanel extends React.Component {
                             } // Animacion mientras carga
                         />
                     </div>
-                    <div className="col">
-                        <h4>Acciones</h4>
-                        <button type="button" className="btn btn-success" data-toggle="modal" data-target={"#" + this.addUserModalId}>Agregar</button>
-                    </div>
                 </div>
 
                 {/* Modal de alta de usuario */}
                 <AddUserModal
                     modalId={this.addUserModalId}
+                    action={this.state.action}
+                    selectedUser={this.state.selectedUser}
+                    getUsers={this.getUsers}
+                    actionModal={this.actionModal}
                 />
             </div>
         );

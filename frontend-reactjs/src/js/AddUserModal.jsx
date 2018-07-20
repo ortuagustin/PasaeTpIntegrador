@@ -3,12 +3,21 @@ import React from 'react';
 /**
  * Renderiza el modal con los campos de alta de un usuario
  * @param {string} modalId Id del modal
+ * @param {string} action Para saber si se esta agregando o eliminando un usuario
+ * @param {*} selectedUser Si action == 'edit' se utiliza para cargar los datos del usuario a editar
+ * @param {Function} getUsers Funcion para refrescar la tabla
+ * @param {Function} actionModal Funcion para manejar los modals
  */
 class AddUserModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.modalId = props.modalId;
+        this.action = props.action;
+        this.selectedUser = props.selectedUser;
+        this.getUsers = props.getUsers;
+        this.actionModal = props.actionModal;
+
         this.defaultState = {
             username: '',
             password: '',
@@ -25,6 +34,16 @@ class AddUserModal extends React.Component {
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.handleChange = this.handleChange.bind(this);
         this.saveUser = this.saveUser.bind(this);
+    }
+
+    /**
+     * Metodo que se ejecuta cuando cambian los props del 
+     * componente
+     * @param {*} props Nuevas props
+     */
+    componentWillReceiveProps(props) {
+        this.action = props.action;
+        this.selectedUser = props.selectedUser;
     }
 
     /**
@@ -58,6 +77,19 @@ class AddUserModal extends React.Component {
         // Cada vez que se abra el modal, obtengo los roles
         $('#' + self.modalId).on('show.bs.modal', function() {
             self.getRoles();
+            if (self.action == 'edit') {
+                // Si estamos editando, cargo los datos del usuario
+                // seleccionado en el formulario
+                console.log(self.selectedUser);
+                self.setState({
+                    username: self.selectedUser.username,
+                    password: self.selectedUser.password,
+                    email: self.selectedUser.email,
+                    firstname: self.selectedUser.firstName,
+                    lastname: self.selectedUser.lastName,
+                    selectedRole: self.selectedUser.authorities[0].name,
+                });
+            }
         });
 
         // Cuando ya esta abierto el modal, hago focus en el 
@@ -77,23 +109,25 @@ class AddUserModal extends React.Component {
      */
     saveUser() {
         let self = this;
+        let idUser = self.action == 'edit' ? self.selectedUser.id : ''; // Id para editar el usuario 
         $.ajax({
-            url: 'http://localhost:8080/admin/users/',
+            url: 'http://localhost:8080/admin/users/' + idUser,
             dataType: "json",
             contentType: "application/json; charset=utf-8",
-            type: 'PUT',
-            data: {
+            type: self.action == 'add' ? 'PUT' : 'PATCH',
+            data: JSON.stringify({
                 username: self.state.username,
                 password: self.state.password,
                 email: self.state.email,
                 firstName: self.state.firstname,
                 lastName: self.state.lastname,
                 authorities: [ self.state.selectedRole ]
-            }
+            })
         }).done(function (jsonReponse, textStatus, jqXHR) {
-            
+            self.getUsers(); // Refresco la tabla
+            self.actionModal(self.modalId, 'hide'); // Escondo el modal
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Error al dar de alta. Intente nuevamente más tarde");
+            alert("Error al " + (self.action == 'add' ? 'dar de alta' : 'editar el usuario') + ". Intente nuevamente más tarde");
             console.log(jqXHR, textStatus, errorThrown);
         });
     }
@@ -119,7 +153,7 @@ class AddUserModal extends React.Component {
     render() {
         // Armo una lista con las opciones
         let rolesList = this.state.roles.map((rol) => {
-            return <option key={rol.id.toString()} value={rol.id}>{rol.name}</option>;
+            return <option key={rol.id.toString()} value={rol.name}>{rol.name}</option>;
         });
 
         // Verifico que no este cargando y que el formulario sea valido

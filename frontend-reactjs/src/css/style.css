@@ -1,3 +1,11 @@
 #admin-panel, .form-row {
     margin-top: 2%;
 }
+
+.cursor-pointer:hover {
+    cursor: pointer;
+}
+
+.button-col button {
+    margin-right: 2%;
+}
