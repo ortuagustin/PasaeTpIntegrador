@@ -55,9 +55,10 @@ public class AdminController {
 			@RequestParam(value="newestPage", defaultValue="0") int page,
 			@RequestParam(value="newestSizePerPage", defaultValue="10") int sizePerPage,
 			@RequestParam(value="newestSortField", defaultValue="username") String sortField,
-			@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder
+			@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder,
+			@RequestParam(value="search", defaultValue="") String search
 			) {
-		return this.getCustomUserService().list(page, sizePerPage, sortField, sortOrder);
+		return this.getCustomUserService().list(page, sizePerPage, sortField, sortOrder, search);
 	}
 	
 	/**

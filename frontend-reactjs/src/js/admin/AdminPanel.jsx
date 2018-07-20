@@ -28,12 +28,14 @@ class AdminPanel extends React.Component {
             totalSize: 0,
             selectedRow: [],
             selectedUser: {},
-            action: null
+            action: null,
+            searchUserInput: ''
         };
 
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.getUsers = this.getUsers.bind(this);
         this.cleanState = this.cleanState.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     /**
@@ -72,7 +74,8 @@ class AdminPanel extends React.Component {
                 newestPage: pageNumber,
                 newestSizePerPage: sizePerPage,
                 newestSortField: newState.sortField,
-                newestSortOrder: newState.sortOrder
+                newestSortOrder: newState.sortOrder,
+                search: self.state.searchUserInput
             }
         }).done(function (jsonReponse, textStatus, jqXHR) {
             if (jqXHR.status == 200) {
@@ -115,6 +118,18 @@ class AdminPanel extends React.Component {
             this.actionModal(this.addUserModalId, 'show');
         });
     }
+
+
+    /**
+     * Metodo que se ejecuta cuando los inputs cambian.
+     * Sirve para refrescar el state
+     * @param {Event} e Evento del cambio del input
+     */
+    handleChange(e) {
+        this.setState({ [e.target.name]: e.target.value }, () => {
+            this.getUsers();
+        });;
+    } 
 
     /**
      * Limpia el estado
@@ -168,13 +183,27 @@ class AdminPanel extends React.Component {
         };
             
         return(
-            <div className="container">
+            <div className="container panel-component">
                 <div className="row">
-                    <div className="col col-md-12 button-col">
+                    <div className="col col-md-9 button-col">
                         <h4>Acciones</h4>
                         <button type="button" className="btn btn-success" onClick={() => this.changeAction('add')}>Agregar</button>
                         <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedUser.id}>Editar</button>
                         <button type="button" className="btn btn-danger" onClick={() => this.actionModal(this.deleteUserModalId, 'show')} disabled={!this.state.selectedUser.id}>Editar</button>
+                    </div>
+                    <div className="col col-md-3 button-col">
+                        <div className="form-group">
+                            <label htmlFor="search-user-input"><h5>Buscar</h5></label>
+                            <input type="text"
+                                className="form-control"
+                                name="searchUserInput"
+                                value={this.state.searchUserInput}
+                                onChange={this.handleChange}
+                                aria-describedby="searchHelpBlock"/>
+                            <small id="searchHelpBlock" className="form-text text-muted">
+                                Buscará por username, nombre y apellido
+                            </small>
+                        </div>
                     </div>
                 </div>
                 <div id="admin-panel" className="row">

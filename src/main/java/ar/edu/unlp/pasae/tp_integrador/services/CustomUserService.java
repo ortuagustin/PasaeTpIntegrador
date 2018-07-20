@@ -11,7 +11,7 @@ public interface CustomUserService extends UserDetailsService {
 	CustomUserDTO update(Long id, CustomUserDTO user);
 	void delete(Long id);
 	CustomUserDTO retrieve(Long id);
-	Page<CustomUser> list(int page, int sizePerPage, String sortField, String sortOrder);
+	Page<CustomUser> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
 	boolean userExists(CustomUserDTO user);
 	boolean userExists(Long id);
 }

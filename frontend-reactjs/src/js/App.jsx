@@ -12,7 +12,7 @@ import 'bootstrap'; // Para los modals
 // Componentes
 import Home from './Home.jsx';
 import AdminPanel from './admin/AdminPanel.jsx';
-import ProfessionalPanel from './ProfessionalPanel.jsx';
+import ProfessionalPanel from './professional/ProfessionalPanel.jsx';
 
 // Estilos
 import '../css/style.css'; // Estilos propios'
@@ -41,14 +41,14 @@ class App extends React.Component {
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/home">Home</Link>
+											<Link to="/">Home</Link>
 										</div>
 									</span>
 								</li>
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/">Admin</Link>
+											<Link to="/admin">Admin</Link>
 										</div>
 									</span>
 								</li>
@@ -70,8 +70,8 @@ class App extends React.Component {
 
 					{/* Renderiza los componentes seleccionados */}
 					<div>
-						<Route exact path="/home" component={Home} />
-						<Route exact path="/" component={AdminPanel} />
+						<Route exact path="/" component={Home} />
+						<Route exact path="/admin" component={AdminPanel} />
 						<Route exact path="/professional" component={ProfessionalPanel} />
 					</div>
 				</div>
