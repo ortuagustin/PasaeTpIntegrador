@@ -11,7 +11,7 @@ import 'bootstrap'; // Para los modals
 
 // Componentes
 import Home from './Home.jsx';
-import AdminPanel from './AdminPanel.jsx';
+import AdminPanel from './admin/AdminPanel.jsx';
 import ProfessionalPanel from './ProfessionalPanel.jsx';
 
 // Estilos

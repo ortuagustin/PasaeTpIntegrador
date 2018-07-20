@@ -2,6 +2,7 @@ import React from 'react';
 
 // Componentes React
 import AddUserModal from './AddUserModal.jsx';
+import DeleteUserModal from './DeleteUserModal.jsx';
 
 // Librerias
 import BootstrapTable from 'react-bootstrap-table-next'; // Tabla
@@ -18,6 +19,7 @@ class AdminPanel extends React.Component {
 
         // Variables que no renderizan la vista
         this.addUserModalId = 'add-user-modal';
+        this.deleteUserModalId = 'delete-user-modal';
 
         this.state = {
             users: [],
@@ -25,12 +27,13 @@ class AdminPanel extends React.Component {
             sizePerPage: 10,
             totalSize: 0,
             selectedRow: [],
-            selectedUser: null,
+            selectedUser: {},
             action: null
         };
 
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.getUsers = this.getUsers.bind(this);
+        this.cleanState = this.cleanState.bind(this);
     }
 
     /**
@@ -88,17 +91,15 @@ class AdminPanel extends React.Component {
     }
 
     selectRow(row, isSelect) {
+        console.log(row);
+        console.log(isSelect);
         if (isSelect) {
             this.setState({
                 selectedRow: [row.id], // Solo selecciono uno a la vez, pero debe ser un arreglo para la libreria
                 selectedUser: row
             });
         } else {
-            // Si limpia borro los datos
-            this.setState({
-                selectedRow: [],
-                selectedUser: null
-            });
+            
         }
     }
 
@@ -112,6 +113,16 @@ class AdminPanel extends React.Component {
         this.setState({ action: action }, () => {
             // Una vez que cambiamos de accion, abrimos el modal de alta/edicion
             this.actionModal(this.addUserModalId, 'show');
+        });
+    }
+
+    /**
+     * Limpia el estado
+     */
+    cleanState() {
+        this.setState({
+            selectedRow: [],
+            selectedUser: {}
         });
     }
 
@@ -153,7 +164,7 @@ class AdminPanel extends React.Component {
             onSelect: (row, isSelect) => {
                 this.selectRow(row, isSelect);
             },
-            selectionHeaderRenderer: () => <span title="Limpiar" className="cursor-pointer">X</span>
+            selectionHeaderRenderer: () => <span title="Limpiar" className="cursor-pointer" onClick={this.cleanState}>X</span>
         };
             
         return(
@@ -162,7 +173,8 @@ class AdminPanel extends React.Component {
                     <div className="col col-md-12 button-col">
                         <h4>Acciones</h4>
                         <button type="button" className="btn btn-success" onClick={() => this.changeAction('add')}>Agregar</button>
-                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedUser}>Editar</button>
+                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedUser.id}>Editar</button>
+                        <button type="button" className="btn btn-danger" onClick={() => this.actionModal(this.deleteUserModalId, 'show')} disabled={!this.state.selectedUser.id}>Editar</button>
                     </div>
                 </div>
                 <div id="admin-panel" className="row">
@@ -197,6 +209,15 @@ class AdminPanel extends React.Component {
                     modalId={this.addUserModalId}
                     action={this.state.action}
                     selectedUser={this.state.selectedUser}
+                    getUsers={this.getUsers}
+                    actionModal={this.actionModal}
+                />
+
+                {/* Modal de confirmacion de eliminacion de usuario */}
+                <DeleteUserModal
+                    modalId={this.deleteUserModalId}
+                    userId={this.state.selectedUser.id}
+                    username={this.state.selectedUser.username}
                     getUsers={this.getUsers}
                     actionModal={this.actionModal}
                 />
