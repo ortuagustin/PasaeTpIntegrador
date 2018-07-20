@@ -12,24 +12,29 @@ module.exports = {
 		contentBase: 'src/',
 		port: 8091,
 		// Send API requests on localhost to API server get around CORS.
-		//		proxy : {
-		//			'/**' : {
-		//				target : {
-		//					host : "localhost",
-		//					protocol : 'http:',
-		//					port : 8080
-		//				}
-		//			}
-		//		},
-		hot: true,
-		inline: true
+		// proxy : {
+		// 	'/**' : {
+		// 		target : {
+		// 			host : "localhost",
+		// 			protocol : 'http:',
+		// 			port : 8080
+		// 		}
+		// 	}
+		// },
+		// hot: true,
+		// inline: true
 	},
 	plugins: [
 		new CopyWebpackPlugin([{
 			from: 'src/index.html',
 			to: templateSrcServerPath
 		}]), 
-		new webpack.HotModuleReplacementPlugin()
+		new webpack.HotModuleReplacementPlugin(),
+		// Hago global jQuery
+		new webpack.ProvidePlugin({
+			$: 'jquery',
+			jQuery: 'jquery'
+		})
 	],
 	output: {
 		path: bundlesSrcPath,

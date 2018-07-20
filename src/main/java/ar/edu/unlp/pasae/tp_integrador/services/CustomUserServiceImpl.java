@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -35,16 +38,22 @@ public class CustomUserServiceImpl implements CustomUserService {
 		return user;
 	}	
 	
-	
 	private List<Role> getRoles(List<Role> userAuthorities) {
-		List<String> rolesToSearch = new ArrayList<String>(); // Lista con los nombres de los roles
+		List<Role> newRoles = new ArrayList<Role>(); // Lista con los nombres de los roles
 
-		// Obtengo los nombre de los roles 
+		// Busco si existe, y si no existen los agrego
 		for (Role role : userAuthorities) {
-			rolesToSearch.add(role.getName());
+			Role existingRole = this.getRoleRepository().findOneByName(role.getName()).orElse(null);
+			// Si no existe lo agrego
+			if (existingRole == null) {
+				this.getRoleRepository().save(role);
+				newRoles.add(role);
+			} else {
+				newRoles.add(existingRole);
+			}
 		}
 		
-		return this.getRoleRepository().findAllByNameIn(rolesToSearch);
+		return newRoles;
 	}
 
 	@Override
@@ -82,10 +91,21 @@ public class CustomUserServiceImpl implements CustomUserService {
 		return this.getTransformer().toDTO(user);
 	}
 	
+	/**
+	 * Genera un Pageable para la paginacion y ordenamiento de 
+	 * los usuarios requeridos
+	 * @param Pagina actual para obtener desde la DB
+	 * @return La pagina solicitada con el ordenamiento incluido
+	 */
+	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
+	    return PageRequest.of(page, sizePerPage, sortDirection, sortField);
+	}
+	
 	@Override
-	public List<CustomUserDTO> list() {
-		List<CustomUser> listPerson = this.getUserRepository().findAll();
-		return this.getTransformer().transform(listPerson);
+	public Page<CustomUser> list(int page, int sizePerPage, String sortField, String sortOrder) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC; 
+		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
+		return this.getUserRepository().findAll(pageRequest);
 	}
 	
 	/**

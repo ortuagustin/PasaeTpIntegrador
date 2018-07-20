@@ -1,0 +1,189 @@
+import React from 'react';
+
+/**
+ * Renderiza el modal con los campos de alta de un usuario
+ * @param {string} modalId Id del modal
+ */
+class AddUserModal extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.modalId = props.modalId;
+        this.defaultState = {
+            username: '',
+            password: '',
+            email: '',
+            firstname: '',
+            lastname: '',
+            selectedRole: '',
+            roles: [],
+            adding: false
+        };
+
+        this.state = this.defaultState;
+
+        // Bindeo la variable 'this' a los metodos llamados desde la vista
+        this.handleChange = this.handleChange.bind(this);
+        this.saveUser = this.saveUser.bind(this);
+    }
+
+    /**
+     * Metodo que se ejecuta cuando los inputs cambian.
+     * Sirve para refrescar el state
+     * @param {Event} e Evento del cambio del input
+     */
+    handleChange(e) {
+        // Verifico que el formulario sea valido
+        if (!e.target.validity.valid) {
+            return;
+        }
+
+        // Modifico
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    /**
+     * Limpia todos los inputs del formulario
+     */
+    cleanInputs() {
+        this.setState(this.defaultState);
+    }
+
+    /**
+     * Ni bien se renderiza el componente pedimos los roles
+     * al servidor
+     */
+    componentDidMount() {
+        let self = this;
+        // Cada vez que se abra el modal, obtengo los roles
+        $('#' + self.modalId).on('show.bs.modal', function() {
+            self.getRoles();
+        });
+
+        // Cuando ya esta abierto el modal, hago focus en el 
+        // primer input
+        $('#' + self.modalId).on('shown.bs.modal', function() {
+            $('#username-input').focus();
+        });
+
+        // Cuando se esconde limpio los inputs
+        $('#' + self.modalId).on('hidden.bs.modal', function() {
+            self.cleanInputs();
+        });
+    }
+
+    /**
+     * Hace un request al server para agregar un usuario
+     */
+    saveUser() {
+        let self = this;
+        $.ajax({
+            url: 'http://localhost:8080/admin/users/',
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            type: 'PUT',
+            data: {
+                username: self.state.username,
+                password: self.state.password,
+                email: self.state.email,
+                firstName: self.state.firstname,
+                lastName: self.state.lastname,
+                authorities: [ self.state.selectedRole ]
+            }
+        }).done(function (jsonReponse, textStatus, jqXHR) {
+            
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Error al dar de alta. Intente nuevamente más tarde");
+            console.log(jqXHR, textStatus, errorThrown);
+        });
+    }
+
+    /**
+    * Obtiene via AJAX los roles disponibles para el
+    * alta de un usuario
+    */
+    getRoles() {
+        let self = this;
+        $.ajax({
+            url: 'http://localhost:8080/admin/roles/',
+        }).done(function (jsonReponse, textStatus, jqXHR) {
+            if (jqXHR.status == 200) {
+                self.setState({ roles: jsonReponse });
+            }
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            alert("Error al obtener los roles. Cierre e intente nuevamente más tarde");
+            console.log(jqXHR, textStatus, errorThrown);
+        });
+    }
+
+    render() {
+        // Armo una lista con las opciones
+        let rolesList = this.state.roles.map((rol) => {
+            return <option key={rol.id.toString()} value={rol.id}>{rol.name}</option>;
+        });
+
+        // Verifico que no este cargando y que el formulario sea valido
+        let isValid = !this.state.adding 
+                        && this.state.username
+                        && this.state.password
+                        && this.state.firstname
+                        && this.state.lastname
+                        && this.state.selectedRole;
+        return(
+            <div className="modal fade" id={this.modalId} tabIndex="-1" role="dialog" aria-labelledby={this.modalId} aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Agregar usuario</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div className="form-row">
+                                <div className="col">
+                                    <label htmlFor="username-input">Nombre de usuario</label>
+                                    <input type="text" id="username-input" name="username" value={this.state.username} className="form-control" onChange={this.handleChange} />
+                                </div>
+                                <div className="col">
+                                    <label htmlFor="password-input">Contraseña</label>
+                                    <input type="password" id="password-input" name="password" value={this.state.password} className="form-control" onChange={this.handleChange} />
+                                </div>
+                            </div> 
+                            <div className="form-row">
+                                <div className="col">
+                                    <label htmlFor="firstname-input">Nombre</label>
+                                    <input type="text" id="firstname-input" name="firstname" value={this.state.firstname} className="form-control"onChange={this.handleChange} />
+                                </div>
+                                <div className="col">
+                                    <label htmlFor="lastname-input">Apellido</label>
+                                    <input type="text" id="lastname-input" name="lastname" value={this.state.lastname} className="form-control" onChange={this.handleChange} />
+                                </div>
+                            </div> 
+                            <div className="form-row">
+                                <div className="col">
+                                    <label htmlFor="inputState">Rol</label>
+                                    <select 
+                                        id="inputState"
+                                        name="selectedRole"
+                                        className="form-control"
+                                        disabled={this.state.roles.length == 0} value={this.state.selectedRole} onChange={this.handleChange}>
+                                        <option value="">{this.state.roles.length ? 'Elegir' : 'Cargando'}</option>
+                                        {rolesList}
+                                    </select>
+                                </div>
+                            </div> 
+                            
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="button" className="btn btn-primary" disabled={!isValid} onClick={this.saveUser}>Guardar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default AddUserModal;

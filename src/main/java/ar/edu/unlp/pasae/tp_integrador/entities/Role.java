@@ -9,15 +9,16 @@ import org.springframework.security.core.GrantedAuthority;
 
 @Entity
 public class Role implements GrantedAuthority {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 
 	public Role() {}
+	
+	public Long getId() {
+		return this.id;
+	}
 
 	public Role(String name) {
 		this.name = name;

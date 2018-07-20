@@ -2,6 +2,7 @@ package ar.edu.unlp.pasae.tp_integrador.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -78,7 +79,6 @@ public class CustomUser implements UserDetails {
 		this.lastName = lastName;
 	}
 	public List<Role> getAuthorities() {
-//		return null;
 		return authorities;
 	}
 	public void setAuthorities(List<Role> authorities) {

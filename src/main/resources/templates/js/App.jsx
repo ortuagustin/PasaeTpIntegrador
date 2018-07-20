@@ -6,8 +6,6 @@ import {
 	Route,
 	Link
 } from 'react-router-dom'
-import 'bootstrap'; // Para los modals
-
 
 // Componentes
 import Home from './Home.jsx';
@@ -15,7 +13,7 @@ import AdminPanel from './AdminPanel.jsx';
 import ProfessionalPanel from './ProfessionalPanel.jsx';
 
 // Estilos
-import '../css/style.css'; // Estilos propios'
+import '../css/style.css'; // Estilos propios
 import '../css/bootstrap.min.css'; // Bootstrap
 
 /**
@@ -39,25 +37,25 @@ class App extends React.Component {
 						<div className="collapse navbar-collapse" id="navbarSupportedContent">
 							<ul className="navbar-nav mr-auto">
 								<li className="nav-item active">
-									<span className="nav-link">
+									<a className="nav-link">
 										<div>
-											<Link to="/home">Home</Link>
+											<Link to="/">Home</Link>
 										</div>
-									</span>
+									</a>
 								</li>
 								<li className="nav-item active">
-									<span className="nav-link">
+									<a className="nav-link">
 										<div>
-											<Link to="/">Admin</Link>
+											<Link to="/admin">Admin</Link>
 										</div>
-									</span>
+									</a>
 								</li>
 								<li className="nav-item active">
-									<span className="nav-link">
+									<a className="nav-link">
 										<div>
 											<Link to="/professional">Profesional</Link>
 										</div>
-									</span>
+									</a>
 								</li>
 							</ul>
 						
@@ -69,11 +67,9 @@ class App extends React.Component {
 					</nav>
 
 					{/* Renderiza los componentes seleccionados */}
-					<div>
-						<Route exact path="/home" component={Home} />
-						<Route exact path="/" component={AdminPanel} />
-						<Route exact path="/professional" component={ProfessionalPanel} />
-					</div>
+					<Route exact path="/" component={Home} />
+					<Route exact path="/admin" component={AdminPanel} />
+					<Route exact path="/professional" component={ProfessionalPanel} />
 				</div>
 			</Router>
 		);

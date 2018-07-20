@@ -3,12 +3,12 @@ package ar.edu.unlp.pasae.tp_integrador.controllers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.RoleDTO;
+import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.UserExistsException;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.UserNotExistsException;
 import ar.edu.unlp.pasae.tp_integrador.services.CustomUserService;
+import ar.edu.unlp.pasae.tp_integrador.services.RoleService;
 import ar.edu.unlp.pasae.tp_integrador.validators.CustomUserDTOValidator;
 
 @RestController
@@ -31,6 +35,8 @@ import ar.edu.unlp.pasae.tp_integrador.validators.CustomUserDTOValidator;
 public class AdminController {
 	@Autowired
 	private CustomUserService customUserService;
+	@Autowired
+	private RoleService roleService;
 
 	/**
 	 * Bindeo el validador
@@ -45,8 +51,22 @@ public class AdminController {
 	 * @return Lista de usuarios disponibles
 	 */
 	@GetMapping(path = "/users/")
-	public List<CustomUserDTO> listAction() {
-		return this.getCustomUserService().list();
+	public Page<CustomUser> listAction(
+			@RequestParam(value="newestPage", defaultValue="0") int page,
+			@RequestParam(value="newestSizePerPage", defaultValue="10") int sizePerPage,
+			@RequestParam(value="newestSortField", defaultValue="username") String sortField,
+			@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder
+			) {
+		return this.getCustomUserService().list(page, sizePerPage, sortField, sortOrder);
+	}
+	
+	/**
+	 * Lista todos los usuarios
+	 * @return Lista de usuarios disponibles
+	 */
+	@GetMapping(path = "/roles/")
+	public List<RoleDTO> rolesListAction() {
+		return this.getRoleService().listAll();
 	}
 
 	/**
@@ -123,6 +143,14 @@ public class AdminController {
 	 */
 	private CustomUserService getCustomUserService() {
 		return this.customUserService;
+	}
+	
+	/**
+	 * Obtiene el servicio de los roles
+	 * @return Servicio de roles
+	 */
+	private RoleService getRoleService() {
+		return this.roleService;
 	}
 
 }
