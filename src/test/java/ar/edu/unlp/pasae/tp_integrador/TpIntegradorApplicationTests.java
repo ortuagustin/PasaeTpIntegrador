@@ -142,6 +142,20 @@ public class TpIntegradorApplicationTests {
 	}
 
 	@Test
+	public void it_does_not_allow_invalid_email() {
+		Long userId = this.user.getId();
+		String name = "Name";
+		String surname = "Surname";
+		String dni = "37058719";
+		String email = "example.com";
+
+		PatientRequestDTO request = new PatientRequestDTO(userId, name, surname, dni, email);
+
+		thrown.expect(ValidationException.class);
+		this.patientService.create(request);
+	}
+
+	@Test
 	public void it_does_not_change_registrant_user() {
 		List<Role> roles = new ArrayList<Role>();
 		CustomUser anotherUser = this.userRepository.save(new CustomUser("other", "other", "other@example.com", "other", "other", roles));
