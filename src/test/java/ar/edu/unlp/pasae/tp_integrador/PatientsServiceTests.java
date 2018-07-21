@@ -17,16 +17,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.*;
-import ar.edu.unlp.pasae.tp_integrador.entities.*;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
+import ar.edu.unlp.pasae.tp_integrador.entities.Role;
 import ar.edu.unlp.pasae.tp_integrador.repositories.CustomUserRepository;
-import ar.edu.unlp.pasae.tp_integrador.services.*;
+import ar.edu.unlp.pasae.tp_integrador.services.PatientService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 @Rollback(true)
-public class TpIntegradorApplicationTests {
+public class PatientsServiceTests {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
