@@ -1,7 +1,9 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +11,33 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Genotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
+import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
+
 import javax.persistence.EntityNotFoundException;
+
+import ar.edu.unlp.pasae.tp_integrador.repositories.CategoricPhenotypeRepository;
+import ar.edu.unlp.pasae.tp_integrador.repositories.CustomUserRepository;
+import ar.edu.unlp.pasae.tp_integrador.repositories.NumericPhenotypeRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PatientRepository;
 import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
 @Service
 public class PatientServiceImpl implements PatientService {
 	@Autowired
-	private PatientRepository repository;
+	private PatientRepository patientRepository;
+	@Autowired
+	private CustomUserRepository userRepository;
+	@Autowired
+	private CategoricPhenotypeRepository categoricPhenotypesRepository;
+	@Autowired
+	private NumericPhenotypeRepository numericPhenotypeRepository;
+
 	@Autowired
 	private Transformer<Patient, PatientDTO> transformer;
 	@Autowired
@@ -26,12 +45,12 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public PatientDTO find(Long patientId) {
-		return this.getTransformer().toDTO(this.getRepository().findById(patientId).get());
+		return this.getTransformer().toDTO(this.getPatientRepository().getOne(patientId));
 	}
 
 	@Override
 	public PatientDTO findByNameAndSurname(String name, String surname) throws EntityNotFoundException {
-		final Patient patient = this.getRepository().findByNameAndSurname(name, surname)
+		final Patient patient = this.getPatientRepository().findByNameAndSurname(name, surname)
 				.orElseThrow(() -> new EntityNotFoundException(
 						MessageFormat.format("No Patient found with name {0} and surname {1}", name, surname)));
 
@@ -40,7 +59,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public PatientDTO findByDNI(String dni) throws EntityNotFoundException {
-		final Patient patient = this.getRepository().findByDni(dni)
+		final Patient patient = this.getPatientRepository().findByDni(dni)
 				.orElseThrow(() -> new EntityNotFoundException(
 						MessageFormat.format("No Patient found with DNI {0}", dni)));
 
@@ -49,46 +68,148 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public Stream<PatientDTO> list() {
-		return this.getRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
+		return this.getPatientRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
 	}
 
 	@Override
-	public PatientDTO update(PatientDTO patient) {
-		Patient entity = this.getRepository().save(this.getTransformer().toEntity(patient));
+	public PatientDTO update(PatientRequestDTO patient) {
+		Patient entity = this.buildPatient(patient);
+		entity.setId(patient.getId());
+		entity.setUser(this.findRegistrantUser(patient.getId()));
 
-		return this.getTransformer().toDTO(entity);
+		return this.save(entity);
 	}
 
 	@Override
-	public PatientDTO create(PatientDTO patientDTO) {
-		Patient patient = this.getRepository().save(this.getTransformer().toEntity(patientDTO));
+	public PatientDTO create(PatientRequestDTO patient) {
+		Patient entity = this.buildPatient(patient);
 
-		return this.getTransformer().toDTO(patient);
+		return this.save(entity);
 	}
 
 	@Override
 	public void delete(Long patientId) {
-		this.getRepository().deleteById(patientId);
+		this.getPatientRepository().deleteById(patientId);
 	}
 
 	@Override
 	public Integer count() {
-		return (int) this.getRepository().count();
+		return (int) this.getPatientRepository().count();
 	}
 
 	@Override
 	public void setPatientGenotype(Long patientId, List<GenotypeDTO> genotypes) {
-		final Patient patient = this.getRepository().getOne(patientId);
+		final Patient patient = this.getPatientRepository().getOne(patientId);
 		patient.setGenotypes(this.getGenotypeTransformer().manyToEntity(genotypes));
-		this.getRepository().save(patient);
+		this.getPatientRepository().save(patient);
 	}
 
-	private PatientRepository getRepository() {
-		return repository;
+	private PatientDTO save(Patient patient) {
+		patient = this.getPatientRepository().save(patient);
+
+		return this.getTransformer().toDTO(patient);
 	}
 
-	private void setRepository(PatientRepository repository) {
-		this.repository = repository;
+	private Patient buildPatient(PatientRequestDTO patient) {
+		final PatientBuilder builder = Patient.builder();
+
+		 return builder.addName(patient.getName())
+			.addSurname(patient.getSurname())
+			.addEmail(patient.getEmail())
+			.addDni(patient.getDni())
+			.addUser(this.findUser(patient.getUserId()))
+			.addCategoricPhenotypes(this.findCategoricPhenotypes(patient.getCategoricPhenotypes()))
+			.addNumericPhenotypes(this.findNumericPhenotypes(patient.getNumericPhenotypes()))
+			// TODO: implementar genotipos
+			// .addGenotypes(this.findGenotypes(patient.getPhenotypes()))
+			.createPatient();
+	}
+
+	// TODO: implementar genotipos
+	// private List<Genotype> findGenotypes(Set<Long> genotypes) {
+	// 	List<Genotype> entities = new ArrayList<Genotype>();
+
+	// 	for (Long genotypeId : genotypes) {
+	// 		final Genotype genotype = this.getGenotypesRepository().findById(genotypeId)
+	// 			.orElseThrow(() -> new EntityNotFoundException(
+	// 				MessageFormat.format("No Genotype found with id {0}", genotypeId)));
+
+	// 		entities.add(genotype);
+	// 	}
+
+	// 	return entities;
+	// }
+
+	private CustomUser findRegistrantUser(Long patientId) {
+		final Patient patient = this.getPatientRepository().getOne(patientId);
+
+		return patient.getUser();
+	}
+
+	private CustomUser findUser(Long userId) {
+		return this.getUserRepository().findById(userId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						MessageFormat.format("No User found with id {0}", userId)));
+	}
+
+	private Set<CategoricPhenotype> findCategoricPhenotypes(Set<Long> phenotypes) {
+		Set<CategoricPhenotype> entities = new HashSet<CategoricPhenotype>();
+
+		for (Long phenotypeId : phenotypes) {
+			final CategoricPhenotype phenotype = this.getCategoricPhenotypesRepository().findById(phenotypeId)
+				.orElseThrow(() -> new EntityNotFoundException(
+					MessageFormat.format("No Categoric Phenotype found with id {0}", phenotypeId)));
+
+			entities.add(phenotype);
+		}
+
+		return entities;
+	}
+
+	private Set<NumericPhenotype> findNumericPhenotypes(Set<Long> phenotypes) {
+		Set<NumericPhenotype> entities = new HashSet<NumericPhenotype>();
+
+		for (Long phenotypeId : phenotypes) {
+			final NumericPhenotype phenotype = this.getNumericPhenotypeRepository().findById(phenotypeId)
+				.orElseThrow(() -> new EntityNotFoundException(
+					MessageFormat.format("No Numeric Phenotype found with id {0}", phenotypeId)));
+
+			entities.add(phenotype);
+		}
+
+		return entities;
+	}
+
+	private CustomUserRepository getUserRepository() {
+		return userRepository;
+	}
+
+	private void setUserRepository(CustomUserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
+
+	private PatientRepository getPatientRepository() {
+		return patientRepository;
+	}
+
+	private void setPatientRepository(PatientRepository patientRepository) {
+		this.patientRepository = patientRepository;
+	}
+
+	public NumericPhenotypeRepository getNumericPhenotypeRepository() {
+		return numericPhenotypeRepository;
+	}
+
+	public void setNumericPhenotypeRepository(NumericPhenotypeRepository numericPhenotypeRepository) {
+		this.numericPhenotypeRepository = numericPhenotypeRepository;
+	}
+
+	public CategoricPhenotypeRepository getCategoricPhenotypesRepository() {
+		return categoricPhenotypesRepository;
+	}
+
+	public void setCategoricPhenotypesRepository(CategoricPhenotypeRepository categoricPhenotypesRepository) {
+		this.categoricPhenotypesRepository = categoricPhenotypesRepository;
 	}
 
 	private Transformer<Patient, PatientDTO> getTransformer() {
@@ -99,16 +220,10 @@ public class PatientServiceImpl implements PatientService {
 		this.transformer = transformer;
 	}
 
-	/**
-	 * @return the genotypeTransformer
-	 */
 	public Transformer<Genotype, GenotypeDTO> getGenotypeTransformer() {
 		return genotypeTransformer;
 	}
 
-	/**
-	 * @param genotypeTransformer the genotypeTransformer to set
-	 */
 	public void setGenotypeTransformer(Transformer<Genotype, GenotypeDTO> genotypeTransformer) {
 		this.genotypeTransformer = genotypeTransformer;
 	}

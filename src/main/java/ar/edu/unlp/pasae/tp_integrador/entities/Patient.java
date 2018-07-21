@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 @Entity
 public class Patient {
@@ -25,7 +26,7 @@ public class Patient {
 	private String name;
 	@NotEmpty
 	private String surname;
-	@NotEmpty
+	@Pattern(regexp = "\\d{7,8}")
 	private String dni;
 	@Email
 	private String email;
@@ -38,29 +39,85 @@ public class Patient {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<CategoricPhenotype> categoricPhenotypes = new HashSet<CategoricPhenotype>();
 
+	public static final class PatientBuilder {
+		private String name;
+		private String surname;
+		private String dni;
+		private String email;
+		private CustomUser user;
+		private List<Genotype> genotypes = new ArrayList<Genotype>();
+		private Set<NumericPhenotype> numericPhenotypes = new HashSet<NumericPhenotype>();
+		private Set<CategoricPhenotype> categoricPhenotypes = new HashSet<CategoricPhenotype>();
+
+		private PatientBuilder() {
+		}
+
+		public PatientBuilder addNumericPhenotypes(final Set<NumericPhenotype> numericPhenotypes) {
+			this.numericPhenotypes = numericPhenotypes;
+			return this;
+		}
+
+		public PatientBuilder addCategoricPhenotypes(final Set<CategoricPhenotype> categoricPhenotypes) {
+			this.categoricPhenotypes = categoricPhenotypes;
+			return this;
+		}
+
+		public PatientBuilder addGenotypes(final List<Genotype> genotypes) {
+			this.genotypes = genotypes;
+			return this;
+		}
+
+		public PatientBuilder addName(final String name) {
+			this.name = name;
+			return this;
+		}
+
+		public PatientBuilder addUser(final CustomUser user) {
+			this.user = user;
+			return this;
+		}
+
+		public PatientBuilder addSurname(final String surname) {
+			this.surname = surname;
+			return this;
+		}
+
+		public PatientBuilder addDni(final String dni) {
+			this.dni = dni;
+			return this;
+		}
+
+		public PatientBuilder addEmail(final String email) {
+			this.email = email;
+			return this;
+		}
+
+		public Patient createPatient() {
+			final Patient patient = new Patient(this.name, this.surname, this.dni, this.user);
+			patient.setNumericPhenotypes(this.numericPhenotypes);
+			patient.setCategoricPhenotypes(this.categoricPhenotypes);
+			patient.setGenotypes(this.genotypes);
+			patient.setEmail(this.email);
+
+			return patient;
+		}
+	}
+
+	public static final PatientBuilder builder() {
+		return new PatientBuilder();
+	}
+
 	public Patient() {
 		super();
 	}
 
-	public Patient(Long id, String name, String surname, String dni, String email, CustomUser user) {
+	public Patient(String name, String surname, String dni, CustomUser user) {
 		super();
-		this.setId(id);
 		this.setName(name);
 		this.setSurname(surname);
 		this.setDni(dni);
 		this.setEmail(email);
 		this.setUser(user);
-	}
-
-	public Patient(Long id, String name, String surname, String dni, String email, CustomUser user, List<Genotype> genotypes) {
-		super();
-		this.setId(id);
-		this.setName(name);
-		this.setSurname(surname);
-		this.setDni(dni);
-		this.setEmail(email);
-		this.setUser(user);
-		this.setGenotypes(genotypes);
 	}
 
 	/**

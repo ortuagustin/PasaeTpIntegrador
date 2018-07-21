@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 
 public interface PatientService {
 	/**
@@ -51,7 +52,7 @@ public interface PatientService {
 	 *
 	 * @return dto con los datos del paciente persistido
 	 */
-	PatientDTO create(PatientDTO patient);
+	PatientDTO create(PatientRequestDTO patient);
 
 	/**
 	 * Devuelve la cantidad de pacientes
@@ -67,7 +68,7 @@ public interface PatientService {
 	 *
 	 * @return dto con los datos del paciente actualizado
 	 */
-	PatientDTO update(PatientDTO patient);
+	PatientDTO update(PatientRequestDTO patient);
 
 	/**
 	 * Actualiza el genotipo de un paciente

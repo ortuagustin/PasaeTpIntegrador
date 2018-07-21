@@ -9,6 +9,9 @@ import javax.validation.constraints.NotNull;
 
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 
+/**
+ * DTO que se usa para devolver el objeto paciente
+ */
 public class PatientDTO {
 	private Long id;
 	@NotEmpty

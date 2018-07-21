@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
-import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
-import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
+import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
 
 @Service
 public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
@@ -19,13 +18,14 @@ public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
 
 	@Override
 	public Patient toEntity(PatientDTO dto) {
-		Patient entity = new Patient(dto.getId(), dto.getName(), dto.getSurname(), dto.getDni(), dto.getEmail(), dto.getUser());
-		Set<NumericPhenotype> numericPhenotypes = this.getPhenotypeTransformer().numericToEntities(dto.getNumericPhenotypes());
-		Set<CategoricPhenotype> categoricPhenotypes = this.getPhenotypeTransformer().categoricToEntities(dto.getCategoricPhenotypes());
-		entity.setCategoricPhenotypes(categoricPhenotypes);
-		entity.setNumericPhenotypes(numericPhenotypes);
+		// TODO: en realidad no se usa mas ... este metodo se va a terminar sacando de la interfaz Transformer
+		final PatientBuilder builder = Patient.builder();
 
-		return entity;
+		 return builder.addName(dto.getName())
+			.addSurname(dto.getSurname())
+			.addEmail(dto.getEmail())
+			.addDni(dto.getDni())
+			.createPatient();
 	}
 
 	@Override
