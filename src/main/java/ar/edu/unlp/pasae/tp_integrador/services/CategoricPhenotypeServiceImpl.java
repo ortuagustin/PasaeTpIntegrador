@@ -15,6 +15,7 @@ import ar.edu.unlp.pasae.tp_integrador.repositories.CategoricPhenotypeRepository
 import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
 @Service
+@SuppressWarnings("unused")
 public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService {
 	@Autowired
 	private CategoricPhenotypeRepository phenotypeRepository;
@@ -81,7 +82,7 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 	}
 
 	private void setPhenotypeRepository(CategoricPhenotypeRepository repository) {
-		this.phenotypeRepository = phenotypeRepository;
+		this.phenotypeRepository = repository;
 	}
 
 	private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> getTransformer() {

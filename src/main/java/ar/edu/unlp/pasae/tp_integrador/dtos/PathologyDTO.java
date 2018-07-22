@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import javax.validation.constraints.NotEmpty;
 
+@SuppressWarnings("unused")
 public class PathologyDTO {
 	private Long id;
 	@NotEmpty

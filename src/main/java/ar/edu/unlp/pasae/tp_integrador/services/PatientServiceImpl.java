@@ -28,6 +28,7 @@ import ar.edu.unlp.pasae.tp_integrador.repositories.PatientRepository;
 import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
 @Service
+@SuppressWarnings("unused")
 public class PatientServiceImpl implements PatientService {
 	@Autowired
 	private PatientRepository patientRepository;

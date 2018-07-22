@@ -2,6 +2,7 @@ package ar.edu.unlp.pasae.tp_integrador.dtos;
 
 import javax.validation.constraints.NotEmpty;
 
+@SuppressWarnings("unused")
 public class NumericPhenotypeDTO {
 	private Long id;
 	@NotEmpty

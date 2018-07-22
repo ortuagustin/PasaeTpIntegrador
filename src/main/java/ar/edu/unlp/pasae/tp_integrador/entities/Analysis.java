@@ -9,6 +9,7 @@ import javax.persistence.Id;
 
 // TODO: modelar asociaciones genotipo-fenotipo
 @Entity
+@SuppressWarnings("unused")
 public class Analysis {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

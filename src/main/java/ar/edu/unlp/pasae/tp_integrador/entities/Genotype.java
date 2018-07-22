@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
+@SuppressWarnings("unused")
 public class Genotype {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

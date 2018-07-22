@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
+@SuppressWarnings("unused")
 public class CategoricPhenotypeDTO {
 	private Long id;
 	@NotEmpty

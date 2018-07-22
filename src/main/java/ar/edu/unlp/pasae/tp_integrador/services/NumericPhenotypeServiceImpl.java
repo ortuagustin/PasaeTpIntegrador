@@ -14,6 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
 @Service
+@SuppressWarnings("unused")
 public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 	@Autowired
 	private NumericPhenotypeRepository phenotypeRepository;
@@ -80,7 +81,7 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 	}
 
 	private void setPhenotypeRepository(NumericPhenotypeRepository repository) {
-		this.phenotypeRepository = phenotypeRepository;
+		this.phenotypeRepository = repository;
 	}
 
 	private Transformer<NumericPhenotype, NumericPhenotypeDTO> getTransformer() {

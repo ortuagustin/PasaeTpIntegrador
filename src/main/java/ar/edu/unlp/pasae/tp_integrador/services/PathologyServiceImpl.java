@@ -13,6 +13,7 @@ import ar.edu.unlp.pasae.tp_integrador.repositories.PathologyRepository;
 import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
 @Service
+@SuppressWarnings("unused")
 public class PathologyServiceImpl implements PathologyService {
 	@Autowired
 	private PathologyRepository repository;

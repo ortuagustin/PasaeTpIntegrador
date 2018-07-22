@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 /**
  * DTO que se usa para altas/modificaciones de pacientes
  */
+@SuppressWarnings("unused")
 public class PatientRequestDTO {
 	private Long id;
 	private Long userId;

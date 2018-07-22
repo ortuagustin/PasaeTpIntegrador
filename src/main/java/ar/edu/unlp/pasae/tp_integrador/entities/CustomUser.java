@@ -2,7 +2,6 @@ package ar.edu.unlp.pasae.tp_integrador.entities;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -36,9 +35,9 @@ public class CustomUser implements UserDetails {
 	private boolean accountNonLocked = true;
 	private boolean credentialsNonExpired = true;
 	private boolean enabled = true;
-	
+
 	public CustomUser() {};
-	
+
 	public CustomUser(String username, String password, String email, String firstName, String lastName, List<Role> authorities) {
 		this.username = username;
 		this.password = password;
@@ -47,7 +46,7 @@ public class CustomUser implements UserDetails {
 		this.lastName = lastName;
 		this.setAuthorities(authorities);
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}

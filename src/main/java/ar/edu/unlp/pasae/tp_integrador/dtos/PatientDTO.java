@@ -12,6 +12,7 @@ import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 /**
  * DTO que se usa para devolver el objeto paciente
  */
+@SuppressWarnings("unused")
 public class PatientDTO {
 	private Long id;
 	@NotEmpty
