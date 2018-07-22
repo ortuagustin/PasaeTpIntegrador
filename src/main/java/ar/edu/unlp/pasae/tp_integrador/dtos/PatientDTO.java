@@ -24,6 +24,7 @@ public class PatientDTO {
 	@Email
 	private String email;
 	@NotNull
+	// TODO: deberia ser un CustomUserDTO!
 	private CustomUser user;
 	private Set<NumericPhenotypeDTO> numericPhenotypes = new HashSet<NumericPhenotypeDTO>();
 	private Set<CategoricPhenotypeDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeDTO>();
