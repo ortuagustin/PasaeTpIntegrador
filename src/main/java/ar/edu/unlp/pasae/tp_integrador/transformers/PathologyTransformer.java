@@ -5,8 +5,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
-import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
 import ar.edu.unlp.pasae.tp_integrador.entities.Pathology.PathologyBuilder;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
