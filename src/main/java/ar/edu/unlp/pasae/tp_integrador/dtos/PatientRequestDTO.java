@@ -21,7 +21,6 @@ public class PatientRequestDTO {
 	private String dni;
 	@Email
 	private String email;
-	private Set<Long> phenotypes = new HashSet<Long>();
 	private Set<Long> numericPhenotypes = new HashSet<Long>();
 	private Set<Long> categoricPhenotypes = new HashSet<Long>();
 
@@ -49,20 +48,6 @@ public class PatientRequestDTO {
 	}
 
 	/**
-	 * @return the phenotypes
-	 */
-	public Set<Long> getPhenotypes() {
-		return phenotypes;
-	}
-
-	/**
-	 * @param phenotypes the phenotypes to set
-	 */
-	public void setPhenotypes(Set<Long> phenotypes) {
-		this.phenotypes = phenotypes;
-	}
-
-	/**
 	 * @return the categoricPhenotypes
 	 */
 	public Set<Long> getCategoricPhenotypes() {
@@ -73,7 +58,8 @@ public class PatientRequestDTO {
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
 	public void setCategoricPhenotypes(Set<Long> categoricPhenotypes) {
-		this.categoricPhenotypes = categoricPhenotypes;
+		this.categoricPhenotypes.clear();
+		this.categoricPhenotypes.addAll(categoricPhenotypes);
 	}
 
 	/**
@@ -87,7 +73,8 @@ public class PatientRequestDTO {
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
 	public void setNumericPhenotypes(Set<Long> numericPhenotypes) {
-		this.numericPhenotypes = numericPhenotypes;
+		this.numericPhenotypes.clear();
+		this.numericPhenotypes.addAll(numericPhenotypes);
 	}
 
 	/**

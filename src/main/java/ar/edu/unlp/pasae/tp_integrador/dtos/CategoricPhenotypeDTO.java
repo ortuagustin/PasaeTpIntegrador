@@ -55,6 +55,7 @@ public class CategoricPhenotypeDTO {
 	 * @param values the values to set
 	 */
 	public void setValues(Set<String> values) {
+		this.values.clear();
 		this.values.addAll(values);
 	}
 
