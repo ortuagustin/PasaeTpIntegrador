@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype.CategoricPhenotypeBuilder;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -45,16 +46,17 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 
 	@Override
 	public CategoricPhenotypeDTO update(CategoricPhenotypeDTO phenotype) {
-		CategoricPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
+		CategoricPhenotype entity = this.buildPhenotype(phenotype);
+		entity.setId(phenotype.getId());
 
-		return this.getTransformer().toDTO(entity);
+		return this.save(entity);
 	}
 
 	@Override
 	public CategoricPhenotypeDTO create(CategoricPhenotypeDTO phenotype) {
-		CategoricPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
+		CategoricPhenotype entity = this.buildPhenotype(phenotype);
 
-		return this.getTransformer().toDTO(entity);
+		return this.save(entity);
 	}
 
 	@Override
@@ -67,6 +69,20 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 	@Override
 	public Integer count() {
 		return (int) this.getPhenotypeRepository().count();
+	}
+
+	private CategoricPhenotypeDTO save(CategoricPhenotype phenotype) {
+		phenotype = this.getPhenotypeRepository().save(phenotype);
+
+		return this.getTransformer().toDTO(phenotype);
+	}
+
+	private CategoricPhenotype buildPhenotype(CategoricPhenotypeDTO phenotype) {
+		final CategoricPhenotypeBuilder builder = CategoricPhenotype.builder();
+
+		 return builder.addName(phenotype.getName())
+			.addValues(phenotype.getValues())
+			.createPhenotype();
 	}
 
 	private CategoricPhenotype findPhenotypeById(Long phenotypeId) throws EntityNotFoundException {
