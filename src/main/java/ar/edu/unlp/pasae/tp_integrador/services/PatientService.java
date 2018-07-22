@@ -17,7 +17,7 @@ public interface PatientService {
 	 *
 	 * @return dto con los datos del paciente bsucado
 	 */
-	PatientDTO find(Long patientId);
+	PatientDTO find(Long patientId) throws EntityNotFoundException;
 
 	/**
 	 * Devuelve un paciente dado su dni
@@ -83,5 +83,5 @@ public interface PatientService {
 	 *
 	 * @param patientId el id del paciente
 	 */
-	void delete(Long patientId);
+	void delete(Long patientId) throws EntityNotFoundException;
 }

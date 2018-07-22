@@ -44,8 +44,10 @@ public class PatientServiceImpl implements PatientService {
 	private Transformer<Genotype, GenotypeDTO> genotypeTransformer;
 
 	@Override
-	public PatientDTO find(Long patientId) {
-		return this.getTransformer().toDTO(this.getPatientRepository().getOne(patientId));
+	public PatientDTO find(Long patientId) throws EntityNotFoundException {
+		final Patient patient = this.findPatientById(patientId);
+
+		return this.getTransformer().toDTO(patient);
 	}
 
 	@Override
@@ -88,8 +90,10 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public void delete(Long patientId) {
-		this.getPatientRepository().deleteById(patientId);
+	public void delete(Long patientId) throws EntityNotFoundException {
+		final Patient patient = this.findPatientById(patientId);
+
+		this.getPatientRepository().delete(patient);
 	}
 
 	@Override
@@ -102,6 +106,14 @@ public class PatientServiceImpl implements PatientService {
 		final Patient patient = this.getPatientRepository().getOne(patientId);
 		patient.setGenotypes(this.getGenotypeTransformer().manyToEntity(genotypes));
 		this.getPatientRepository().save(patient);
+	}
+
+	private Patient findPatientById(Long patientId) throws EntityNotFoundException {
+		final Patient patient = this.getPatientRepository().findById(patientId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						MessageFormat.format("No Patient found with Id {0}", patientId)));
+
+		return patient;
 	}
 
 	private PatientDTO save(Patient patient) {
