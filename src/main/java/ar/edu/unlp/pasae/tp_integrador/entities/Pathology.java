@@ -22,19 +22,51 @@ public class Pathology {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<CategoricPhenotype> categoricPhenotypes = new HashSet<CategoricPhenotype>();
 
-	public Pathology(Long id, String name, Set<NumericPhenotype> numericPhenotypes, Set<CategoricPhenotype> categoricPhenotypes) {
+	public static final class PathologyBuilder {
+		private String name;
+		private Set<NumericPhenotype> numericPhenotypes = new HashSet<NumericPhenotype>();
+		private Set<CategoricPhenotype> categoricPhenotypes = new HashSet<CategoricPhenotype>();
+
+		private PathologyBuilder() {
+		}
+
+		public PathologyBuilder addNumericPhenotypes(final Set<NumericPhenotype> numericPhenotypes) {
+			this.numericPhenotypes = numericPhenotypes;
+			return this;
+		}
+
+		public PathologyBuilder addCategoricPhenotypes(final Set<CategoricPhenotype> categoricPhenotypes) {
+			this.categoricPhenotypes = categoricPhenotypes;
+			return this;
+		}
+
+		public PathologyBuilder addName(final String name) {
+			this.name = name;
+			return this;
+		}
+
+		public Pathology createPathology() {
+			final Pathology pathology = new Pathology(this.name);
+			pathology.setNumericPhenotypes(this.numericPhenotypes);
+			pathology.setCategoricPhenotypes(this.categoricPhenotypes);
+
+			return pathology;
+		}
+	}
+
+	public static final PathologyBuilder builder() {
+		return new PathologyBuilder();
+	}
+
+	public Pathology(Long id, String name) {
 		super();
 		this.setId(id);
 		this.setName(name);
-		this.setCategoricPhenotypes(categoricPhenotypes);
-		this.setNumericPhenotypes(numericPhenotypes);
 	}
 
-	public Pathology(String name, Set<NumericPhenotype> numericPhenotypes, Set<CategoricPhenotype> categoricPhenotypes) {
+	public Pathology(String name) {
 		super();
 		this.setName(name);
-		this.setCategoricPhenotypes(categoricPhenotypes);
-		this.setNumericPhenotypes(numericPhenotypes);
 	}
 
 	public Pathology() {
@@ -106,7 +138,8 @@ public class Pathology {
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
 	public void setCategoricPhenotypes(Set<CategoricPhenotype> categoricPhenotypes) {
-		this.categoricPhenotypes = categoricPhenotypes;
+		this.categoricPhenotypes.clear();
+		this.categoricPhenotypes.addAll(categoricPhenotypes);
 	}
 
 	/**
@@ -120,6 +153,7 @@ public class Pathology {
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
 	public void setNumericPhenotypes(Set<NumericPhenotype> numericPhenotypes) {
-		this.numericPhenotypes = numericPhenotypes;
+		this.numericPhenotypes.clear();
+		this.numericPhenotypes.addAll(numericPhenotypes);
 	}
 }

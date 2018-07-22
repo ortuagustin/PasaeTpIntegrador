@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
+import ar.edu.unlp.pasae.tp_integrador.entities.Pathology.PathologyBuilder;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyDTO;
@@ -19,10 +20,11 @@ public class PathologyTransformer extends BaseTransformer<Pathology, PathologyDT
 
 	@Override
 	public Pathology toEntity(PathologyDTO dto) {
-		Set<NumericPhenotype> numericPhenotypes = this.getPhenotypeTransformer().numericToEntities(dto.getNumericPhenotypes());
-		Set<CategoricPhenotype> categoricPhenotypes = this.getPhenotypeTransformer().categoricToEntities(dto.getCategoricPhenotypes());
+		// TODO: en realidad no se usa mas ... este metodo se va a terminar sacando de la interfaz Transformer
+		final PathologyBuilder builder = Pathology.builder();
 
-		return new Pathology(dto.getId(), dto.getName(), numericPhenotypes, categoricPhenotypes);
+		 return builder.addName(dto.getName())
+			.createPathology();
 	}
 
 	@Override

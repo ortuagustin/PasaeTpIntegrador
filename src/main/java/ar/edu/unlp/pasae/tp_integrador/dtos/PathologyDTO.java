@@ -5,6 +5,9 @@ import java.util.HashSet;
 
 import javax.validation.constraints.NotEmpty;
 
+/**
+ * DTO que se usa para devolver el objeto patologia
+ */
 @SuppressWarnings("unused")
 public class PathologyDTO {
 	private Long id;
@@ -69,7 +72,8 @@ public class PathologyDTO {
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
 	public void setCategoricPhenotypes(Set<CategoricPhenotypeDTO> categoricPhenotypes) {
-		this.categoricPhenotypes = categoricPhenotypes;
+		this.categoricPhenotypes.clear();
+		this.categoricPhenotypes.addAll(categoricPhenotypes);
 	}
 
 	/**
@@ -83,6 +87,7 @@ public class PathologyDTO {
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
 	public void setNumericPhenotypes(Set<NumericPhenotypeDTO> numericPhenotypes) {
-		this.numericPhenotypes = numericPhenotypes;
+		this.numericPhenotypes.clear();
+		this.numericPhenotypes.addAll(numericPhenotypes);
 	}
 }

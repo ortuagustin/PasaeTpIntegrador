@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.services.PathologyService;
 
 @RestController
@@ -40,13 +41,13 @@ public class PathologyController {
   }
 
   @PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-  public PathologyDTO create(@RequestBody @Valid PathologyDTO patient) {
-      return this.getPathologysService().create(patient);
+  public PathologyDTO create(@RequestBody @Valid PathologyRequestDTO pathology) {
+      return this.getPathologysService().create(pathology);
   }
 
   @PatchMapping(path = "/", consumes = "application/json")
-  public PathologyDTO update(@RequestBody @Valid PathologyDTO patient) {
-    return this.getPathologysService().update(patient);
+  public PathologyDTO update(@RequestBody @Valid PathologyRequestDTO pathology) {
+    return this.getPathologysService().update(pathology);
   }
 
   private PathologyService getPathologysService() {
