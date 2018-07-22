@@ -17,59 +17,71 @@ import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 @Service
 public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService {
 	@Autowired
-	private CategoricPhenotypeRepository repository;
+	private CategoricPhenotypeRepository phenotypeRepository;
 	@Autowired
 	private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> transformer;
 
 	@Override
-	public CategoricPhenotypeDTO find(Long id) {
-		return this.getTransformer().toDTO(this.getRepository().findById(id).get());
+	public CategoricPhenotypeDTO find(Long phenotypeId) throws EntityNotFoundException {
+		final CategoricPhenotype phenotype = this.findPhenotypeById(phenotypeId);
+
+		return this.getTransformer().toDTO(phenotype);
 	}
 
 	@Override
 	public CategoricPhenotypeDTO findByName(String name) throws EntityNotFoundException {
-		final CategoricPhenotype phenotype = this.getRepository().findByName(name)
+		final CategoricPhenotype phenotype = this.getPhenotypeRepository().findByName(name)
 				.orElseThrow(() -> new EntityNotFoundException(
-						MessageFormat.format("No CategoricPhenotype found with name {0}", name)));
+						MessageFormat.format("No Categoric Phenotype found with name {0}", name)));
 
 		return this.getTransformer().toDTO(phenotype);
 	}
 
 	@Override
 	public Stream<CategoricPhenotypeDTO> list() {
-		return this.getRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
+		return this.getPhenotypeRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
 	}
 
 	@Override
-	public CategoricPhenotypeDTO update(CategoricPhenotypeDTO CategoricPhenotype) {
-		CategoricPhenotype phenotype = this.getRepository().save(this.getTransformer().toEntity(CategoricPhenotype));
+	public CategoricPhenotypeDTO update(CategoricPhenotypeDTO phenotype) {
+		CategoricPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
 
-		return this.getTransformer().toDTO(phenotype);
+		return this.getTransformer().toDTO(entity);
 	}
 
 	@Override
-	public CategoricPhenotypeDTO create(CategoricPhenotypeDTO CategoricPhenotypeDTO) {
-		CategoricPhenotype phenotype = this.getRepository().save(this.getTransformer().toEntity(CategoricPhenotypeDTO));
+	public CategoricPhenotypeDTO create(CategoricPhenotypeDTO phenotype) {
+		CategoricPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
 
-		return this.getTransformer().toDTO(phenotype);
+		return this.getTransformer().toDTO(entity);
 	}
 
 	@Override
-	public void delete(Long id) {
-		this.getRepository().deleteById(id);
+	public void delete(Long phenotypeId) throws EntityNotFoundException {
+		final CategoricPhenotype phenotype = this.findPhenotypeById(phenotypeId);
+
+		this.getPhenotypeRepository().delete(phenotype);
 	}
 
 	@Override
 	public Integer count() {
-		return (int) this.getRepository().count();
+		return (int) this.getPhenotypeRepository().count();
 	}
 
-	private CategoricPhenotypeRepository getRepository() {
-		return repository;
+	private CategoricPhenotype findPhenotypeById(Long phenotypeId) throws EntityNotFoundException {
+		final CategoricPhenotype phenotype = this.getPhenotypeRepository().findById(phenotypeId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						MessageFormat.format("No Categoric Phenotype found with Id {0}", phenotypeId)));
+
+		return phenotype;
 	}
 
-	private void setRepository(CategoricPhenotypeRepository repository) {
-		this.repository = repository;
+	private CategoricPhenotypeRepository getPhenotypeRepository() {
+		return phenotypeRepository;
+	}
+
+	private void setPhenotypeRepository(CategoricPhenotypeRepository repository) {
+		this.phenotypeRepository = phenotypeRepository;
 	}
 
 	private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> getTransformer() {

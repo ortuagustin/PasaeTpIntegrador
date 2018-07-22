@@ -68,11 +68,11 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 	}
 
 	private NumericPhenotype findPhenotypeById(Long phenotypeId) throws EntityNotFoundException {
-		final NumericPhenotype patient = this.getPhenotypeRepository().findById(phenotypeId)
+		final NumericPhenotype phenotype = this.getPhenotypeRepository().findById(phenotypeId)
 				.orElseThrow(() -> new EntityNotFoundException(
 						MessageFormat.format("No Numeric Phenotype found with Id {0}", phenotypeId)));
 
-		return patient;
+		return phenotype;
 	}
 
 	private NumericPhenotypeRepository getPhenotypeRepository() {
