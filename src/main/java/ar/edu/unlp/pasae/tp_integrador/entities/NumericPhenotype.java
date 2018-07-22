@@ -19,7 +19,7 @@ public class NumericPhenotype extends Phenotype {
   @Override
   public Boolean validate(String value) {
     try {
-      Integer.parseInt(value);
+      Float.parseFloat(value);
       return true;
     } catch (Exception NumberFormatException) {
       return false;
