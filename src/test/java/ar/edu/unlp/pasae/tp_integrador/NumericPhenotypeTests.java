@@ -7,7 +7,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -86,7 +85,7 @@ public class NumericPhenotypeTests {
 	}
 
 	@Test
-	public void it_finds_patient_by_name() {
+	public void it_finds_phenotype_by_name() {
 		String name = "Name";
 
 		NumericPhenotypeDTO request = new NumericPhenotypeDTO(name);
