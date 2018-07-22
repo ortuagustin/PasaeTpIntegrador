@@ -7,11 +7,60 @@ import javax.persistence.EntityNotFoundException;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 
 public interface NumericPhenotypeService {
-	NumericPhenotypeDTO find(Long id);
+	/**
+	 * Devuelve un fenotipo dado su id
+	 *
+	 * @param phenotypeId el id del fenotipo
+	 *
+	 * @return dto con los datos del fenotipo solicitado
+	 */
+	NumericPhenotypeDTO find(Long phenotypeId) throws EntityNotFoundException;
+
+	/**
+	 * Devuelve un fenotipo dado su dni
+	 *
+	 * @param name el nombre del fenotipo
+	 *
+	 * @return dto con los datos del fenotipo solicitado
+	 */
 	NumericPhenotypeDTO findByName(String name) throws EntityNotFoundException;
+
+	/**
+	 * Devuelve un Stream con todos los fenotipos del sistema
+	 *
+	 * @return stream de fenotipos
+	 */
 	Stream<NumericPhenotypeDTO> list();
-	NumericPhenotypeDTO create(NumericPhenotypeDTO Phenotype);
+
+	/**
+	 * Crea un fenotipo
+	 *
+	 * @param phenotype dto con los datos del fenotipo
+	 *
+	 * @return dto con los datos del fenotipo persistido
+	 */
+	NumericPhenotypeDTO create(NumericPhenotypeDTO phenotype);
+
+	/**
+	 * Devuelve la cantidad de fenotipos
+	 *
+	 * @return la cantidad de fenotipos
+	 */
 	Integer count();
-	NumericPhenotypeDTO update(NumericPhenotypeDTO Phenotype);
-	void delete(Long id);
+
+	/**
+	 * Actualiza un fenotipo
+	 *
+	 * @param phenotype dto con los datos a actualizar
+	 *
+	 * @return dto con los datos del fenotipo actualizado
+	 */
+	NumericPhenotypeDTO update(NumericPhenotypeDTO phenotype);
+
+	/**
+	 * Elimina un fenotipo
+	 *
+	 * @param phenotypeId el id del fenotipo
+	 */
+	void delete(Long phenotypeId) throws EntityNotFoundException;
 }

@@ -1,8 +1,13 @@
 package ar.edu.unlp.pasae.tp_integrador;
 
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -27,6 +32,104 @@ public class NumericPhenotypeTests {
 
 	@Autowired
 	private NumericPhenotypeService phenotypeService;
+
+  @Test
+	public void it_returns_phenotype_list() {
+		Collection<NumericPhenotypeDTO> phenotypes;
+
+		phenotypes = this.phenotypeService.list().collect(Collectors.toList());
+
+		Assert.assertTrue("Phenotype list should be empty", phenotypes.isEmpty());
+
+		for (Integer i = 1; i <= 10; i++) {
+			NumericPhenotypeDTO request;
+			request = new NumericPhenotypeDTO("Phenotype #" + i);
+			this.phenotypeService.create(request);
+		}
+
+		phenotypes = this.phenotypeService.list().collect(Collectors.toList());
+
+		Assert.assertFalse("Phenotype list should not be empty", phenotypes.isEmpty());
+		Assert.assertEquals(10, phenotypes.size());
+	}
+
+	@Test
+	public void it_returns_phenotype_count() {
+		Assert.assertEquals((Integer) 0, this.phenotypeService.count());
+
+		for (Integer i = 1; i <= 10; i++) {
+			NumericPhenotypeDTO request;
+			request = new NumericPhenotypeDTO("Phenotype #" + i);
+			this.phenotypeService.create(request);
+		}
+
+		Assert.assertEquals((Integer) 10, this.phenotypeService.count());
+	}
+
+	@Test
+	public void it_finds_phenotype_by_id() {
+		String name = "A Phenotype";
+		NumericPhenotypeDTO request = new NumericPhenotypeDTO(name);
+		Long phenotypeId = this.phenotypeService.create(request).getId();
+		NumericPhenotypeDTO phenotype = this.phenotypeService.find(phenotypeId);
+
+		Assert.assertNotNull(phenotype);
+		Assert.assertEquals(name, phenotype.getName());
+	}
+
+	@Test
+	public void it_throws_exception_when_phenotype_id_does_not_exist() {
+		thrown.expect(EntityNotFoundException.class);
+
+		this.phenotypeService.find(1L);
+		this.phenotypeService.find(2L);
+	}
+
+	@Test
+	public void it_finds_patient_by_name() {
+		String name = "Name";
+
+		NumericPhenotypeDTO request = new NumericPhenotypeDTO(name);
+		this.phenotypeService.create(request).getId();
+		NumericPhenotypeDTO phenotype = this.phenotypeService.findByName(name);
+
+		Assert.assertNotNull(phenotype);
+		Assert.assertEquals(name, phenotype.getName());
+	}
+
+	@Test
+	public void it_throws_exception_when_phenotype_name_does_not_exist() {
+		thrown.expect(EntityNotFoundException.class);
+
+		this.phenotypeService.findByName("");
+		this.phenotypeService.findByName("123");
+		this.phenotypeService.findByName("12345678");
+	}
+
+	@Test
+	public void it_deletes_phenotype() {
+		NumericPhenotypeDTO request = new NumericPhenotypeDTO("Name");
+		Long phenotypeId = this.phenotypeService.create(request).getId();
+
+		NumericPhenotypeDTO phenotype;
+
+		phenotype = this.phenotypeService.find(phenotypeId);
+		Assert.assertNotNull(phenotype);
+
+		thrown.expect(EntityNotFoundException.class);
+
+		this.phenotypeService.delete(phenotypeId);
+		phenotype = this.phenotypeService.find(phenotypeId);
+		Assert.assertNull(phenotype);
+	}
+
+	@Test
+	public void it_throws_exception_when_deleting_non_existing_phenotype() {
+		thrown.expect(EntityNotFoundException.class);
+
+		this.phenotypeService.delete(1L);
+		this.phenotypeService.delete(2L);
+	}
 
 	@Test
 	public void it_saves_new_phenotype() {

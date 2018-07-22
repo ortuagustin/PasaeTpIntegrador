@@ -15,7 +15,7 @@ public interface PatientService {
 	 *
 	 * @param patientId el id del paciente
 	 *
-	 * @return dto con los datos del paciente bsucado
+	 * @return dto con los datos del paciente solicitado
 	 */
 	PatientDTO find(Long patientId) throws EntityNotFoundException;
 
@@ -24,7 +24,7 @@ public interface PatientService {
 	 *
 	 * @param dni el dni del paciente
 	 *
-	 * @return dto con los datos del paciente bsucado
+	 * @return dto con los datos del paciente solicitado
 	 */
 	PatientDTO findByDNI(String dni) throws EntityNotFoundException;
 
@@ -34,7 +34,7 @@ public interface PatientService {
 	 * @param name    el nombre del paciente
 	 * @param surname el apellido del paciente
 	 *
-	 * @return dto con los datos del paciente bsucado
+	 * @return dto con los datos del paciente solicitado
 	 */
 	PatientDTO findByNameAndSurname(String name, String surname) throws EntityNotFoundException;
 

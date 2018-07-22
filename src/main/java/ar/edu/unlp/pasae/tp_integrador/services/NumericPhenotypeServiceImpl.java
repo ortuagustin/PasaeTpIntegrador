@@ -16,59 +16,71 @@ import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 @Service
 public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 	@Autowired
-	private NumericPhenotypeRepository repository;
+	private NumericPhenotypeRepository phenotypeRepository;
 	@Autowired
 	private Transformer<NumericPhenotype, NumericPhenotypeDTO> transformer;
 
 	@Override
-	public NumericPhenotypeDTO find(Long id) {
-		return this.getTransformer().toDTO(this.getRepository().findById(id).get());
+	public NumericPhenotypeDTO find(Long phenotypeId) throws EntityNotFoundException {
+		final NumericPhenotype phenotype = this.findPhenotypeById(phenotypeId);
+
+		return this.getTransformer().toDTO(phenotype);
 	}
 
 	@Override
 	public NumericPhenotypeDTO findByName(String name) throws EntityNotFoundException {
-		final NumericPhenotype phenotype = this.getRepository().findByName(name)
+		final NumericPhenotype phenotype = this.getPhenotypeRepository().findByName(name)
 				.orElseThrow(() -> new EntityNotFoundException(
-						MessageFormat.format("No NumericPhenotype found with name {0}", name)));
+						MessageFormat.format("No Numeric Phenotype found with name {0}", name)));
 
 		return this.getTransformer().toDTO(phenotype);
 	}
 
 	@Override
 	public Stream<NumericPhenotypeDTO> list() {
-		return this.getRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
+		return this.getPhenotypeRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
 	}
 
 	@Override
-	public NumericPhenotypeDTO update(NumericPhenotypeDTO NumericPhenotype) {
-		NumericPhenotype phenotype = this.getRepository().save(this.getTransformer().toEntity(NumericPhenotype));
+	public NumericPhenotypeDTO update(NumericPhenotypeDTO phenotype) {
+		NumericPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
 
-		return this.getTransformer().toDTO(phenotype);
+		return this.getTransformer().toDTO(entity);
 	}
 
 	@Override
-	public NumericPhenotypeDTO create(NumericPhenotypeDTO NumericPhenotypeDTO) {
-		NumericPhenotype phenotype = this.getRepository().save(this.getTransformer().toEntity(NumericPhenotypeDTO));
+	public NumericPhenotypeDTO create(NumericPhenotypeDTO phenotype) {
+		NumericPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
 
-		return this.getTransformer().toDTO(phenotype);
+		return this.getTransformer().toDTO(entity);
 	}
 
 	@Override
-	public void delete(Long id) {
-		this.getRepository().deleteById(id);
+	public void delete(Long phenotypeId) throws EntityNotFoundException {
+		final NumericPhenotype phenotype = this.findPhenotypeById(phenotypeId);
+
+		this.getPhenotypeRepository().delete(phenotype);
 	}
 
 	@Override
 	public Integer count() {
-		return (int) this.getRepository().count();
+		return (int) this.getPhenotypeRepository().count();
 	}
 
-	private NumericPhenotypeRepository getRepository() {
-		return repository;
+	private NumericPhenotype findPhenotypeById(Long phenotypeId) throws EntityNotFoundException {
+		final NumericPhenotype patient = this.getPhenotypeRepository().findById(phenotypeId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						MessageFormat.format("No Numeric Phenotype found with Id {0}", phenotypeId)));
+
+		return patient;
 	}
 
-	private void setRepository(NumericPhenotypeRepository repository) {
-		this.repository = repository;
+	private NumericPhenotypeRepository getPhenotypeRepository() {
+		return phenotypeRepository;
+	}
+
+	private void setPhenotypeRepository(NumericPhenotypeRepository repository) {
+		this.phenotypeRepository = phenotypeRepository;
 	}
 
 	private Transformer<NumericPhenotype, NumericPhenotypeDTO> getTransformer() {
