@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype.NumericPhenotypeBuilder;
 import ar.edu.unlp.pasae.tp_integrador.repositories.NumericPhenotypeRepository;
 
 import javax.persistence.EntityNotFoundException;
@@ -44,16 +45,17 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 
 	@Override
 	public NumericPhenotypeDTO update(NumericPhenotypeDTO phenotype) {
-		NumericPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
+		NumericPhenotype entity = this.buildPhenotype(phenotype);
+		entity.setId(phenotype.getId());
 
-		return this.getTransformer().toDTO(entity);
+		return this.save(entity);
 	}
 
 	@Override
 	public NumericPhenotypeDTO create(NumericPhenotypeDTO phenotype) {
-		NumericPhenotype entity = this.getPhenotypeRepository().save(this.getTransformer().toEntity(phenotype));
+		NumericPhenotype entity = this.buildPhenotype(phenotype);
 
-		return this.getTransformer().toDTO(entity);
+		return this.save(entity);
 	}
 
 	@Override
@@ -66,6 +68,19 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 	@Override
 	public Integer count() {
 		return (int) this.getPhenotypeRepository().count();
+	}
+
+	private NumericPhenotypeDTO save(NumericPhenotype phenotype) {
+		phenotype = this.getPhenotypeRepository().save(phenotype);
+
+		return this.getTransformer().toDTO(phenotype);
+	}
+
+	private NumericPhenotype buildPhenotype(NumericPhenotypeDTO phenotype) {
+		final NumericPhenotypeBuilder builder = NumericPhenotype.builder();
+
+		 return builder.addName(phenotype.getName())
+			.createPhenotype();
 	}
 
 	private NumericPhenotype findPhenotypeById(Long phenotypeId) throws EntityNotFoundException {
