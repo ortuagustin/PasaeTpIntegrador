@@ -28,7 +28,7 @@ import ar.edu.unlp.pasae.tp_integrador.services.PatientService;
 @SpringBootTest
 @Transactional
 @Rollback(true)
-public class PatientsServiceTests {
+public class PatientTests {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
