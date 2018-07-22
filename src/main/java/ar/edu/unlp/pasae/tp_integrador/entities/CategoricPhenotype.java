@@ -5,10 +5,12 @@ import java.util.Set;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class CategoricPhenotype extends Phenotype {
   @ElementCollection
+  @NotEmpty
   private Set<String> values = new HashSet<String>();
 
   public CategoricPhenotype(String name, Set<String> values) {

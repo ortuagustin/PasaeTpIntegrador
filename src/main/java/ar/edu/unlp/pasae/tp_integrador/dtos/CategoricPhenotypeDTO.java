@@ -9,6 +9,7 @@ public class CategoricPhenotypeDTO {
 	private Long id;
 	@NotEmpty
 	private String name;
+	@NotEmpty
 	private Set<String> values = new HashSet<String>();
 
 	public CategoricPhenotypeDTO(Long id, String name, Set<String> values) {
@@ -53,7 +54,7 @@ public class CategoricPhenotypeDTO {
 	 * @param values the values to set
 	 */
 	public void setValues(Set<String> values) {
-		this.values = values;
+		this.values.addAll(values);
 	}
 
 	/**
