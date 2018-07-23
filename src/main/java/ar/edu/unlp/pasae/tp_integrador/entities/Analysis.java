@@ -17,6 +17,34 @@ public class Analysis {
 	private Date date;
 	private AnalysisState state;
 
+	public static final class AnalysisBuilder {
+		private Date date;
+		private AnalysisState state;
+
+		private AnalysisBuilder() {
+		}
+
+		public AnalysisBuilder addDate(final Date date) {
+			this.date = date;
+			return this;
+		}
+
+		public AnalysisBuilder addState(final AnalysisState state) {
+			this.state = state;
+			return this;
+		}
+
+		public Analysis createAnalysis() {
+      final Analysis analysis = new Analysis(this.date, this.state);
+
+			return analysis;
+		}
+	}
+
+	public static final AnalysisBuilder builder() {
+		return new AnalysisBuilder();
+	}
+
 	public Analysis(Long id, Date date, AnalysisState state) {
 		super();
 		this.setId(id);
