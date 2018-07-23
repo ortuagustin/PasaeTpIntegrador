@@ -51,6 +51,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		//.antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
 		.and().formLogin()
 		.and().exceptionHandling().accessDeniedPage("/Access_Denied");
+		
+		// Para poder utilizar la consola H2 con Spring Security
+		http.headers().frameOptions().disable();
 
 	}
 }
