@@ -98,7 +98,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 	/**
 	 * Genera un Pageable para la paginacion y ordenamiento de 
 	 * los usuarios requeridos
-	 * @param Pagina actual para obtener desde la DB
+	 * @param page Pagina actual para obtener desde la DB
 	 * @return La pagina solicitada con el ordenamiento incluido
 	 */
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {

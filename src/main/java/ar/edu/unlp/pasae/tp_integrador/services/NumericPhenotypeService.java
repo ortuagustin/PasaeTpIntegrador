@@ -4,7 +4,10 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.Page;
+
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 
 public interface NumericPhenotypeService {
 	/**
@@ -17,20 +20,22 @@ public interface NumericPhenotypeService {
 	NumericPhenotypeDTO find(Long phenotypeId) throws EntityNotFoundException;
 
 	/**
-	 * Devuelve un fenotipo dado su dni
+	 * Devuelve un fenotipo dado su nombre
 	 *
 	 * @param name el nombre del fenotipo
 	 *
 	 * @return dto con los datos del fenotipo solicitado
 	 */
 	NumericPhenotypeDTO findByName(String name) throws EntityNotFoundException;
+	
 
 	/**
 	 * Devuelve un Stream con todos los fenotipos del sistema
 	 *
 	 * @return stream de fenotipos
 	 */
-	Stream<NumericPhenotypeDTO> list();
+	//Stream<NumericPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
+	Page<NumericPhenotype> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
 
 	/**
 	 * Crea un fenotipo

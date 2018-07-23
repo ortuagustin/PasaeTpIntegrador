@@ -4,6 +4,9 @@ import java.text.MessageFormat;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
@@ -37,10 +40,20 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 
 		return this.getTransformer().toDTO(phenotype);
 	}
+	
+	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
+	    return PageRequest.of(page, sizePerPage, sortDirection, sortField);
+	}
 
 	@Override
-	public Stream<NumericPhenotypeDTO> list() {
-		return this.getPhenotypeRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
+	public Page<NumericPhenotype> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC; 
+		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
+		NumericPhenotypeRepository numericPhenotypeRepository = this.getPhenotypeRepository();
+		if (search.equals("")) {
+			return numericPhenotypeRepository.findAll(pageRequest);
+		}
+		return numericPhenotypeRepository.findByNameContains(search, pageRequest);
 	}
 
 	@Override
