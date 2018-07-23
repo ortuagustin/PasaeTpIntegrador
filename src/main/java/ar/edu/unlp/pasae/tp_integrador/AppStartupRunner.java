@@ -54,7 +54,7 @@ public class AppStartupRunner implements ApplicationRunner {
 		this.getUserRepository().save(new CustomUser("admin", "admin", "admin@hotmail.com", "admin", "admin", roles2));
 		
 		this.createMockPhenotypes();
-//		this.getUserRepository().save(new CustomUser("admin2", "admin2", "admin2@hotmail.com", "admin2", "admin2", roles2));
+		this.getUserRepository().save(new CustomUser("admin2", "admin2", "admin2@hotmail.com", "admin2", "admin2", roles2));
 	}
 
 	private void createMockPhenotypes() {

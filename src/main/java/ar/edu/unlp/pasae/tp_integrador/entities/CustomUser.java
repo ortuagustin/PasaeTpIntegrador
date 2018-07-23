@@ -7,7 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -29,7 +29,7 @@ public class CustomUser implements UserDetails {
 	private String lastName;
 
 	/* Spring Security related fields*/
-	@OneToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> authorities;
 	private boolean accountNonExpired = true;
 	private boolean accountNonLocked = true;
