@@ -24,7 +24,7 @@ class AddUserModal extends React.Component {
             email: '',
             firstname: '',
             lastname: '',
-            selectedRole: '',
+            selectedRoles: new Set(),
             roles: [],
             adding: false
         };
@@ -63,6 +63,20 @@ class AddUserModal extends React.Component {
     }
 
     /**
+     * Hace un toggle de un checkbox en particular
+     * @param {string} roleName Nombre del rol que estamos seleccionando/deseleccionando
+     */
+    toggleCheckbox(roleName) {
+        let selectedRoles = this.state.selectedRoles;
+        if (selectedRoles.has(roleName)) {
+            selectedRoles.delete(roleName);
+        } else {
+            selectedRoles.add(roleName);
+        }
+        this.setState({ selectedRoles });
+    }
+
+    /**
      * Limpia todos los inputs del formulario
      */
     cleanInputs() {
@@ -81,14 +95,15 @@ class AddUserModal extends React.Component {
             if (self.action == 'edit') {
                 // Si estamos editando, cargo los datos del usuario
                 // seleccionado en el formulario
-                console.log(self.selectedUser);
+                // console.log(self.selectedUser);
+                let authorities = self.selectedUser.authorities.map(authority => authority.name); // Me quedo solo con los nombres
                 self.setState({
                     username: self.selectedUser.username,
                     password: self.selectedUser.password,
                     email: self.selectedUser.email,
                     firstname: self.selectedUser.firstName,
                     lastname: self.selectedUser.lastName,
-                    selectedRole: self.selectedUser.authorities[0].name,
+                    selectedRoles: new Set(authorities),
                 });
             }
         });
@@ -139,7 +154,7 @@ class AddUserModal extends React.Component {
                 email: self.state.email,
                 firstName: self.state.firstname,
                 lastName: self.state.lastname,
-                authorities: [ self.state.selectedRole ]
+                authorities: [...self.state.selectedRoles] // Con los 3 puntos suspensivos convierto el set en un array
             })
         }).done(function (jsonReponse, textStatus, jqXHR) {
             self.getUsers(); // Refresco la tabla
@@ -175,16 +190,27 @@ class AddUserModal extends React.Component {
     isFormValid() {
         return !this.state.adding
                 && this.state.username
+                && this.state.email
                 && this.state.password
                 && this.state.firstname
                 && this.state.lastname
-                && this.state.selectedRole;
+                && this.state.selectedRoles.size > 0;
     }
 
     render() {
-        // Armo una lista con las opciones
-        let rolesList = this.state.roles.map((rol) => {
-            return <option key={rol.id.toString()} value={rol.name}>{rol.name}</option>;
+        // Armo una lista con los roles disponibles
+        let rolesList = this.state.roles.map((rol, idx) => {
+            return (
+                <div key={"input-rol-div-" + rol.id} className="custom-control custom-checkbox custom-control-inline">
+                    <input key={"input-rol-" + rol.id}
+                        id={"rol-" + rol.id}
+                        className="custom-control-input"
+                        type="checkbox"
+                        checked={this.state.selectedRoles.has(rol.name)}
+                        onChange={() => this.toggleCheckbox(rol.name)}/>
+                    <label key={"input-rol-label-" + rol.id} className="custom-control-label" htmlFor={"rol-" + rol.id}>{rol.name}</label>
+                </div>
+            );
         });
 
         // Verifico que no este cargando y que el formulario sea valido
@@ -219,18 +245,17 @@ class AddUserModal extends React.Component {
                                     <label htmlFor="lastname-input">Apellido</label>
                                     <input type="text" id="lastname-input" name="lastname" value={this.state.lastname} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
                                 </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="col">
+                                    <label htmlFor="username-email">Mail</label>
+                                    <input type="text" id="username-email" name="email" value={this.state.email} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress} />
+                                </div>
                             </div> 
                             <div className="form-row">
                                 <div className="col">
-                                    <label htmlFor="inputState">Rol</label>
-                                    <select 
-                                        id="inputState"
-                                        name="selectedRole"
-                                        className="form-control"
-                                        disabled={this.state.roles.length == 0} value={this.state.selectedRole} onChange={this.handleChange}>
-                                        <option value="">{this.state.roles.length ? 'Elegir' : 'Cargando'}</option>
-                                        {rolesList}
-                                    </select>
+                                    <h5>Roles</h5>
+                                    {rolesList}
                                 </div>
                             </div> 
                             

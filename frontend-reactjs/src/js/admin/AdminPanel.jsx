@@ -29,13 +29,15 @@ class AdminPanel extends React.Component {
             selectedRow: [],
             selectedUser: {},
             action: null,
-            searchUserInput: ''
+            searchUserInput: '',
+            option: 'users'
         };
 
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.getUsers = this.getUsers.bind(this);
         this.cleanState = this.cleanState.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.updateValid = this.updateValid.bind(this);
     }
 
     /**
@@ -94,8 +96,6 @@ class AdminPanel extends React.Component {
     }
 
     selectRow(row, isSelect) {
-        console.log(row);
-        console.log(isSelect);
         if (isSelect) {
             this.setState({
                 selectedRow: [row.id], // Solo selecciono uno a la vez, pero debe ser un arreglo para la libreria
@@ -141,6 +141,22 @@ class AdminPanel extends React.Component {
         });
     }
 
+    /**
+     * Evalua si estan habilitadas las opciones 
+     * de edicion y eliminacion de algun elemento
+     * @returns True si se puede editar/eliminar, false caso contrario
+     */
+    updateValid() {
+        return (
+            (this.state.option == 'users'
+                && this.state.selectedUser.id !== undefined)
+            ||
+            (this.state.option == 'fenotypes')
+            ||
+            (this.state.option == 'genotypes')
+        );
+    }
+
     render() {
         // Preparo la configuracion de las columnas de la tabla
         const columns = [{
@@ -181,17 +197,35 @@ class AdminPanel extends React.Component {
             },
             selectionHeaderRenderer: () => <span title="Limpiar" className="cursor-pointer" onClick={this.cleanState}>X</span>
         };
-            
+        
+        // Verifico si habilito las opciones de editar o eliminar
+        let isUpdateValid = this.updateValid();
+
         return(
-            <div className="container panel-component">
+            <div className="container-fluid panel-component">
+                <div className="row margin-bottom">
+                    <div className="col-12">
+                        <ul className="nav nav-pills">
+                            <li className="nav-item">
+                                <a className={"nav-link " + (this.state.option == "users" ? 'active' : '')} onClick={() => this.setState({ option: 'users' })} href="#">Usuarios</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className={"nav-link " + (this.state.option == "fenotypes" ? 'active' : '')} onClick={() => this.setState({ option: 'fenotypes' })} href="#">Fenotipos</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className={"nav-link " + (this.state.option == "genotypes" ? 'active' : '')} onClick={() => this.setState({ option: 'genotypes' })} href="#">Patologías</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
                 <div className="row">
-                    <div className="col col-md-9 button-col">
+                    <div className="col-9 button-col">
                         <h4>Acciones</h4>
                         <button type="button" className="btn btn-success" onClick={() => this.changeAction('add')}>Agregar</button>
-                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedUser.id}>Editar</button>
-                        <button type="button" className="btn btn-danger" onClick={() => this.actionModal(this.deleteUserModalId, 'show')} disabled={!this.state.selectedUser.id}>Editar</button>
+                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!isUpdateValid}>Editar</button>
+                        <button type="button" className="btn btn-danger" onClick={() => this.actionModal(this.deleteUserModalId, 'show')} disabled={!isUpdateValid}>Editar</button>
                     </div>
-                    <div className="col col-md-3 button-col">
+                    <div className="col-3 button-col">
                         <div className="form-group">
                             <label htmlFor="search-user-input"><h5>Buscar</h5></label>
                             <input type="text"
@@ -207,7 +241,7 @@ class AdminPanel extends React.Component {
                     </div>
                 </div>
                 <div id="admin-panel" className="row">
-                    <div className="col col-md-12">
+                    <div className="col-12">
                         <h4>Usuarios</h4>
                         <BootstrapTable
                             remote={{ pagination: true, filter: true }}
