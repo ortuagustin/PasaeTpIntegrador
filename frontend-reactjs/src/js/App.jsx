@@ -41,21 +41,21 @@ class App extends React.Component {
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/">Home</Link>
+											<Link to="/home">Home</Link>
 										</div>
 									</span>
 								</li>
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/admin">Admin</Link>
+											<Link to="/">Admin</Link>
 										</div>
 									</span>
 								</li>
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/professional">Profesional</Link>
+											<Link to="/app/professional">Profesional</Link>
 										</div>
 									</span>
 								</li>
@@ -70,9 +70,9 @@ class App extends React.Component {
 
 					{/* Renderiza los componentes seleccionados */}
 					<div>
-						<Route exact path="/" component={Home} />
-						<Route exact path="/admin" component={AdminPanel} />
-						<Route exact path="/professional" component={ProfessionalPanel} />
+						<Route exact path="/home" component={Home} />
+						<Route exact path="/" component={AdminPanel} />
+						<Route exact path="/app/professional" component={ProfessionalPanel} />
 					</div>
 				</div>
 			</Router>

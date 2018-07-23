@@ -38,19 +38,19 @@ public class CustomUserServiceImpl implements CustomUserService {
 		return user;
 	}	
 	
+	/**
+	 * Obtiene los roles desde la DB y los devuelve en una lista
+	 * @param userAuthorities Arreglo con los nombres de los roles a obtener
+	 * @return Lista de los Roles (objetos)
+	 */
 	private List<Role> getRoles(List<Role> userAuthorities) {
 		List<Role> newRoles = new ArrayList<Role>(); // Lista con los nombres de los roles
 
-		// Busco si existe, y si no existen los agrego
+		// Obtengo los roles desde la DB, ya se que existen
+		// porque fueron validados por el CustomUserDTOValidator
 		for (Role role : userAuthorities) {
 			Role existingRole = this.getRoleRepository().findOneByName(role.getName()).orElse(null);
-			// Si no existe lo agrego
-			if (existingRole == null) {
-				this.getRoleRepository().save(role);
-				newRoles.add(role);
-			} else {
-				newRoles.add(existingRole);
-			}
+			newRoles.add(existingRole);
 		}
 		
 		return newRoles;
@@ -80,6 +80,10 @@ public class CustomUserServiceImpl implements CustomUserService {
 		return this.getTransformer().toDTO(u);
 	}
 
+	/**
+	 * Borra el usuario cuyo id fue pasado por parametro
+	 * @param id Id del usuario a borrar
+	 */
 	@Override
 	public void delete(Long id) {
 		this.getUserRepository().deleteById(id);
@@ -94,7 +98,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 	/**
 	 * Genera un Pageable para la paginacion y ordenamiento de 
 	 * los usuarios requeridos
-	 * @param Pagina actual para obtener desde la DB
+	 * @param page Pagina actual para obtener desde la DB
 	 * @return La pagina solicitada con el ordenamiento incluido
 	 */
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
@@ -132,15 +136,26 @@ public class CustomUserServiceImpl implements CustomUserService {
 		return this.getUserRepository().findById(id).isPresent();
 	}
 
-
+	/**
+	 * Obtiene el transformer de usuarios
+	 * @return Transformer de usuarios
+	 */
 	private CustomUserTransformer getTransformer() {
 		return this.userTransformer;
 	}
 	
+	/**
+	 * Obtiene el repositorio de usuarios
+	 * @return Repositorio de usuarios
+	 */
 	private CustomUserRepository getUserRepository() {
 		return this.userRepository;
 	}
 	
+	/**
+	 * Obtiene el repositorio de roles
+	 * @return Repositorio de roles
+	 */
 	private RoleRepository getRoleRepository() {
 		return this.roleRepository;
 	}
