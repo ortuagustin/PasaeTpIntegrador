@@ -4,6 +4,8 @@ import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.springframework.data.domain.Page;
+
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 
 public interface CategoricPhenotypeService {
@@ -31,6 +33,19 @@ public interface CategoricPhenotypeService {
 	 * @return stream de fenotipos
 	 */
 	Stream<CategoricPhenotypeDTO> list();
+
+	/**
+	 * Devuelve un Stream Paginado de fenotipos, de acuerdo a los parametros dados
+	 *
+	 * @param page el numero de pagina
+	 * @param sizePerPage cantidad de elementos por pagina
+	 * @param sortField el campo por el que se desea ordenar
+	 * @param sortOrder ascendente o descendente
+	 * @param search filtro
+	 *
+	 * @return stream de fenotipos
+	 */
+	Page<CategoricPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
 
 	/**
 	 * Crea un fenotipo
@@ -63,4 +78,9 @@ public interface CategoricPhenotypeService {
 	 * @param phenotypeId el id del fenotipo
 	 */
 	void delete(Long phenotypeId) throws EntityNotFoundException;
+
+	/**
+	 * Elimina todos los fenotipos
+	 */
+	void deleteAll();
 }

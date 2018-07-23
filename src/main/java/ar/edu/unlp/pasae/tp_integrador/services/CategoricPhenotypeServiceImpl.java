@@ -4,6 +4,9 @@ import java.text.MessageFormat;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
@@ -40,6 +43,21 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 	}
 
 	@Override
+	public Page<CategoricPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
+		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
+		Page<CategoricPhenotype> result;
+
+		if (search.equals("")) {
+			result = this.getPhenotypeRepository().findAll(pageRequest);
+		} else {
+			result = this.getPhenotypeRepository().findByNameContains(search, pageRequest);
+		}
+
+		return result.map(each -> this.getTransformer().toDTO(each));
+	}
+
+	@Override
 	public Stream<CategoricPhenotypeDTO> list() {
 		return this.getPhenotypeRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
 	}
@@ -69,6 +87,15 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 	@Override
 	public Integer count() {
 		return (int) this.getPhenotypeRepository().count();
+	}
+
+	@Override
+	public void deleteAll() {
+		this.getPhenotypeRepository().deleteAll();
+	}
+
+	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
+		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
 	}
 
 	private CategoricPhenotypeDTO save(CategoricPhenotype phenotype) {
