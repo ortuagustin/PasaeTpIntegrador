@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.services.NumericPhenotypeService;
 
 @RestController
@@ -28,15 +27,20 @@ public class NumericPhenotypeController {
 	NumericPhenotypeService phenotypesService;
 
 	@GetMapping(path = "/", produces = "application/json")
-	public Page<NumericPhenotype> index(
+	public Page<NumericPhenotypeDTO> index(
 			@RequestParam(value="newestPage", defaultValue="0") int page,
 			@RequestParam(value="newestSizePerPage", defaultValue="10") int sizePerPage,
 			@RequestParam(value="newestSortField", defaultValue="name") String sortField,
 			@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder,
 			@RequestParam(value="search", defaultValue="") String search
-			) {
+	) {
 		return this.getPhenotypesService().list(page, sizePerPage, sortField, sortOrder, search);
 	}
+
+  @GetMapping(path = "/all", produces = "application/json")
+  public Collection<NumericPhenotypeDTO> indexAll() {
+    return this.getPhenotypesService().list().collect(Collectors.toList());
+  }
 
 	@GetMapping(path = "/{id}", produces = "application/json")
 	public NumericPhenotypeDTO show(@PathVariable(value = "id") Long id) {

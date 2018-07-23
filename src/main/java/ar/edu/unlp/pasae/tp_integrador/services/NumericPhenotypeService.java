@@ -7,7 +7,6 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 
 public interface NumericPhenotypeService {
 	/**
@@ -27,15 +26,26 @@ public interface NumericPhenotypeService {
 	 * @return dto con los datos del fenotipo solicitado
 	 */
 	NumericPhenotypeDTO findByName(String name) throws EntityNotFoundException;
-	
+
+	/**
+	 * Devuelve un Stream Paginado de fenotipos, de acuerdo a los parametros dados
+	 *
+	 * @param page el numero de pagina
+	 * @param sizePerPage cantidad de elementos por pagina
+	 * @param sortField el campo por el que se desea ordenar
+	 * @param sortOrder ascendente o descendente
+	 * @param search filtro
+	 *
+	 * @return stream de fenotipos
+	 */
+	Page<NumericPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
 
 	/**
 	 * Devuelve un Stream con todos los fenotipos del sistema
 	 *
 	 * @return stream de fenotipos
 	 */
-	//Stream<NumericPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
-	Page<NumericPhenotype> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
+	Stream<NumericPhenotypeDTO> list();
 
 	/**
 	 * Crea un fenotipo
@@ -68,4 +78,9 @@ public interface NumericPhenotypeService {
 	 * @param phenotypeId el id del fenotipo
 	 */
 	void delete(Long phenotypeId) throws EntityNotFoundException;
+
+	/**
+	 * Elimina todos los fenotipos
+	 */
+	void deleteAll();
 }

@@ -40,20 +40,29 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 
 		return this.getTransformer().toDTO(phenotype);
 	}
-	
+
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
-	    return PageRequest.of(page, sizePerPage, sortDirection, sortField);
+		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
 	}
 
 	@Override
-	public Page<NumericPhenotype> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
-		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC; 
+	public Page<NumericPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
 		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
-		NumericPhenotypeRepository numericPhenotypeRepository = this.getPhenotypeRepository();
+		Page<NumericPhenotype> result;
+
 		if (search.equals("")) {
-			return numericPhenotypeRepository.findAll(pageRequest);
+			result = this.getPhenotypeRepository().findAll(pageRequest);
+		} else {
+			result = this.getPhenotypeRepository().findByNameContains(search, pageRequest);
 		}
-		return numericPhenotypeRepository.findByNameContains(search, pageRequest);
+
+		return result.map(each -> this.getTransformer().toDTO(each));
+	}
+
+	@Override
+	public Stream<NumericPhenotypeDTO> list() {
+		return this.getPhenotypeRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
 	}
 
 	@Override
@@ -81,6 +90,11 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 	@Override
 	public Integer count() {
 		return (int) this.getPhenotypeRepository().count();
+	}
+
+	@Override
+	public void deleteAll() {
+		this.getPhenotypeRepository().deleteAll();
 	}
 
 	private NumericPhenotypeDTO save(NumericPhenotype phenotype) {
