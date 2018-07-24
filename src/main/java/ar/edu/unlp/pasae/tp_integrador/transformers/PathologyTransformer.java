@@ -18,7 +18,6 @@ public class PathologyTransformer extends BaseTransformer<Pathology, PathologyDT
 
 	@Override
 	public Pathology toEntity(PathologyDTO dto) {
-		// TODO: en realidad no se usa mas ... este metodo se va a terminar sacando de la interfaz Transformer
 		final PathologyBuilder builder = Pathology.builder();
 
 		 return builder.addName(dto.getName())
