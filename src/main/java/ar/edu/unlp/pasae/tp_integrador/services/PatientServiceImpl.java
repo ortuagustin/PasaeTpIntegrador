@@ -133,25 +133,8 @@ public class PatientServiceImpl implements PatientService {
 			.addUser(this.findUser(patient.getUserId()))
 			.addCategoricPhenotypes(this.findCategoricPhenotypes(patient.getCategoricPhenotypes()))
 			.addNumericPhenotypes(this.findNumericPhenotypes(patient.getNumericPhenotypes()))
-			// TODO: implementar genotipos
-			// .addGenotypes(this.findGenotypes(patient.getPhenotypes()))
 			.createPatient();
 	}
-
-	// TODO: implementar genotipos
-	// private List<Genotype> findGenotypes(Set<Long> genotypes) {
-	// 	List<Genotype> entities = new ArrayList<Genotype>();
-
-	// 	for (Long genotypeId : genotypes) {
-	// 		final Genotype genotype = this.getGenotypesRepository().findById(genotypeId)
-	// 			.orElseThrow(() -> new EntityNotFoundException(
-	// 				MessageFormat.format("No Genotype found with id {0}", genotypeId)));
-
-	// 		entities.add(genotype);
-	// 	}
-
-	// 	return entities;
-	// }
 
 	private CustomUser findRegistrantUser(Long patientId) {
 		final Patient patient = this.getPatientRepository().getOne(patientId);

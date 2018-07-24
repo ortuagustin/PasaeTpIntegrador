@@ -10,6 +10,7 @@ public class GenotypeDTO {
    */
   @NotEmpty
   private Integer snp;
+
   /**
    * El valor del genotipo en si (A, D, T, G)
    */

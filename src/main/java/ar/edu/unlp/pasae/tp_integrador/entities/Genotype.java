@@ -12,11 +12,13 @@ public class Genotype {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   /**
    * posicion en el genoma para este "valor"
    */
   @NotEmpty
   private Integer snp;
+
   /**
    * El valor del genotipo en si (A, D, T, G)
    */
