@@ -20,7 +20,7 @@ public class Genotype {
   private Integer snp;
 
   /**
-   * El valor del genotipo en si (A, D, T, G)
+  * El valor del genotipo en si, es decir, los dos alelos (A, D, T, G)
    */
   @NotEmpty
   private String value;
