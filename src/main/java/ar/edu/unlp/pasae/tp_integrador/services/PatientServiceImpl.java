@@ -1,6 +1,8 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +40,8 @@ public class PatientServiceImpl implements PatientService {
 	private CategoricPhenotypeRepository categoricPhenotypesRepository;
 	@Autowired
 	private NumericPhenotypeRepository numericPhenotypeRepository;
+	@Autowired
+	private GenotypeDecoderService genotypeDecoderService;
 
 	@Autowired
 	private Transformer<Patient, PatientDTO> transformer;
@@ -103,10 +107,14 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public void setPatientGenotype(Long patientId, List<GenotypeDTO> genotypes) {
+	public Stream<GenotypeDTO> setPatientGenotype(Long patientId, String genotype) {
 		final Patient patient = this.getPatientRepository().getOne(patientId);
-		patient.setGenotypes(this.getGenotypeTransformer().manyToEntity(genotypes));
+		final Collection<Genotype> genotypes = this.getGenotypeDecoderService().decodeGenotype(genotype);
+
+		patient.setGenotypes(genotypes);
 		this.getPatientRepository().save(patient);
+
+		return this.getGenotypeTransformer().manyToDto(genotypes).stream();
 	}
 
 	private Patient findPatientById(Long patientId) throws EntityNotFoundException {
@@ -222,5 +230,13 @@ public class PatientServiceImpl implements PatientService {
 
 	public void setGenotypeTransformer(Transformer<Genotype, GenotypeDTO> genotypeTransformer) {
 		this.genotypeTransformer = genotypeTransformer;
+	}
+
+	public GenotypeDecoderService getGenotypeDecoderService() {
+		return this.genotypeDecoderService;
+	}
+
+	public void setGenotypeDecoderService(GenotypeDecoderService genotypeDecoderService) {
+		this.genotypeDecoderService = genotypeDecoderService;
 	}
 }

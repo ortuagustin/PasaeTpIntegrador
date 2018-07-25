@@ -1,6 +1,5 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
@@ -74,9 +73,9 @@ public interface PatientService {
 	 * Actualiza el genotipo de un paciente
 	 *
 	 * @param patientId el id del paciente
-	 * @param genotypes lista de objetos genotipo
+	 * @param genotype genotipo del paciente (en formato rsXXXMF)
 	 */
-	void setPatientGenotype(Long patientId, List<GenotypeDTO> genotypes);
+	Stream<GenotypeDTO> setPatientGenotype(Long patientId, String genotype);
 
 	/**
 	 * Elimina un paciente
