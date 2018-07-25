@@ -13,7 +13,8 @@ class AdminPanel extends React.Component {
 
         this.state = {
             fenotypes: [],
-            option: 'users'
+            // option: 'users'
+            option: 'phenotypes'
         };
     }
 

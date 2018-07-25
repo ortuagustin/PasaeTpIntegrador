@@ -35,6 +35,7 @@ class UserCRUDComponent extends React.Component {
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.getUsers = this.getUsers.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.cleanState = this.cleanState.bind(this);
     }
 
     /**
@@ -83,6 +84,8 @@ class UserCRUDComponent extends React.Component {
                     page: pageNumber,
                     sizePerPage: jsonReponse.size,
                     totalSize: jsonReponse.totalElements
+                }, () => {
+                    self.cleanState();
                 });
             }
         }).fail(function (jqXHR, textStatus, errorThrown) {

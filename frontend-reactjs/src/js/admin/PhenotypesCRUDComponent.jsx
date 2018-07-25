@@ -1,10 +1,14 @@
 import React from 'react';
 
+// Componentes
+import AddPhenotypeModal from './AddPhenotypeModal.jsx';
+import DeletePhenotypeModal from './DeletePhenotypeModal.jsx';
+
 // Librerias
 import BootstrapTable from 'react-bootstrap-table-next'; // Tabla
 import paginationFactory from 'react-bootstrap-table2-paginator'; // Paginacion en tabla
 import overlayFactory from 'react-bootstrap-table2-overlay'; // Para la animacion de carga
-import filterFactory, { selectFilter } from 'react-bootstrap-table2-filter';
+import filterFactory from 'react-bootstrap-table2-filter';
 
 /**
  * Componente que renderiza el panel de CRUD de usuarios
@@ -21,12 +25,13 @@ class PhenotypesCRUDComponent extends React.Component {
             selectedRow: [],
             selectedPhenotype: {},
             action: null,
-            searchUserInput: ''
+            searchPhenotypeInput: '',
+            phenotypesType: 'numeric'
         }
 
         // Variables que no renderizan la vista
-        this.addUserModalId = 'add-user-modal';
-        this.deleteUserModalId = 'delete-user-modal';
+        this.addPhenotypeModalId = 'add-user-modal';
+        this.deletePhenotypeModalId = 'delete-user-modal';
 
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.getPhenotypes = this.getPhenotypes.bind(this);
@@ -58,73 +63,40 @@ class PhenotypesCRUDComponent extends React.Component {
      */
     getPhenotypes(actionType = '', newState = {}) {
         let self = this;
+
         // Genero los parametros del request
         let pageNumber = newState.page ? newState.page - 1 : self.state.page;
         let sizePerPage = newState.sizePerPage ? newState.sizePerPage : self.state.sizePerPage;
 
-        let data = {
-            newestPage: pageNumber,
-            newestSizePerPage: sizePerPage,
-            newestSortField: newState.sortField,
-            newestSortOrder: newState.sortOrder,
-            search: self.state.searchUserInput
-        };
+        let url = self.state.phenotypesType == 'numeric' ? 'http://localhost:8080/numeric-phenotypes/' : 'http://localhost:8080/categoric-phenotypes/';
 
         // Cargo los fenotipos numericos y categoricos
-        self.setState({
-            phenotypes: [],
-            loading: true
-        }, () => {
-            let ajaxNumeric = this.getNumericPhenotypes(data);
-            let ajaxCategoric = {};//this.getCategoricPhenotypes(data);
-            
-            // Cuando terminan de ejecutarse (exitosa o falladamente)
-            // se elimina el estado de cargando
-            $.when(ajaxNumeric, ajaxCategoric).always(function() {
-                self.setState({ loading: false});
+        self.setState({ loading: true }, () => {
+            $.ajax({
+                url: url,
+                data: {
+                    newestPage: pageNumber,
+                    newestSizePerPage: sizePerPage,
+                    newestSortField: newState.sortField,
+                    newestSortOrder: newState.sortOrder,
+                    search: self.state.searchPhenotypeInput
+                }
+            }).done(function (jsonReponse, textStatus, jqXHR) {
+                if (jqXHR.status == 200) {
+                    self.setState({
+                        phenotypes: jsonReponse.content,
+                        page: pageNumber,
+                        sizePerPage: sizePerPage,
+                        totalSize: jsonReponse.totalElements
+                    }, () => {
+                        self.cleanState();
+                    });
+                }
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.log(jqXHR, textStatus, errorThrown);
+            }).always(function() {
+                self.setState({  loading: false });
             });
-        });
-    }
-
-    /**
-     * Obtiene los fenotipos numericos
-     * @param {*} data Objeto con la informacion a enviar
-     * @returns El envio ajax para su posterior evaluacion
-     */
-    getNumericPhenotypes(data) {
-        let self = this;
-        return $.ajax({
-            url: 'http://localhost:8080/numeric-phenotypes/',
-            data: data
-        }).done(function (jsonReponse, textStatus, jqXHR) {
-            if (jqXHR.status == 200) {
-                let phenotypes = self.state.phenotypes;
-                phenotypes = phenotypes.concat(jsonReponse.content);
-                self.setState({ phenotypes });
-            }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR, textStatus, errorThrown);
-        });
-    }
-
-    /**
-    * Obtiene los fenotipos categoricos
-    * @param {*} data Objeto con la informacion a enviar
-    * @returns El envio ajax para su posterior evaluacion
-    */
-    getCategoricPhenotypes(data) {
-        let self = this;
-        return $.ajax({
-            url: 'http://localhost:8080/categoric-phenotypes/',
-            data: data
-        }).done(function (jsonReponse, textStatus, jqXHR) {
-            if (jqXHR.status == 200) {
-                let currentPhenotypes = self.state.phenotypes;
-                currentPhenotypes = currentPhenotypes.concat(jsonReponse.content);
-                self.setState({ currentPhenotypes });
-            }
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR, textStatus, errorThrown);
         });
     }
 
@@ -151,7 +123,7 @@ class PhenotypesCRUDComponent extends React.Component {
     changeAction(action) {
         this.setState({ action: action }, () => {
             // Una vez que cambiamos de accion, abrimos el modal de alta/edicion
-            this.actionModal(this.addUserModalId, 'show');
+            this.actionModal(this.addPhenotypeModalId, 'show');
         });
     }
 
@@ -162,7 +134,7 @@ class PhenotypesCRUDComponent extends React.Component {
      */
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value }, () => {
-            this.getUsers();
+            this.getPhenotypes();
         });;
     }
 
@@ -176,13 +148,18 @@ class PhenotypesCRUDComponent extends React.Component {
         });
     }
 
-    render() {
-        const selectOptions = {
-            0: 'Numérico',
-            1: 'Categórico',
-            2: 'Todos'
-        };
+    /**
+     * Cambia el tipo de fenotipo a listar
+     * @param {string} type Tipo actual de fenotypos a listar
+     */
+    changePhenotypesType(type) {
+        this.setState({ phenotypesType: type }, () => {
+            // Cuando termina de setearlo vuelve a pedir los fenotipos
+            this.getPhenotypes();
+        })
+    }
 
+    render() {
         const columns = [{
             dataField: 'name',
             text: 'Nombre',
@@ -193,10 +170,6 @@ class PhenotypesCRUDComponent extends React.Component {
             formatter: (cell, row, rowIndex, formatExtraData) => {
                 return row.values ? "Categórico" : 'Numérico';
             },
-            // filter: selectFilter({
-            //     options: selectOptions,
-            //     defaultValue: 0
-            // })
         }, {
             dataField: 'values',
             text: 'Valor/es',
@@ -222,15 +195,15 @@ class PhenotypesCRUDComponent extends React.Component {
                         <h4>Acciones</h4>
                         <button type="button" className="btn btn-success" onClick={() => this.changeAction('add')}>Agregar</button>
                         <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedPhenotype.id}>Editar</button>
-                        <button type="button" className="btn btn-danger" disabled={!this.state.selectedPhenotype.id}>Eliminar</button>
+                        <button type="button" className="btn btn-danger" onClick={() => this.actionModal(this.deletePhenotypeModalId, 'show')} disabled={!this.state.selectedPhenotype.id}>Eliminar</button>
                     </div>
                     <div className="col-3 button-col">
                         <div className="form-group">
                             <label htmlFor="search-user-input"><h5>Buscar</h5></label>
                             <input type="text"
                                 className="form-control"
-                                name="searchUserInput"
-                                value={this.state.searchUserInput}
+                                name="searchPhenotypeInput"
+                                value={this.state.searchPhenotypeInput}
                                 onChange={this.handleChange}
                                 aria-describedby="searchHelpBlockPhenotypes" />
                             <small id="searchHelpBlockPhenotypes" className="form-text text-muted">
@@ -239,6 +212,20 @@ class PhenotypesCRUDComponent extends React.Component {
                         </div>
                     </div>
                 </div>
+
+                <div className="row margin-bottom">
+                    <div className="col-12">
+                        <ul className="nav nav-pills">
+                            <li className="nav-item">
+                                <a className={"nav-link " + (this.state.phenotypesType == "numeric" ? 'active' : '')} onClick={() => this.changePhenotypesType('numeric')} href="#">Numéricos</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className={"nav-link " + (this.state.phenotypesType == "categoric" ? 'active' : '')} onClick={() => this.changePhenotypesType('categoric')} href="#">Categóricos</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div id="admin-panel" className="row">
                     <div className="col-12">
                         <h4>Fenotipos</h4>
@@ -267,6 +254,25 @@ class PhenotypesCRUDComponent extends React.Component {
                     </div>
                 </div>
 
+                {/* Modal de alta de fenotipo */}
+                <AddPhenotypeModal
+                    modalId={this.addPhenotypeModalId}
+                    action={this.state.action}
+                    selectedPhenotype={this.state.selectedPhenotype}
+                    phenotypeType={this.state.phenotypesType}
+                    getPhenotypes={this.getPhenotypes}
+                    actionModal={this.actionModal}
+                />
+                
+                {/* Modal de confirmacion de eliminacion de fenotipo */}
+                <DeletePhenotypeModal
+                    modalId={this.deletePhenotypeModalId}
+                    phenotypeId={this.state.selectedPhenotype.id}
+                    name={this.state.selectedPhenotype.name}
+                    phenotypeType={this.state.phenotypesType}
+                    getPhenotypes={this.getPhenotypes}
+                    actionModal={this.actionModal}
+                />
             </div>
         );
     }

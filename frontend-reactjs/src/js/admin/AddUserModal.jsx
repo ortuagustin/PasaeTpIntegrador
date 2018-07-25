@@ -201,14 +201,14 @@ class AddUserModal extends React.Component {
         // Armo una lista con los roles disponibles
         let rolesList = this.state.roles.map((rol, idx) => {
             return (
-                <div key={"input-rol-div-" + rol.id} className="custom-control custom-checkbox custom-control-inline">
-                    <input key={"input-rol-" + rol.id}
+                <div key={"input-role-div-" + rol.id} className="custom-control custom-checkbox custom-control-inline">
+                    <input key={"input-role-" + rol.id}
                         id={"rol-" + rol.id}
                         className="custom-control-input"
                         type="checkbox"
                         checked={this.state.selectedRoles.has(rol.name)}
                         onChange={() => this.toggleCheckbox(rol.name)}/>
-                    <label key={"input-rol-label-" + rol.id} className="custom-control-label" htmlFor={"rol-" + rol.id}>{rol.name}</label>
+                    <label key={"input-role-label-" + rol.id} className="custom-control-label" htmlFor={"rol-" + rol.id}>{rol.name}</label>
                 </div>
             );
         });
