@@ -52,12 +52,14 @@ public class PatientController {
     return this.getPatientsService().update(request);
   }
 
-  @PutMapping(path = "/", consumes = "application/json")
-  public Collection<GenotypeDTO> updateGenotype(
-      @RequestParam(value="patientId", required=true) Long patientId,
-      @RequestBody String genotype
-  ) {
-    return this.getPatientsService().setPatientGenotype(patientId, genotype).collect(Collectors.toList());
+  @GetMapping(path = "/{id}/genotype", consumes = "application/json", produces = "application/json")
+  public Collection<GenotypeDTO> getGenotype(@PathVariable(value = "id") Long id) {
+    return this.getPatientsService().getPatientGenotype(id).collect(Collectors.toList());
+  }
+
+  @PutMapping(path = "/{id}/genotype", consumes = "application/json", produces = "application/json")
+  public Collection<GenotypeDTO> setGenotype(@PathVariable(value = "id") Long id, @RequestBody String genotype) {
+    return this.getPatientsService().setPatientGenotype(id, genotype).collect(Collectors.toList());
   }
 
   private PatientService getPatientsService() {
