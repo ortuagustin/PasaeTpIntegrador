@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
 
 /**
  * DTO que se usa para devolver el objeto paciente
@@ -24,12 +24,11 @@ public class PatientDTO {
 	@Email
 	private String email;
 	@NotNull
-	// TODO: deberia ser un CustomUserDTO!
-	private CustomUser user;
+	private CustomUserDTO user;
 	private Set<NumericPhenotypeDTO> numericPhenotypes = new HashSet<NumericPhenotypeDTO>();
 	private Set<CategoricPhenotypeDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeDTO>();
 
-	public PatientDTO(Long id, String name, String surname, String dni, String email, CustomUser user) {
+	public PatientDTO(Long id, String name, String surname, String dni, String email, CustomUserDTO user) {
 		super();
 		this.setId(id);
 		this.setName(name);
@@ -39,7 +38,7 @@ public class PatientDTO {
 		this.setUser(user);
 	}
 
-	public PatientDTO(String name, String surname, String dni, String email, CustomUser user) {
+	public PatientDTO(String name, String surname, String dni, String email, CustomUserDTO user) {
 		super();
 		this.setName(name);
 		this.setSurname(surname);
@@ -55,7 +54,7 @@ public class PatientDTO {
 	/**
 	 * @return the user
 	 */
-	public CustomUser getUser() {
+	public CustomUserDTO getUser() {
 		return user;
 	}
 
@@ -132,7 +131,7 @@ public class PatientDTO {
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(CustomUser user) {
+	public void setUser(CustomUserDTO user) {
 		this.user = user;
 	}
 

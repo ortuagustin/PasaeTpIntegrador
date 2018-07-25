@@ -10,6 +10,7 @@ public class GenotypeDTO {
    */
   @NotEmpty
   private Integer snp;
+
   /**
    * El valor del genotipo en si (A, D, T, G)
    */
@@ -31,6 +32,24 @@ public class GenotypeDTO {
 
   private GenotypeDTO() {
     super();
+  }
+
+  /**
+   * @return el valor del alelo heredado del padre
+   */
+  public String getFatherValue() {
+    Character c = this.getValue().charAt(0);
+
+    return c.toString();
+  }
+
+  /**
+   * @return el valor del alelo heredado de la madre
+   */
+  public String getMotherValue() {
+    Character c = this.getValue().charAt(1);
+
+    return c.toString();
   }
 
   /**

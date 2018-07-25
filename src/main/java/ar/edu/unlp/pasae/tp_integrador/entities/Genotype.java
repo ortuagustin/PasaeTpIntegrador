@@ -12,11 +12,13 @@ public class Genotype {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   /**
    * posicion en el genoma para este "valor"
    */
   @NotEmpty
   private Integer snp;
+
   /**
    * El valor del genotipo en si (A, D, T, G)
    */
@@ -34,6 +36,24 @@ public class Genotype {
     super();
     this.setSnp(snp);
     this.setValue(value);
+  }
+
+  /**
+   * @return el valor del alelo heredado del padre
+   */
+  public String getFatherValue() {
+    Character c = this.getValue().charAt(0);
+
+    return c.toString();
+  }
+
+  /**
+   * @return el valor del alelo heredado de la madre
+   */
+  public String getMotherValue() {
+    Character c = this.getValue().charAt(1);
+
+    return c.toString();
   }
 
   private Genotype() {
