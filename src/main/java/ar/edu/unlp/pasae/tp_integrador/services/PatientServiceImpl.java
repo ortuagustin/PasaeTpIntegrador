@@ -108,7 +108,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public Stream<GenotypeDTO> setPatientGenotype(Long patientId, String genotype) {
-		final Patient patient = this.getPatientRepository().getOne(patientId);
+		final Patient patient = this.findPatientById(patientId);
 		final Collection<Genotype> genotypes = this.getGenotypeDecoderService().decodeGenotype(genotype);
 
 		patient.setGenotypes(genotypes);
@@ -119,7 +119,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public Stream<GenotypeDTO> getPatientGenotype(Long patientId) {
-		final Patient patient = this.getPatientRepository().getOne(patientId);
+		final Patient patient = this.findPatientById(patientId);
 
 		return this.getGenotypeTransformer().manyToDto(patient.getGenotypes()).stream();
 	}
@@ -152,7 +152,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	private CustomUser findRegistrantUser(Long patientId) {
-		final Patient patient = this.getPatientRepository().getOne(patientId);
+		final Patient patient = this.findPatientById(patientId);
 
 		return patient.getUser();
 	}
