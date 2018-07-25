@@ -117,6 +117,13 @@ public class PatientServiceImpl implements PatientService {
 		return this.getGenotypeTransformer().manyToDto(genotypes).stream();
 	}
 
+	@Override
+	public Stream<GenotypeDTO> getPatientGenotype(Long patientId) {
+		final Patient patient = this.getPatientRepository().getOne(patientId);
+
+		return this.getGenotypeTransformer().manyToDto(patient.getGenotypes()).stream();
+	}
+
 	private Patient findPatientById(Long patientId) throws EntityNotFoundException {
 		final Patient patient = this.getPatientRepository().findById(patientId)
 				.orElseThrow(() -> new EntityNotFoundException(

@@ -78,6 +78,13 @@ public interface PatientService {
 	Stream<GenotypeDTO> setPatientGenotype(Long patientId, String genotype);
 
 	/**
+	 * Devuelve el genotipo de un paciente
+	 *
+	 * @param patientId el id del paciente
+	 */
+	Stream<GenotypeDTO> getPatientGenotype(Long patientId);
+
+	/**
 	 * Elimina un paciente
 	 *
 	 * @param patientId el id del paciente

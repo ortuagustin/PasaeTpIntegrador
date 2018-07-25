@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
@@ -21,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
@@ -224,6 +226,29 @@ public class PatientTests {
 		Assert.assertEquals(surname, patient.getSurname());
 		Assert.assertEquals(dni, patient.getDni());
 		Assert.assertEquals(email, patient.getEmail());
+	}
+
+	@Test
+	public void it_updates_the_patient_genotype() {
+		Long userId = this.user.getId();
+		String name = "Name";
+		String surname = "Surname";
+		String dni = "37058719";
+		String email = "test@example.com";
+		String genotype = "rs111acrs1122at";
+
+		PatientRequestDTO request = new PatientRequestDTO(userId, name, surname, dni, email);
+		PatientDTO patient = this.patientService.create(request);
+
+		Stream<GenotypeDTO> patientGenotype;
+
+		patientGenotype = this.patientService.getPatientGenotype(patient.getId());
+		Assert.assertEquals(0, patientGenotype.count());
+
+		this.patientService.setPatientGenotype(patient.getId(), genotype);
+
+		patientGenotype = this.patientService.getPatientGenotype(patient.getId());
+		Assert.assertEquals(2, patientGenotype.count());
 	}
 
 	@Test
