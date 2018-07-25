@@ -38,6 +38,24 @@ public class Genotype {
     this.setValue(value);
   }
 
+  /**
+   * @return el valor del alelo heredado del padre
+   */
+  public String getFatherValue() {
+    Character c = this.getValue().charAt(0);
+
+    return c.toString();
+  }
+
+  /**
+   * @return el valor del alelo heredado de la madre
+   */
+  public String getMotherValue() {
+    Character c = this.getValue().charAt(1);
+
+    return c.toString();
+  }
+
   private Genotype() {
     super();
   }
