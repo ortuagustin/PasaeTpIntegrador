@@ -11,13 +11,17 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotypeValue;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Genotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotypeValue;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
 
@@ -163,29 +167,29 @@ public class PatientServiceImpl implements PatientService {
 						MessageFormat.format("No User found with id {0}", userId)));
 	}
 
-	private Set<CategoricPhenotype> findCategoricPhenotypes(Set<Long> phenotypes) {
-		Set<CategoricPhenotype> entities = new HashSet<CategoricPhenotype>();
+	private Set<CategoricPhenotypeValue> findCategoricPhenotypes(Set<CategoricPhenotypeValueDTO> phenotypes) {
+		Set<CategoricPhenotypeValue> entities = new HashSet<CategoricPhenotypeValue>();
 
-		for (Long phenotypeId : phenotypes) {
-			final CategoricPhenotype phenotype = this.getCategoricPhenotypesRepository().findById(phenotypeId)
+		for (CategoricPhenotypeValueDTO each : phenotypes) {
+			final CategoricPhenotype phenotype = this.getCategoricPhenotypesRepository().findById(each.getPhenotypeId())
 				.orElseThrow(() -> new EntityNotFoundException(
-					MessageFormat.format("No Categoric Phenotype found with id {0}", phenotypeId)));
+					MessageFormat.format("No Categoric Phenotype found with id {0}", each.getPhenotypeId())));
 
-			entities.add(phenotype);
+			entities.add(new CategoricPhenotypeValue(phenotype, each.getValue()));
 		}
 
 		return entities;
 	}
 
-	private Set<NumericPhenotype> findNumericPhenotypes(Set<Long> phenotypes) {
-		Set<NumericPhenotype> entities = new HashSet<NumericPhenotype>();
+	private Set<NumericPhenotypeValue> findNumericPhenotypes(Set<NumericPhenotypeValueDTO> phenotypes) {
+		Set<NumericPhenotypeValue> entities = new HashSet<NumericPhenotypeValue>();
 
-		for (Long phenotypeId : phenotypes) {
-			final NumericPhenotype phenotype = this.getNumericPhenotypeRepository().findById(phenotypeId)
+		for (NumericPhenotypeValueDTO each : phenotypes) {
+			final NumericPhenotype phenotype = this.getNumericPhenotypeRepository().findById(each.getPhenotypeId())
 				.orElseThrow(() -> new EntityNotFoundException(
-					MessageFormat.format("No Numeric Phenotype found with id {0}", phenotypeId)));
+					MessageFormat.format("No Numeric Phenotype found with id {0}", each.getPhenotypeId())));
 
-			entities.add(phenotype);
+			entities.add(new NumericPhenotypeValue(phenotype, each.getValue()));
 		}
 
 		return entities;

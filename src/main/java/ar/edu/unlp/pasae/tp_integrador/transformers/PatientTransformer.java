@@ -1,5 +1,6 @@
 package ar.edu.unlp.pasae.tp_integrador.transformers;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,10 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
+import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotypeValue;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotypeValue;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
 
@@ -34,10 +39,10 @@ public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
 	@Override
 	public PatientDTO toDTO(Patient entity) {
 		Set<NumericPhenotypeDTO> numericPhenotypes = this.getPhenotypeTransformer()
-				.numericToDtos(entity.getNumericPhenotypes());
+				.numericToDtos(this.getNumericPhenotypes(entity));
 
 		Set<CategoricPhenotypeDTO> categoricPhenotypes = this.getPhenotypeTransformer()
-				.categoricToDtos(entity.getCategoricPhenotypes());
+				.categoricToDtos(this.getCategoricPhenotypes(entity));
 
 		CustomUserDTO user = this.getCustomUserTransformer().toDTO(entity.getUser());
 
@@ -48,6 +53,26 @@ public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
 		dto.setNumericPhenotypes(numericPhenotypes);
 
 		return dto;
+	}
+
+	private Set<NumericPhenotype> getNumericPhenotypes(Patient entity) {
+		Set<NumericPhenotype> phenotypes = new HashSet<NumericPhenotype>();
+
+		for (NumericPhenotypeValue each : entity.getNumericPhenotypes()) {
+			phenotypes.add(each.getPhenotype());
+		}
+
+		return phenotypes;
+	}
+
+	private Set<CategoricPhenotype> getCategoricPhenotypes(Patient entity) {
+		Set<CategoricPhenotype> phenotypes = new HashSet<CategoricPhenotype>();
+
+		for (CategoricPhenotypeValue each : entity.getCategoricPhenotypes()) {
+			phenotypes.add(each.getPhenotype());
+		}
+
+		return phenotypes;
 	}
 
 	/**

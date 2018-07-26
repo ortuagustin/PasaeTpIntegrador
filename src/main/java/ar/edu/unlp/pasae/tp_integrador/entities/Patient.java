@@ -35,9 +35,9 @@ public class Patient {
 	@OneToMany
 	private List<Genotype> genotypes = new ArrayList<Genotype>();
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<NumericPhenotype> numericPhenotypes = new HashSet<NumericPhenotype>();
+	private Set<NumericPhenotypeValue> numericPhenotypes = new HashSet<NumericPhenotypeValue>();
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<CategoricPhenotype> categoricPhenotypes = new HashSet<CategoricPhenotype>();
+	private Set<CategoricPhenotypeValue> categoricPhenotypes = new HashSet<CategoricPhenotypeValue>();
 
 	public static final class PatientBuilder {
 		private String name;
@@ -46,18 +46,18 @@ public class Patient {
 		private String email;
 		private CustomUser user;
 		private List<Genotype> genotypes = new ArrayList<Genotype>();
-		private Set<NumericPhenotype> numericPhenotypes = new HashSet<NumericPhenotype>();
-		private Set<CategoricPhenotype> categoricPhenotypes = new HashSet<CategoricPhenotype>();
+		private Set<NumericPhenotypeValue> numericPhenotypes = new HashSet<NumericPhenotypeValue>();
+		private Set<CategoricPhenotypeValue> categoricPhenotypes = new HashSet<CategoricPhenotypeValue>();
 
 		private PatientBuilder() {
 		}
 
-		public PatientBuilder addNumericPhenotypes(final Set<NumericPhenotype> numericPhenotypes) {
+		public PatientBuilder addNumericPhenotypes(final Set<NumericPhenotypeValue> numericPhenotypes) {
 			this.numericPhenotypes = numericPhenotypes;
 			return this;
 		}
 
-		public PatientBuilder addCategoricPhenotypes(final Set<CategoricPhenotype> categoricPhenotypes) {
+		public PatientBuilder addCategoricPhenotypes(final Set<CategoricPhenotypeValue> categoricPhenotypes) {
 			this.categoricPhenotypes = categoricPhenotypes;
 			return this;
 		}
@@ -140,7 +140,7 @@ public class Patient {
 	 *
 	 * @return this
 	 */
-	public Patient addPhenotype(NumericPhenotype phenotype) {
+	public Patient addPhenotype(NumericPhenotypeValue phenotype) {
 		this.getNumericPhenotypes().add(phenotype);
 
 		return this;
@@ -153,7 +153,7 @@ public class Patient {
 	 *
 	 * @return this
 	 */
-	public Patient addPhenotype(CategoricPhenotype phenotype) {
+	public Patient addPhenotype(CategoricPhenotypeValue phenotype) {
 		this.getCategoricPhenotypes().add(phenotype);
 
 		return this;
@@ -261,28 +261,28 @@ public class Patient {
 	/**
 	 * @return the categoricPhenotypes
 	 */
-	public Set<CategoricPhenotype> getCategoricPhenotypes() {
+	public Set<CategoricPhenotypeValue> getCategoricPhenotypes() {
 		return categoricPhenotypes;
 	}
 
 	/**
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
-	public void setCategoricPhenotypes(Set<CategoricPhenotype> categoricPhenotypes) {
+	public void setCategoricPhenotypes(Set<CategoricPhenotypeValue> categoricPhenotypes) {
 		this.categoricPhenotypes = categoricPhenotypes;
 	}
 
 	/**
 	 * @return the numericPhenotypes
 	 */
-	public Set<NumericPhenotype> getNumericPhenotypes() {
+	public Set<NumericPhenotypeValue> getNumericPhenotypes() {
 		return numericPhenotypes;
 	}
 
 	/**
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
-	public void setNumericPhenotypes(Set<NumericPhenotype> numericPhenotypes) {
+	public void setNumericPhenotypes(Set<NumericPhenotypeValue> numericPhenotypes) {
 		this.numericPhenotypes = numericPhenotypes;
 	}
 }
