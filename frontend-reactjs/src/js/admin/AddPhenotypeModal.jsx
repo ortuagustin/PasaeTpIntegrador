@@ -16,12 +16,12 @@ class AddPhenotypeModal extends React.Component {
         this.modalId = props.modalId;
         this.getPhenotypes = props.getPhenotypes;
         this.actionModal = props.actionModal;
+        this.action = props.action;
 
         this.defaultState = {
             name: '',
             values: [''],
             phenotypeType: props.phenotypeType,
-            action: props.action,
             adding: false,
             selectedPhenotype: props.selectedPhenotype
         };
@@ -41,11 +41,11 @@ class AddPhenotypeModal extends React.Component {
      * @param {*} props Nuevas props
      */
     componentWillReceiveProps(props) {
-        this.setState({
-            action: props.action,
+        this.action = props.action;
+        this.setState({ 
             phenotypeType: props.phenotypeType,
             selectedPhenotype: props.selectedPhenotype
-        })
+        });
     }
 
     /**
@@ -90,7 +90,10 @@ class AddPhenotypeModal extends React.Component {
      * Limpia todos los inputs del formulario
      */
     cleanInputs() {
-        this.setState(this.defaultState);
+        console.log("Limpiando")
+        this.setState(this.defaultState, () => {
+            console.log(this.state);
+        });
     }
 
     /**
@@ -106,7 +109,7 @@ class AddPhenotypeModal extends React.Component {
                 // seleccionado en el formulario
                 self.setState({
                     name: self.state.selectedPhenotype.name,
-                    values: self.state.selectedPhenotype.values,
+                    values: self.state.selectedPhenotype.values ? self.state.selectedPhenotype.values : [''],
                 });
             }
         });
@@ -119,6 +122,7 @@ class AddPhenotypeModal extends React.Component {
 
         // Cuando se esconde limpio los inputs
         $('#' + self.modalId).on('hidden.bs.modal', function() {
+            console.log("Escondido");
             self.cleanInputs();
         });
     }
@@ -147,28 +151,26 @@ class AddPhenotypeModal extends React.Component {
 
         let url;
         let values;
-        let data = {
-            name: self.state.name,
-            values: values
-        };
+       
         if (self.state.phenotypeType == 'numeric') {
             url = 'http://localhost:8080/numeric-phenotypes/';
-            values = self.state.values[0];
+            values = null;
         } else {
             url = 'http://localhost:8080/categoric-phenotypes/';
             values = self.state.values;
         }
 
-        if (self.action == 'edit') {
-            data.id = self.state.selectedPhenotype.id;
-        }
+        let phenotypeId = self.action == 'edit' ? self.state.selectedPhenotype.id : '';
 
         $.ajax({
-            url: url,
+            url: url + phenotypeId,
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             type: self.action == 'add' ? 'PUT' : 'PATCH',
-            data: JSON.stringify(data)
+            data: JSON.stringify({
+                name: self.state.name,
+                values: values
+            })
         }).done(function (jsonReponse, textStatus, jqXHR) {
             self.getPhenotypes(); // Refresco la tabla
             self.actionModal(self.modalId, 'hide'); // Escondo el modal
@@ -184,6 +186,11 @@ class AddPhenotypeModal extends React.Component {
      * @param {*} idx Index del valor a editar
      */
     changeValue(e, idx) {
+        // Verifico que el formulario sea valido
+        if (!e.target.validity.valid) {
+            return;
+        }
+
         let values = this.state.values;
         values[idx] = e.target.value;
         this.setState({ values });
@@ -202,41 +209,53 @@ class AddPhenotypeModal extends React.Component {
     render() {
         // Armo una lista con los roles disponibles
         console.log(this.state.values);
-        let valuesList = this.state.values.map((value, idx) => {
-            let deleteButton = null;
-            let addButton = null;
 
-            if (idx != 0) {
-                deleteButton = <button className="btn btn-danger" onClick={() => this.removeValue(idx)} title="Eliminar valor">-</button>;
-            }
+        let valuesComponent = null;
 
-            console.log("type-->", this.state.phenotypeType);
-            if (this.state.phenotypeType == 'categoric') {
-                addButton = <button className="btn btn-success"
+        // Lista con los valores del fenotipo
+        if (this.state.phenotypeType == 'categoric') {
+            let valuesList = this.state.values.map((value, idx) => {
+                let deleteButton = null;
+                let addButton = null;
+    
+                if (idx != 0) {
+                    deleteButton = <button className="btn btn-danger" onClick={() => this.removeValue(idx)} title="Eliminar valor">-</button>;
+                }
+    
+                addButton = (<button className="btn btn-success"
                                 onClick={this.addValue}
                                 title="Agregar valor"
-                                disabled={idx != 0 && !this.state.values[idx - 1]}>+</button>;
-            }
+                                disabled={idx != 0 && !this.state.values[idx - 1]}>+</button>);
+    
+                return (
+                    <div key={"input-value-div-" + idx} className="row margin-bottom text-center">
+                        <div className="col">
+                            {deleteButton}
+                        </div>
+                        <div className="col">
+                            <input key={"input-value-" + idx}
+                                id={"rol-" + idx}
+                                className="form-control"
+                                type="text"
+                                value={value}
+                                onChange={(e) => this.changeValue(e, idx)}/>
+                        </div>
+                        <div className="col">
+                            {addButton}
+                        </div>
+                    </div>
+                );
+            });
 
-            return (
-                <div key={"input-value-div-" + idx} className="row margin-bottom text-center">
-                    <div className="col">
-                        {deleteButton}
+            valuesComponent = (
+                <div className="form-row">
+                    <div className="col-md-12">
+                        <h5>Valores</h5>
+                        {valuesList}
                     </div>
-                    <div className="col">
-                        <input key={"input-value-" + idx}
-                            id={"rol-" + idx}
-                            className="form-control"
-                            type="text"
-                            value={value}
-                            onChange={(e) => this.changeValue(e, idx)}/>
-                    </div>
-                    <div className="col">
-                        {addButton}
-                    </div>
-                </div>
+                </div> 
             );
-        });
+        }
 
         // Verifico que no este cargando y que el formulario sea valido
         let isValid = this.isFormValid();
@@ -257,13 +276,8 @@ class AddPhenotypeModal extends React.Component {
                                     <input type="text" id="phenotype-name-input" name="name" value={this.state.name} className="form-control" onChange={this.handleChange} onKeyPress={this.handleKeyPress}/>
                                 </div>
                             </div>
-                            <div className="form-row">
-                                <div className="col-md-12">
-                                    <h5>Valores</h5>
-                                    {valuesList}
-                                </div>
-                            </div> 
                             
+                            {valuesComponent}
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>
