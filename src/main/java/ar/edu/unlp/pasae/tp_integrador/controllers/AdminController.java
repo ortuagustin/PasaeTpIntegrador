@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.RoleDTO;
-import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.UserExistsException;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.UserNotExistsException;
 import ar.edu.unlp.pasae.tp_integrador.services.CustomUserService;
@@ -51,7 +50,7 @@ public class AdminController {
 	 * @return Lista de usuarios disponibles
 	 */
 	@GetMapping(path = "/users/")
-	public Page<CustomUser> listAction(
+	public Page<CustomUserDTO> listAction(
 			@RequestParam(value="newestPage", defaultValue="0") int page,
 			@RequestParam(value="newestSizePerPage", defaultValue="10") int sizePerPage,
 			@RequestParam(value="newestSortField", defaultValue="username") String sortField,

@@ -90,10 +90,7 @@ class AddPhenotypeModal extends React.Component {
      * Limpia todos los inputs del formulario
      */
     cleanInputs() {
-        console.log("Limpiando")
-        this.setState(this.defaultState, () => {
-            console.log(this.state);
-        });
+        this.setState(this.defaultState);
     }
 
     /**
@@ -122,7 +119,6 @@ class AddPhenotypeModal extends React.Component {
 
         // Cuando se esconde limpio los inputs
         $('#' + self.modalId).on('hidden.bs.modal', function() {
-            console.log("Escondido");
             self.cleanInputs();
         });
     }

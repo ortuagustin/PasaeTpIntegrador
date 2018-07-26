@@ -3,6 +3,7 @@ import React from 'react';
 // Componentes React
 import UserCRUDComponent from './UserCRUDComponent.jsx';
 import PhenotypesCRUDComponent from './PhenotypesCRUDComponent.jsx';
+import PathologiesCRUDComponent from './PathologiesCRUDComponent.jsx';
 
 // Estilos
 import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'; // Estilos de la tabla
@@ -14,17 +15,29 @@ class AdminPanel extends React.Component {
         this.state = {
             fenotypes: [],
             // option: 'users'
-            option: 'phenotypes'
+            // option: 'phenotypes'
+            option: 'pathologies'
         };
     }
 
     render() {
         let crudComponent;
-        if (this.state.option == 'phenotypes') {
-            crudComponent = <PhenotypesCRUDComponent/>;
-        } else {
-            crudComponent = <UserCRUDComponent/>;
+
+        switch (this.state.option) {
+            case 'users':
+                crudComponent = <UserCRUDComponent />;
+                break;
+            case 'phenotypes':
+                crudComponent = <PhenotypesCRUDComponent />;
+                break;
+            case 'pathologies':
+                crudComponent = <PathologiesCRUDComponent />;
+                break;
+            default:
+                crudComponent = null;
+                break;
         }
+
 
         return(
             <div className="container-fluid panel-component">
@@ -38,7 +51,7 @@ class AdminPanel extends React.Component {
                                 <a className={"nav-link " + (this.state.option == "phenotypes" ? 'active' : '')} onClick={() => this.setState({ option: 'phenotypes' })} href="#">Fenotipos</a>
                             </li>
                             <li className="nav-item">
-                                <a className={"nav-link " + (this.state.option == "genotypes" ? 'active' : '')} onClick={() => this.setState({ option: 'genotypes' })} href="#">Patologías</a>
+                                <a className={"nav-link " + (this.state.option == "pathologies" ? 'active' : '')} onClick={() => this.setState({ option: 'pathologies' })} href="#">Patologías</a>
                             </li>
                         </ul>
                     </div>

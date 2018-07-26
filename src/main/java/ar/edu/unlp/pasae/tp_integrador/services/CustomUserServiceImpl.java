@@ -106,14 +106,18 @@ public class CustomUserServiceImpl implements CustomUserService {
 	}
 	
 	@Override
-	public Page<CustomUser> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+	public Page<CustomUserDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
 		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC; 
 		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
 		CustomUserRepository userRepository = this.getUserRepository();
+		Page<CustomUser> result;
 		if (search.equals("")) {
-			return userRepository.findAll(pageRequest);
+			result = userRepository.findAll(pageRequest);
+		} else {
+			result = userRepository.findByUsernameContainingOrFirstNameContainingOrLastNameContaining(search, search, search, pageRequest);
 		}
-		return userRepository.findByUsernameContainingOrFirstNameContainingOrLastNameContaining(search, search, search, pageRequest);
+		
+		return result.map(each -> this.getTransformer().toDTO(each));
 	}
 	
 	/**
