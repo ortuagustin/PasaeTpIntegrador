@@ -9,10 +9,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Aspect
 @Configuration
-public class ControllerExceptionLoggerAspect {
-  private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionLoggerAspect.class);
+public class ExceptionLoggerAspect {
+  private static final Logger logger = LoggerFactory.getLogger(ExceptionLoggerAspect.class);
 
-  @AfterThrowing(value = "execution(* ar.edu.unlp.pasae.tp_integrador.controllers.*.*(..))", throwing = "exception")
+  @AfterThrowing(value = "execution(* ar.edu.unlp.pasae.tp_integrador.services.*.*(..))", throwing = "exception")
   public void after(final JoinPoint joinPoint, final Exception exception) throws Exception {
     logger.error(exception.getLocalizedMessage());
   }
