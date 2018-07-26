@@ -1,8 +1,7 @@
 import React from 'react';
 
 // Componentes
-import AddPathologyModal from './AddPathologyModal.jsx';
-import DeletePathologyModal from './DeletePathologyModal.jsx';
+
 
 // Librerias
 import BootstrapTable from 'react-bootstrap-table-next'; // Tabla
@@ -13,27 +12,27 @@ import filterFactory from 'react-bootstrap-table2-filter';
 /**
  * Componente que renderiza el panel de CRUD de usuarios
  */
-class PathologiesCRUDComponent extends React.Component {
+class PatientsCRUDComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            pathologies: [],
+            patients: [],
             page: 0,
             sizePerPage: 10,
             totalSize: 0,
             selectedRow: [],
-            selectedPathology: {},
+            selectedPatient: {},
             action: null,
-            searchPhenotypeInput: '',
+            searchPatientInput: '',
         }
 
         // Variables que no renderizan la vista
-        this.addPathologyModalId = 'add-pathology-modal';
-        this.deletePathologyModalId = 'delete-pathology-modal';
+        this.addPatientModalId = 'add-pathology-modal';
+        this.deletePatientModalId = 'delete-pathology-modal';
 
         // Bindeo la variable 'this' a los metodos llamados desde la vista
-        this.getPathologies = this.getPathologies.bind(this);
+        this.getPatients = this.getPatients.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -42,7 +41,7 @@ class PathologiesCRUDComponent extends React.Component {
      * renderizar el componente
      */
     componentDidMount() {
-        this.getPathologies();
+        this.getPatients();
     }
 
     /**
@@ -60,28 +59,28 @@ class PathologiesCRUDComponent extends React.Component {
      * @param {string} type Tipo de accion realizada en la tabla 
      * @param {*} newState Atributos de la tabla actuales
      */
-    getPathologies(actionType = '', newState = {}) {
+    getPatients(actionType = '', newState = {}) {
         let self = this;
 
         // Genero los parametros del request
         let pageNumber = newState.page ? newState.page - 1 : self.state.page;
         let sizePerPage = newState.sizePerPage ? newState.sizePerPage : self.state.sizePerPage;
 
-        // Cargo los fenotipos numericos y categoricos
+        // Cargo los pacientes
         self.setState({ loading: true }, () => {
             $.ajax({
-                url: 'http://localhost:8080/pathologies/',
+                url: 'http://localhost:8080/patients/',
                 data: {
                     newestPage: pageNumber,
                     newestSizePerPage: sizePerPage,
                     newestSortField: newState.sortField,
                     newestSortOrder: newState.sortOrder,
-                    search: self.state.searchPhenotypeInput
+                    search: self.state.searchPatientInput
                 }
             }).done(function (jsonReponse, textStatus, jqXHR) {
                 if (jqXHR.status == 200) {
                     self.setState({
-                        pathologies: jsonReponse.content,
+                        patients: jsonReponse.content,
                         page: pageNumber,
                         sizePerPage: sizePerPage,
                         totalSize: jsonReponse.totalElements
@@ -106,7 +105,7 @@ class PathologiesCRUDComponent extends React.Component {
         if (isSelect) {
             this.setState({
                 selectedRow: [row.id], // Solo selecciono uno a la vez, pero debe ser un arreglo para la libreria
-                selectedPathology: row
+                selectedPatient: row
             });
         }
     }
@@ -120,7 +119,7 @@ class PathologiesCRUDComponent extends React.Component {
     changeAction(action) {
         this.setState({ action: action }, () => {
             // Una vez que cambiamos de accion, abrimos el modal de alta/edicion
-            this.actionModal(this.addPathologyModalId, 'show');
+            this.actionModal(this.addPatientModalId, 'show');
         });
     }
 
@@ -131,7 +130,7 @@ class PathologiesCRUDComponent extends React.Component {
      */
     handleChange(e) {
         this.setState({ [e.target.name]: e.target.value }, () => {
-            this.getPathologies();
+            this.getPatients();
         });;
     }
 
@@ -141,7 +140,7 @@ class PathologiesCRUDComponent extends React.Component {
     cleanState() {
         this.setState({
             selectedRow: [],
-            selectedPathology: {}
+            selectedPatient: {}
         });
     }
 
@@ -150,6 +149,21 @@ class PathologiesCRUDComponent extends React.Component {
             {
                 dataField: 'name',
                 text: 'Nombre',
+                sort: true,
+            },
+            {
+                dataField: 'surname',
+                text: 'Apellido',
+                sort: true,
+            },
+            {
+                dataField: 'dni',
+                text: 'DNI',
+                sort: true,
+            },
+            {
+                dataField: 'email',
+                text: 'Mail',
                 sort: true,
             },
             {
@@ -188,20 +202,23 @@ class PathologiesCRUDComponent extends React.Component {
                     <div className="col-9 button-col">
                         <h4>Acciones</h4>
                         <button type="button" className="btn btn-success" onClick={() => this.changeAction('add')}>Agregar</button>
-                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedPathology.id}>Editar</button>
-                        <button type="button" className="btn btn-danger" onClick={() => this.actionModal(this.deletePathologyModalId, 'show')} disabled={!this.state.selectedPathology.id}>Eliminar</button>
+                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedPatient.id}>Editar</button>
+                        <button type="button"
+                            className="btn btn-danger"
+                            onClick={() => this.actionModal(this.deletePatientModalId, 'show')}
+                            disabled={!this.state.selectedPatient.id}>Eliminar</button>
                     </div>
                     <div className="col-3 button-col">
                         <div className="form-group">
                             <label htmlFor="search-user-input"><h5>Buscar</h5></label>
                             <input type="text"
                                 className="form-control"
-                                name="searchPhenotypeInput"
-                                value={this.state.searchPhenotypeInput}
+                                name="searchPatientInput"
+                                value={this.state.searchPatientInput}
                                 onChange={this.handleChange}
                                 aria-describedby="searchHelpBlockPathology" />
                             <small id="searchHelpBlockPathology" className="form-text text-muted">
-                                Buscará por nombre de patología o fenotipo
+                                Buscará por nombre, apellido, dni y mail
                             </small>
                         </div>
                     </div>
@@ -213,14 +230,14 @@ class PathologiesCRUDComponent extends React.Component {
                         <BootstrapTable
                             remote={{ pagination: true, filter: true }}
                             keyField='id'
-                            data={this.state.pathologies}
+                            data={this.state.patients}
                             columns={columns}
                             page={this.state.page}
                             sizePerPage={this.state.sizePerPage}
                             totalSize={this.state.totalSize}
                             noDataIndication="No hay información para mostrar"
-                            onTableChange={this.getPathologies}
-                            pagination={paginationFactory()}
+                            onTableChange={this.getPatients}
+                            // pagination={paginationFactory()}
                             filter={filterFactory()}
                             loading={this.state.loading}
                             selectRow={selectRow}
@@ -236,26 +253,12 @@ class PathologiesCRUDComponent extends React.Component {
                 </div>
 
                 {/* Modal de alta de fenotipo */}
-                <AddPathologyModal
-                    modalId={this.addPathologyModalId}
-                    action={this.state.action}
-                    selectedPathology={this.state.selectedPathology}
-                    getPathologies={this.getPathologies}
-                    actionModal={this.actionModal}
-                />
                 
                 {/* Modal de confirmacion de eliminacion de fenotipo */}
-                <DeletePathologyModal
-                    modalId={this.deletePathologyModalId}
-                    pathologyId={this.state.selectedPathology.id}
-                    name={this.state.selectedPathology.name}
-                    getPathologies={this.getPathologies}
-                    actionModal={this.actionModal}
-                />
 
             </div>
         );
     }
 }
 
-export default PathologiesCRUDComponent;
+export default PatientsCRUDComponent;

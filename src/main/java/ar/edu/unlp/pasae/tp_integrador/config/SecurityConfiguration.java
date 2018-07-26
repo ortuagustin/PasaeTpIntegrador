@@ -1,17 +1,5 @@
 package ar.edu.unlp.pasae.tp_integrador.config;
 
-// TODO segurizar servicios: Patologia, Fenotipo, Usuarios
-// - Solamente puede acceder a este servicio usuarios con rol ADMIN
-// TODO segurizar servicio: Pacientes
-// - Solamente puede acceder a este servicio usuarios con rol REGISTER
-// - Update y Delete solamente puede hacerlo el usuario asociado al paciente (el que lo ingreso al sistema)
-// TODO segurizar servicio: Analisis de datos
-// - Solamente puede acceder a este servicio usuarios con rol SCIENTIST
-// TODO segurizar servicio: Gestion de asociaciones genotipo-fenotivo en estado publicado
-// - Solamente puede acceder a este servicio usuarios con rol CLINICAL_DOCTOR
-// TODO segurizar servicio: Visualizacion de graficos de fenotipo/genotipo
-// - Solamente puede acceder a este servicio usuarios con rol EPIDEMIOLOGIST
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

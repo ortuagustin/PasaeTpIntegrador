@@ -13,6 +13,7 @@ import 'bootstrap'; // Para los modals
 import Home from './Home.jsx';
 import AdminPanel from './admin/AdminPanel.jsx';
 import ProfessionalPanel from './professional/ProfessionalPanel.jsx';
+import PatientsCRUDComponent from './register/PatientsCRUDComponent.jsx';
 
 // Estilos
 import '../css/style.css'; // Estilos propios'
@@ -48,7 +49,7 @@ class App extends React.Component {
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/">Admin</Link>
+											<Link to="/app/admin">Admin</Link>
 										</div>
 									</span>
 								</li>
@@ -56,6 +57,13 @@ class App extends React.Component {
 									<span className="nav-link">
 										<div>
 											<Link to="/app/professional">Profesional</Link>
+										</div>
+									</span>
+								</li>
+								<li className="nav-item active">
+									<span className="nav-link">
+										<div>
+											<Link to="/">Registrante</Link>
 										</div>
 									</span>
 								</li>
@@ -70,9 +78,10 @@ class App extends React.Component {
 
 					{/* Renderiza los componentes seleccionados */}
 					<div>
-						<Route exact path="/home" component={Home} />
-						<Route exact path="/" component={AdminPanel} />
+						<Route exact path="/app/home" component={Home} />
+						<Route exact path="/app/admin" component={AdminPanel} />
 						<Route exact path="/app/professional" component={ProfessionalPanel} />
+						<Route exact path="/" component={PatientsCRUDComponent} />
 					</div>
 				</div>
 			</Router>

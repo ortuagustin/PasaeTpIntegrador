@@ -9,11 +9,15 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
@@ -22,6 +26,7 @@ import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Genotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotypeValue;
+import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
 
@@ -108,6 +113,25 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public Integer count() {
 		return (int) this.getPatientRepository().count();
+	}
+	
+	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
+		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
+	}
+	
+	@Override
+	public Page<PatientDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
+		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
+		Page<Patient> result;
+
+		if (search.equals("")) {
+			result = this.getPatientRepository().findAll(pageRequest);
+		} else {
+			result = this.getPatientRepository().findByNameContainsOrSurnameContainsOrDniContainsOrEmailContains(search, pageRequest);
+		}
+
+		return result.map(each -> this.getTransformer().toDTO(each));
 	}
 
 	@Override
