@@ -2,6 +2,7 @@ import React from 'react';
 
 // Componentes
 import AddPathologyModal from './AddPathologyModal.jsx';
+import DeletePathologyModal from './DeletePathologyModal.jsx';
 
 // Librerias
 import BootstrapTable from 'react-bootstrap-table-next'; // Tabla
@@ -244,6 +245,13 @@ class PathologiesCRUDComponent extends React.Component {
                 />
                 
                 {/* Modal de confirmacion de eliminacion de fenotipo */}
+                <DeletePathologyModal
+                    modalId={this.deletePathologyModalId}
+                    pathologyId={this.state.selectedPathology.id}
+                    name={this.state.selectedPathology.name}
+                    getPathologies={this.getPathologies}
+                    actionModal={this.actionModal}
+                />
 
             </div>
         );

@@ -71,8 +71,8 @@ class AddPathologyModal extends React.Component {
      * Elimina el valor con el indice especificado
      * @param {number} index Index del valor a eliminar
      */
-    removePhenotype(index) {
-        if (this.state.phenotypeType == 'numeric') {
+    removePhenotype(phenotypeType, index) {
+        if (phenotypeType == 'numeric') {
             let numericPhenotypes = this.state.numericPhenotypes;
             numericPhenotypes.splice(index, 1);
             this.setState({ numericPhenotypes });
@@ -120,7 +120,8 @@ class AddPathologyModal extends React.Component {
                 // seleccionado en el formulario
                 self.setState({
                     name: self.state.selectedPathology.name,
-                    phenotypes: self.state.selectedPathology.phenotypes ? self.state.selectedPathology.phenotypes : [{}],
+                    numericPhenotypes: self.state.selectedPathology.numericPhenotypes,
+                    categoricPhenotypes: self.state.selectedPathology.categoricPhenotypes
                 });
             }
         });
@@ -233,7 +234,7 @@ class AddPathologyModal extends React.Component {
     isFormValid() {
         return !this.state.adding
                 && this.state.name
-                && (this.state.numericPhenotypes.length > 0 || this.state.numericPhenotypes.length);
+                && (this.state.numericPhenotypes.length > 0 || this.state.categoricPhenotypes.length > 0);
     }
 
     render() {
@@ -256,7 +257,7 @@ class AddPathologyModal extends React.Component {
         });
 
         let categoricPhenotypesvaluesList = this.state.categoricPhenotypes.map((phenotype, idx) => {
-            let deleteButton = <button className="btn btn-danger" onClick={() => this.removePhenotype('numeric', idx)} title="Eliminar valor">-</button>;
+            let deleteButton = <button className="btn btn-danger" onClick={() => this.removePhenotype('categoric', idx)} title="Eliminar valor">-</button>;
 
             return (
                 <div key={"input-value-div-" + phenotype.id} className="row margin-bottom text-center">
@@ -322,7 +323,7 @@ class AddPathologyModal extends React.Component {
 
                             <div className="row">
                                 <div className="col-md-12 text-center">
-                                    <div class="custom-control custom-radio custom-control-inline">
+                                    <div className="custom-control custom-radio custom-control-inline">
                                         <input className="form-check-input"
                                                 type="radio"
                                                 name="inlineRadioOptions"
@@ -330,9 +331,9 @@ class AddPathologyModal extends React.Component {
                                                 className="custom-control-input"
                                                 checked={this.state.phenotypeType == 'numeric'}
                                                 onChange={() => this.setState({ phenotypeType: 'numeric'})}/>
-                                        <label class="custom-control-label" for="numeric">Numéricos</label>
+                                        <label className="custom-control-label" htmlFor="numeric">Numéricos</label>
                                     </div>
-                                    <div class="custom-control custom-radio custom-control-inline">
+                                    <div className="custom-control custom-radio custom-control-inline">
                                         <input className="form-check-input"
                                                 type="radio"
                                                 name="inlineRadioOptions"
@@ -340,7 +341,7 @@ class AddPathologyModal extends React.Component {
                                                 className="custom-control-input"
                                                 checked={this.state.phenotypeType == 'categoric'}
                                                 onChange={() => this.setState({ phenotypeType: 'categoric' })}/>
-                                        <label class="custom-control-label" for="categoric">Categóricos</label>
+                                        <label className="custom-control-label" htmlFor="categoric">Categóricos</label>
                                     </div>
                                 </div>
                             </div>
