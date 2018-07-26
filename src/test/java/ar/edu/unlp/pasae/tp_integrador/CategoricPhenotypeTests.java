@@ -192,8 +192,8 @@ public class CategoricPhenotypeTests {
     updatedValues.add("Value 4");
     updatedValues.add("Value 5");
 
-		CategoricPhenotypeDTO updateRequest = new CategoricPhenotypeDTO(phenotype.getId(), name, updatedValues);
-		CategoricPhenotypeDTO updatedPhenotype = this.phenotypeService.update(updateRequest);
+		CategoricPhenotypeDTO updateRequest = new CategoricPhenotypeDTO(name, updatedValues);
+		CategoricPhenotypeDTO updatedPhenotype = this.phenotypeService.update(phenotype.getId(), updateRequest);
 
     Assert.assertEquals(name, updatedPhenotype.getName());
     Assert.assertEquals(updatedValues.size(), updatedPhenotype.getValues().size());

@@ -57,9 +57,9 @@ public class CategoricPhenotypeController {
       return this.getPhenotypesService().create(phenotype);
   }
 
-  @PatchMapping(path = "/", consumes = "application/json")
-  public CategoricPhenotypeDTO update(@RequestBody @Valid CategoricPhenotypeDTO phenotype) {
-    return this.getPhenotypesService().update(phenotype);
+  @PatchMapping(path = "/{id}", consumes = "application/json")
+  public CategoricPhenotypeDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid CategoricPhenotypeDTO phenotype) {
+    return this.getPhenotypesService().update(id, phenotype);
   }
 
   private CategoricPhenotypeService getPhenotypesService() {

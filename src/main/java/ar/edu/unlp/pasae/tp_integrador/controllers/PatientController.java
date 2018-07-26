@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
@@ -47,9 +46,9 @@ public class PatientController {
       return this.getPatientsService().create(request);
   }
 
-  @PatchMapping(path = "/", consumes = "application/json")
-  public PatientDTO update(@RequestBody @Valid PatientRequestDTO request) {
-    return this.getPatientsService().update(request);
+  @PatchMapping(path = "/{id}", consumes = "application/json")
+  public PatientDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid PatientRequestDTO request) {
+    return this.getPatientsService().update(id, request);
   }
 
   @GetMapping(path = "/{id}/genotype", consumes = "application/json", produces = "application/json")

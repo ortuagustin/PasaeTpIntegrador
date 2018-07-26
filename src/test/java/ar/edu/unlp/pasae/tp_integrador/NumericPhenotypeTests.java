@@ -154,8 +154,8 @@ public class NumericPhenotypeTests {
 
     String name = "Changed Name";
 
-		NumericPhenotypeDTO updateRequest = new NumericPhenotypeDTO(phenotype.getId(), name);
-		NumericPhenotypeDTO updatedPhenotype = this.phenotypeService.update(updateRequest);
+		NumericPhenotypeDTO updateRequest = new NumericPhenotypeDTO(name);
+		NumericPhenotypeDTO updatedPhenotype = this.phenotypeService.update(phenotype.getId(), updateRequest);
 
     Assert.assertEquals(name, updatedPhenotype.getName());
   }

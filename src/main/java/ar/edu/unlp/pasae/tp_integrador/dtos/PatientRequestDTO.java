@@ -11,7 +11,6 @@ import javax.validation.constraints.NotEmpty;
  */
 @SuppressWarnings("unused")
 public class PatientRequestDTO {
-	private Long id;
 	private Long userId;
 	@NotEmpty
 	private String name;
@@ -23,16 +22,6 @@ public class PatientRequestDTO {
 	private String email;
 	private Set<Long> numericPhenotypes = new HashSet<Long>();
 	private Set<Long> categoricPhenotypes = new HashSet<Long>();
-
-	public PatientRequestDTO(Long id, Long userId, String name, String surname, String dni, String email) {
-		super();
-		this.setId(id);
-		this.setUserId(userId);
-		this.setName(name);
-		this.setSurname(surname);
-		this.setDni(dni);
-		this.setEmail(email);
-	}
 
 	public PatientRequestDTO(Long userId, String name, String surname, String dni, String email) {
 		super();
@@ -145,19 +134,5 @@ public class PatientRequestDTO {
 	 */
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
 	}
 }

@@ -57,9 +57,9 @@ public class NumericPhenotypeController {
 		return this.getPhenotypesService().create(phenotype);
 	}
 
-	@PatchMapping(path = "/", consumes = "application/json")
-	public NumericPhenotypeDTO update(@RequestBody @Valid NumericPhenotypeDTO phenotype) {
-		return this.getPhenotypesService().update(phenotype);
+	@PatchMapping(path = "/{id}", consumes = "application/json")
+	public NumericPhenotypeDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid NumericPhenotypeDTO phenotype) {
+		return this.getPhenotypesService().update(id, phenotype);
 	}
 
 	private NumericPhenotypeService getPhenotypesService() {

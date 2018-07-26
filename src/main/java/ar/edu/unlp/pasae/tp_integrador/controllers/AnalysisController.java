@@ -43,9 +43,9 @@ public class AnalysisController {
     return this.getAnalysisService().create(analysis);
   }
 
-  @PatchMapping(path = "/publish", consumes = "application/json")
-  public AnalysisDTO publish(@RequestBody @Valid AnalysisDTO analysis) {
-    return this.getAnalysisService().publish(analysis);
+  @PatchMapping(path = "/publish/{id}", consumes = "application/json")
+  public AnalysisDTO publish(@PathVariable(value = "id") Long id) {
+    return this.getAnalysisService().publish(id);
   }
 
   private AnalysisService getAnalysisService() {

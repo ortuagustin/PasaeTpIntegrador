@@ -66,11 +66,12 @@ public interface CategoricPhenotypeService {
 	/**
 	 * Actualiza un fenotipo
 	 *
+	 * @param phenotypeId
 	 * @param phenotype dto con los datos a actualizar
 	 *
 	 * @return dto con los datos del fenotipo actualizado
 	 */
-	CategoricPhenotypeDTO update(CategoricPhenotypeDTO phenotype);
+	CategoricPhenotypeDTO update(Long phenotypeId, CategoricPhenotypeDTO phenotype);
 
 	/**
 	 * Elimina un fenotipo

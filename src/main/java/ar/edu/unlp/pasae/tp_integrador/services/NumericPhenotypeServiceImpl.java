@@ -66,9 +66,9 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 	}
 
 	@Override
-	public NumericPhenotypeDTO update(NumericPhenotypeDTO phenotype) {
+	public NumericPhenotypeDTO update(Long phenotypeId, NumericPhenotypeDTO phenotype) {
 		NumericPhenotype entity = this.buildPhenotype(phenotype);
-		entity.setId(phenotype.getId());
+		entity.setId(phenotypeId);
 
 		return this.save(entity);
 	}

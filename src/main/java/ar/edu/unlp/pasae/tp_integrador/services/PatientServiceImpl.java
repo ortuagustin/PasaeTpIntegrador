@@ -79,10 +79,10 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public PatientDTO update(PatientRequestDTO patient) {
+	public PatientDTO update(Long patientId, PatientRequestDTO patient) {
 		Patient entity = this.buildPatient(patient);
-		entity.setId(patient.getId());
-		entity.setUser(this.findRegistrantUser(patient.getId()));
+		entity.setId(patientId);
+		entity.setUser(this.findRegistrantUser(patientId));
 
 		return this.save(entity);
 	}

@@ -42,9 +42,9 @@ public interface AnalysisService {
 	/**
 	 * Actualiza un analisis
 	 *
-	 * @param analysis dto con los datos a actualizar
+	 * @param analysisId el id del analisis a publicar
 	 *
 	 * @return dto con los datos del analisis actualizado
 	 */
-	AnalysisDTO publish(AnalysisDTO analysis);
+	AnalysisDTO publish(Long analysisId);
 }

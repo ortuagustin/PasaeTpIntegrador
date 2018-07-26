@@ -262,8 +262,8 @@ public class PatientTests {
 		String dni = "12345678";
 		String email = "changed@example.com";
 
-		PatientRequestDTO updateRequest = new PatientRequestDTO(patient.getId(), userId, name, surname, dni, email);
-		PatientDTO updatedPatient = this.patientService.update(updateRequest);
+		PatientRequestDTO updateRequest = new PatientRequestDTO(userId, name, surname, dni, email);
+		PatientDTO updatedPatient = this.patientService.update(patient.getId(), updateRequest);
 
 		Assert.assertEquals(name, updatedPatient.getName());
 		Assert.assertEquals(surname, updatedPatient.getSurname());
@@ -358,8 +358,8 @@ public class PatientTests {
 		PatientRequestDTO createRequest = new PatientRequestDTO(userId, name, surname, dni, email);
 		PatientDTO patient = this.patientService.create(createRequest);
 
-		PatientRequestDTO updateRequest = new PatientRequestDTO(patient.getId(), anotherUser.getId(), name, surname, dni, email);
-		PatientDTO updatedPatient = this.patientService.update(updateRequest);
+		PatientRequestDTO updateRequest = new PatientRequestDTO(anotherUser.getId(), name, surname, dni, email);
+		PatientDTO updatedPatient = this.patientService.update(patient.getId(), updateRequest);
 
 		Assert.assertEquals(userId, patient.getUser().getId());
 		Assert.assertEquals(userId, updatedPatient.getUser().getId());

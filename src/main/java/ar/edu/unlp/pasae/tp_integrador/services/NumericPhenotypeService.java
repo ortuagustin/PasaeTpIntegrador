@@ -66,11 +66,12 @@ public interface NumericPhenotypeService {
 	/**
 	 * Actualiza un fenotipo
 	 *
+	 * @param phenotypeId
 	 * @param phenotype dto con los datos a actualizar
 	 *
 	 * @return dto con los datos del fenotipo actualizado
 	 */
-	NumericPhenotypeDTO update(NumericPhenotypeDTO phenotype);
+	NumericPhenotypeDTO update(Long phenotypeId, NumericPhenotypeDTO phenotype);
 
 	/**
 	 * Elimina un fenotipo

@@ -52,11 +52,12 @@ public interface PathologyService {
 	/**
 	 * Actualiza una patologia
 	 *
+	 * @param pathologyId el id de la patologia a actualizar
 	 * @param pathology dto con los datos a actualizar
 	 *
 	 * @return dto con los datos de la patologia actualizada
 	 */
-	PathologyDTO update(PathologyRequestDTO pathology);
+	PathologyDTO update(Long pathologyId, PathologyRequestDTO pathology);
 
 	/**
 	 * Elimina una patologia

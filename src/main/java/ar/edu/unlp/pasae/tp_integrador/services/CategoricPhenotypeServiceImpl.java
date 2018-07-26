@@ -63,9 +63,9 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 	}
 
 	@Override
-	public CategoricPhenotypeDTO update(CategoricPhenotypeDTO phenotype) {
+	public CategoricPhenotypeDTO update(Long phenotypeId, CategoricPhenotypeDTO phenotype) {
 		CategoricPhenotype entity = this.buildPhenotype(phenotype);
-		entity.setId(phenotype.getId());
+		entity.setId(phenotypeId);
 
 		return this.save(entity);
 	}

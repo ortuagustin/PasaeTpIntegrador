@@ -45,9 +45,9 @@ public class PathologyController {
       return this.getPathologysService().create(pathology);
   }
 
-  @PatchMapping(path = "/", consumes = "application/json")
-  public PathologyDTO update(@RequestBody @Valid PathologyRequestDTO pathology) {
-    return this.getPathologysService().update(pathology);
+  @PatchMapping(path = "/{id}", consumes = "application/json")
+  public PathologyDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid PathologyRequestDTO pathology) {
+    return this.getPathologysService().update(id, pathology);
   }
 
   private PathologyService getPathologysService() {

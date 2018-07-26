@@ -63,11 +63,12 @@ public interface PatientService {
 	/**
 	 * Actualiza un paciente
 	 *
+	 * @param patientId id del paciente a actualizar
 	 * @param patient dto con los datos a actualizar
 	 *
 	 * @return dto con los datos del paciente actualizado
 	 */
-	PatientDTO update(PatientRequestDTO patient);
+	PatientDTO update(Long patientId, PatientRequestDTO patient);
 
 	/**
 	 * Actualiza el genotipo de un paciente

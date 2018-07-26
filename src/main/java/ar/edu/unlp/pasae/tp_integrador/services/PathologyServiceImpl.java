@@ -55,9 +55,9 @@ public class PathologyServiceImpl implements PathologyService {
 		return this.getPathologyRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
 	}
 
-	public PathologyDTO update(PathologyRequestDTO pathology) {
+	public PathologyDTO update(Long pathologyId, PathologyRequestDTO pathology) {
 		Pathology entity = this.buildPathology(pathology);
-		entity.setId(pathology.getId());
+		entity.setId(pathologyId);
 
 		return this.save(entity);
 	}

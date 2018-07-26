@@ -47,9 +47,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	public AnalysisDTO publish(AnalysisDTO analysis) {
-		final Analysis entity = this.findAnalysisById(analysis.getId());
-		analysis.setState(AnalysisState.PUBLISHED);
+	public AnalysisDTO publish(Long analysisId) {
+		final Analysis entity = this.findAnalysisById(analysisId);
+		entity.setState(AnalysisState.PUBLISHED);
 
 		return this.save(entity);
 	}

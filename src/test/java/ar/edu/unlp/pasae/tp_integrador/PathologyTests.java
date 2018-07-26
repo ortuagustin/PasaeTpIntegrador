@@ -205,10 +205,10 @@ public class PathologyTests {
 
 		String name = "Changed Name";
 
-		PathologyRequestDTO updateRequest = new PathologyRequestDTO(pathology.getId(), name, this.getNumericPhenotypesIds(),
+		PathologyRequestDTO updateRequest = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(),
 				this.getCategoricPhenotypesIds());
 
-		PathologyDTO updatedPathology = this.pathologyService.update(updateRequest);
+		PathologyDTO updatedPathology = this.pathologyService.update(pathology.getId(), updateRequest);
 
 		Assert.assertEquals(name, updatedPathology.getName());
     Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
