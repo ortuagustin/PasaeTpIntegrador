@@ -14,6 +14,11 @@ public class NumericPhenotypeValue {
     @OneToOne
     private NumericPhenotype phenotype;
     private Long value;
+    
+    @SuppressWarnings("unused")
+	private NumericPhenotypeValue() {
+		super();
+	}
 
     public NumericPhenotypeValue(NumericPhenotype phenotype, Long value) {
         super();

@@ -8,12 +8,10 @@ import {
 } from 'react-router-dom'
 import 'bootstrap'; // Para los modals
 
-
 // Componentes
-import Home from './Home.jsx';
+import HomePanel from './home/HomePanel.jsx';
 import AdminPanel from './admin/AdminPanel.jsx';
-import ProfessionalPanel from './professional/ProfessionalPanel.jsx';
-import PatientsCRUDComponent from './register/PatientsCRUDComponent.jsx';
+import RegisterPanel from './register/RegisterPanel.jsx';
 
 // Estilos
 import '../css/style.css'; // Estilos propios'
@@ -42,7 +40,7 @@ class App extends React.Component {
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/home">Home</Link>
+											<Link to="/">Home</Link>
 										</div>
 									</span>
 								</li>
@@ -56,14 +54,7 @@ class App extends React.Component {
 								<li className="nav-item active">
 									<span className="nav-link">
 										<div>
-											<Link to="/app/professional">Profesional</Link>
-										</div>
-									</span>
-								</li>
-								<li className="nav-item active">
-									<span className="nav-link">
-										<div>
-											<Link to="/">Registrante</Link>
+											<Link to="/app/register">Registrante</Link>
 										</div>
 									</span>
 								</li>
@@ -78,10 +69,9 @@ class App extends React.Component {
 
 					{/* Renderiza los componentes seleccionados */}
 					<div>
-						<Route exact path="/app/home" component={Home} />
+						<Route exact path="/" component={HomePanel} />
 						<Route exact path="/app/admin" component={AdminPanel} />
-						<Route exact path="/app/professional" component={ProfessionalPanel} />
-						<Route exact path="/" component={PatientsCRUDComponent} />
+						<Route exact path="/app/register" component={RegisterPanel} />
 					</div>
 				</div>
 			</Router>

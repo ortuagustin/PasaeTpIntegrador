@@ -4,10 +4,10 @@ import React from 'react';
 import Autocomplete from 'react-autocomplete';
 
 /**
- * Renderiza el modal con los campos de alta de un fenotipo
+ * Renderiza el modal con los campos de alta de una patologia
  * @param {string} modalId Id del modal
- * @param {string} action Para saber si se esta agregando o eliminando un fenotipo
- * @param {*} selectedPathology Si action == 'edit' se utiliza para cargar los datos del fenotipo a editar
+ * @param {string} action Para saber si se esta agregando o eliminando una patologia
+ * @param {*} selectedPathology Si action == 'edit' se utiliza para cargar los datos de la patologia a editar
  * @param {Function} getPathologies Funcion para refrescar la tabla
  * @param {Function} actionModal Funcion para manejar los modals
  */
@@ -26,7 +26,7 @@ class AddPathologyModal extends React.Component {
             categoricPhenotypes: [], // Listado final de fenotipos categoricos para esta patologia
             phenotypesInput: '', // Valor actual del autocomplete
             phenotypesSuggeretion: [], // Las sugerencias del autocomplete actual
-            phenotypeType: 'numeric', // Tipo de fenotipo a buscar
+            phenotypeType: 'numeric', // Tipo de patologia a buscar
             adding: false,
             selectedPathology: props.selectedPathology
         };
@@ -91,7 +91,7 @@ class AddPathologyModal extends React.Component {
     }
 
     /**
-     * Guarda un fenotipo
+     * Guarda una patologia
      * @param {*} phenotype Fenotipo seleccionad
      */
     selectPhenotype(phenotype) {
@@ -116,7 +116,7 @@ class AddPathologyModal extends React.Component {
         // Cada vez que se abra el modal, obtengo los roles
         $('#' + self.modalId).on('show.bs.modal', function() {
             if (self.action == 'edit') {
-                // Si estamos editando, cargo los datos del fenotipo
+                // Si estamos editando, cargo los datos de la patologia
                 // seleccionado en el formulario
                 self.setState({
                     name: self.state.selectedPathology.name,
@@ -151,7 +151,7 @@ class AddPathologyModal extends React.Component {
     }
 
     /**
-     * Hace un request al server para agregar un fenotipo
+     * Hace un request al server para agregar una patologia
      */
     savePathology() {
         let self = this;
@@ -245,7 +245,7 @@ class AddPathologyModal extends React.Component {
             let deleteButton = <button className="btn btn-danger" onClick={() => this.removePhenotype('numeric', idx)} title="Eliminar valor">-</button>;
 
             return (
-                <div key={"input-value-div-" + phenotype.id} className="row margin-bottom text-center">
+                <div key={"input-value-numeric-div-" + phenotype.id} className="row margin-bottom text-center">
                     <div className="col">
                         {deleteButton}
                     </div>
@@ -260,7 +260,7 @@ class AddPathologyModal extends React.Component {
             let deleteButton = <button className="btn btn-danger" onClick={() => this.removePhenotype('categoric', idx)} title="Eliminar valor">-</button>;
 
             return (
-                <div key={"input-value-div-" + phenotype.id} className="row margin-bottom text-center">
+                <div key={"input-value-categoric-div-" + phenotype.id} className="row margin-bottom text-center">
                     <div className="col">
                         {deleteButton}
                     </div>
@@ -322,7 +322,7 @@ class AddPathologyModal extends React.Component {
                             </div>
 
                             <div className="row">
-                                <div className="col-md-12 text-center">
+                                <div className="col-md-12 text-center margin-top">
                                     <div className="custom-control custom-radio custom-control-inline">
                                         <input className="form-check-input"
                                                 type="radio"

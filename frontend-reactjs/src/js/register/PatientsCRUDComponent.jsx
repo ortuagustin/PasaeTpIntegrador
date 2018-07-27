@@ -1,7 +1,8 @@
 import React from 'react';
 
 // Componentes
-
+import AddPatientModal from './AddPatientModal.jsx';
+import DeletePatientModal from './DeletePatientModal.jsx';
 
 // Librerias
 import BootstrapTable from 'react-bootstrap-table-next'; // Tabla
@@ -34,6 +35,7 @@ class PatientsCRUDComponent extends React.Component {
         // Bindeo la variable 'this' a los metodos llamados desde la vista
         this.getPatients = this.getPatients.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.cleanState = this.cleanState.bind(this);
     }
 
     /**
@@ -202,7 +204,7 @@ class PatientsCRUDComponent extends React.Component {
                     <div className="col-9 button-col">
                         <h4>Acciones</h4>
                         <button type="button" className="btn btn-success" onClick={() => this.changeAction('add')}>Agregar</button>
-                        <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedPatient.id}>Editar</button>
+                        {/* <button type="button" className="btn btn-dark" onClick={() => this.changeAction('edit')} disabled={!this.state.selectedPatient.id}>Editar</button> */}
                         <button type="button"
                             className="btn btn-danger"
                             onClick={() => this.actionModal(this.deletePatientModalId, 'show')}
@@ -226,7 +228,7 @@ class PatientsCRUDComponent extends React.Component {
 
                 <div id="admin-panel" className="row">
                     <div className="col-12">
-                        <h4>Patologías</h4>
+                        <h4>Pacientes</h4>
                         <BootstrapTable
                             remote={{ pagination: true, filter: true }}
                             keyField='id'
@@ -237,7 +239,7 @@ class PatientsCRUDComponent extends React.Component {
                             totalSize={this.state.totalSize}
                             noDataIndication="No hay información para mostrar"
                             onTableChange={this.getPatients}
-                            // pagination={paginationFactory()}
+                            pagination={paginationFactory()}
                             filter={filterFactory()}
                             loading={this.state.loading}
                             selectRow={selectRow}
@@ -252,10 +254,23 @@ class PatientsCRUDComponent extends React.Component {
                     </div>
                 </div>
 
-                {/* Modal de alta de fenotipo */}
+                {/* Modal de alta de paciente */}
+                <AddPatientModal
+                    modalId={this.addPatientModalId}
+                    action={this.state.action}
+                    selectedPatient={this.state.selectedPatient}
+                    getPatients={this.getPatients}
+                    actionModal={this.actionModal}
+                />
                 
-                {/* Modal de confirmacion de eliminacion de fenotipo */}
-
+                {/* Modal de confirmacion de eliminacion de paciente */}
+                <DeletePatientModal
+                    modalId={this.deletePatientModalId}
+                    patientId={this.state.selectedPatient.id}
+                    name={this.state.selectedPatient.name}
+                    getPatients={this.getPatients}
+                    actionModal={this.actionModal}
+                />
             </div>
         );
     }

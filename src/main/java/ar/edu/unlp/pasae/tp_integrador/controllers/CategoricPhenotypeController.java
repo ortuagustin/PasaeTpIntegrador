@@ -23,8 +23,8 @@ import ar.edu.unlp.pasae.tp_integrador.services.CategoricPhenotypeService;
 @RestController
 @RequestMapping("/categoric-phenotypes")
 public class CategoricPhenotypeController {
-  @Autowired
-  CategoricPhenotypeService phenotypesService;
+	@Autowired
+	CategoricPhenotypeService phenotypesService;
 
 	@GetMapping(path = "/", produces = "application/json")
 	public Page<CategoricPhenotypeDTO> index(
@@ -33,36 +33,36 @@ public class CategoricPhenotypeController {
 			@RequestParam(value="newestSortField", defaultValue="name") String sortField,
 			@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder,
 			@RequestParam(value="search", defaultValue="") String search
-	) {
+			) {
 		return this.getPhenotypesService().list(page, sizePerPage, sortField, sortOrder, search);
 	}
 
-  @GetMapping(path = "/all", produces = "application/json")
-  public Collection<CategoricPhenotypeDTO> indexAll() {
-    return this.getPhenotypesService().list().collect(Collectors.toList());
-  }
+	@GetMapping(path = "/all", produces = "application/json")
+	public Collection<CategoricPhenotypeDTO> indexAll() {
+		return this.getPhenotypesService().list().collect(Collectors.toList());
+	}
 
-  @GetMapping(path = "/{id}", produces = "application/json")
-  public CategoricPhenotypeDTO show(@PathVariable(value = "id") Long id) {
-    return this.getPhenotypesService().find(id);
-  }
+	@GetMapping(path = "/{id}", produces = "application/json")
+	public CategoricPhenotypeDTO show(@PathVariable(value = "id") Long id) {
+		return this.getPhenotypesService().find(id);
+	}
 
-  @DeleteMapping(path = "/{id}")
-  public void delete(@PathVariable(value = "id") Long id) {
-    this.getPhenotypesService().delete(id);
-  }
+	@DeleteMapping(path = "/{id}")
+	public void delete(@PathVariable(value = "id") Long id) {
+		this.getPhenotypesService().delete(id);
+	}
 
-  @PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-  public CategoricPhenotypeDTO create(@RequestBody @Valid CategoricPhenotypeDTO phenotype) {
-      return this.getPhenotypesService().create(phenotype);
-  }
+	@PutMapping(path = "/", consumes = "application/json", produces = "application/json")
+	public CategoricPhenotypeDTO create(@RequestBody @Valid CategoricPhenotypeDTO phenotype) {
+		return this.getPhenotypesService().create(phenotype);
+	}
 
-  @PatchMapping(path = "/{id}", consumes = "application/json")
-  public CategoricPhenotypeDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid CategoricPhenotypeDTO phenotype) {
-    return this.getPhenotypesService().update(id, phenotype);
-  }
+	@PatchMapping(path = "/{id}", consumes = "application/json")
+	public CategoricPhenotypeDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid CategoricPhenotypeDTO phenotype) {
+		return this.getPhenotypesService().update(id, phenotype);
+	}
 
-  private CategoricPhenotypeService getPhenotypesService() {
-    return this.phenotypesService;
-  }
+	private CategoricPhenotypeService getPhenotypesService() {
+		return this.phenotypesService;
+	}
 }

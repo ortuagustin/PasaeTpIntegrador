@@ -14,6 +14,11 @@ public class CategoricPhenotypeValue {
     @OneToOne
     private CategoricPhenotype phenotype;
     private Long valueId;
+    
+    @SuppressWarnings("unused")
+	private CategoricPhenotypeValue() {
+		super();
+	}
 
     public CategoricPhenotypeValue(CategoricPhenotype phenotype, Long valueId) {
         super();

@@ -235,7 +235,7 @@ class PathologiesCRUDComponent extends React.Component {
                     </div>
                 </div>
 
-                {/* Modal de alta de fenotipo */}
+                {/* Modal de alta de patologias */}
                 <AddPathologyModal
                     modalId={this.addPathologyModalId}
                     action={this.state.action}
@@ -244,7 +244,7 @@ class PathologiesCRUDComponent extends React.Component {
                     actionModal={this.actionModal}
                 />
                 
-                {/* Modal de confirmacion de eliminacion de fenotipo */}
+                {/* Modal de confirmacion de eliminacion de patologias */}
                 <DeletePathologyModal
                     modalId={this.deletePathologyModalId}
                     pathologyId={this.state.selectedPathology.id}
