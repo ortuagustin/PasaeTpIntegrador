@@ -26,16 +26,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.cors().and()
 		.csrf().disable() // Necesario porque sino ignora los request que no son GET (ncesita el CRSF token)
 		.authorizeRequests()
-//		.antMatchers("/**").authenticated()
 		.antMatchers("/scientist/**").hasAuthority(RoleName.SCIENTIST.toString())
-//		.antMatchers("/admin/**").hasAuthority(RoleName.ADMIN.toString())
-		.antMatchers("/admin/**").permitAll()
+		.antMatchers("/admin/**").hasAuthority(RoleName.ADMIN.toString())
 		.antMatchers("/clinical-doctor/**").permitAll()//hasAuthority(RoleName.CLINICAL_DOCTOR.toString())
-		.antMatchers("/epidemiologist/**").permitAll()//.hasAuthority(RoleName.EPIDEMIOLOGIST.toString())
 		.antMatchers("/css/**", "/resources/**").permitAll()
+		.antMatchers("/**").authenticated()
 		//.antMatchers("/secured-admin/**").hasAnyAuthority(RoleName.ADMIN.toString(), RoleName.SCIENTIST.toString()) // Multiples roles
 		// Dejo las siguientes dos linea como ejemplo de la funcion "access()"
-		//.antMatchers("/admin/**").access("hasRole('ADMIN')")
 		//.antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
 		.and().formLogin()
 		.and().exceptionHandling().accessDeniedPage("/Access_Denied");

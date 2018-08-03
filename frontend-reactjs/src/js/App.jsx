@@ -1,4 +1,4 @@
-// Librerias
+// Librerias dsaad
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
@@ -7,6 +7,8 @@ import {
 	Link
 } from 'react-router-dom'
 import 'bootstrap'; // Para los modals
+
+import Cookies from 'universal-cookie';
 
 // Componentes
 import HomePanel from './home/HomePanel.jsx';
