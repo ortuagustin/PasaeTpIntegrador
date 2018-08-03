@@ -34,3 +34,10 @@ El resultado de un análisis lo puede convertir en una nueva asociación en esta
 En todos los casos los usuarios deberán loguearse para poder operar y sus operacion estarán restringidas según su rol.
 
 Debe manejar un log utilizando AOP. Las operaciones deberán ser transaccionales.
+
+## Como correr
+
+1- Correr TpIntegradorApplication.java.
+2- Desde la carpeta "frontend-react" correr "npm run start"
+3- Backend corriendo en localhost:8080
+3- Frontend corriendo en localhost:8091
