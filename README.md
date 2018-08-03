@@ -37,7 +37,7 @@ Debe manejar un log utilizando AOP. Las operaciones deberán ser transaccionales
 
 ## Como correr
 
-1- Correr TpIntegradorApplication.java.
-2- Desde la carpeta "frontend-react" correr "npm run start"
-3- Backend corriendo en localhost:8080
-3- Frontend corriendo en localhost:8091
+  1. Correr TpIntegradorApplication.java.
+  2. Desde la carpeta "frontend-react" correr "npm run start"
+  3. Backend corriendo en localhost:8080
+  4. Frontend corriendo en localhost:8091
