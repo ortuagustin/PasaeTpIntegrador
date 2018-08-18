@@ -4,13 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @SuppressWarnings("unused")
 public class CategoricPhenotypeDTO {
 	private Long id;
 	@NotEmpty
 	private String name;
-	@NotEmpty
+	@NotNull
+	@Size(min = 2)
 	private Set<String> values = new HashSet<String>();
 
 	public CategoricPhenotypeDTO(Long id, String name, Set<String> values) {

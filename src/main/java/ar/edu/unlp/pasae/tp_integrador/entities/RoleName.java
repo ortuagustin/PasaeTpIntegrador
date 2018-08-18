@@ -5,5 +5,5 @@ package ar.edu.unlp.pasae.tp_integrador.entities;
  * ya que el security provider lo pone implicitamente
  */
 public enum RoleName {
-	ADMIN, REGISTER, SCIENTIST, CLINICAL_DOCTOR, EPIDEMIOLOGIST;
+	ADMIN, REGISTER, SCIENTIST, CLINICAL_DOCTOR;
 }

@@ -95,7 +95,6 @@ class AddPathologyModal extends React.Component {
      * @param {*} phenotype Fenotipo seleccionad
      */
     selectPhenotype(phenotype) {
-        console.log("Entra!", phenotype);
         if (this.state.phenotypeType == 'numeric') {
             let numericPhenotypes = this.state.numericPhenotypes;
             numericPhenotypes.push(phenotype);
@@ -105,6 +104,12 @@ class AddPathologyModal extends React.Component {
             categoricPhenotypes.push(phenotype);
             this.setState({ categoricPhenotypes });
         }
+
+        // Limpio el input y las sugerencias
+        this.setState({
+            phenotypesSuggeretion: [],
+            phenotypesInput: ''
+        });
     }
 
     /**
@@ -205,10 +210,6 @@ class AddPathologyModal extends React.Component {
         let self = this;
         self.setState({ phenotypesInput: e.target.value }, () => {
             let nameSearched = self.state.phenotypesInput;
-            // Solo hago el request cuando ingresa al menos 4 caracteres
-            if (nameSearched.length < 3) {
-                return;
-            }
 
             let url = self.state.phenotypeType == 'numeric' ? 'http://localhost:8080/numeric-phenotypes/' : 'http://localhost:8080/categoric-phenotypes/';
             

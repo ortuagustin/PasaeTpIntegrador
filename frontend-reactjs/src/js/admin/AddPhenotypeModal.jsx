@@ -199,13 +199,19 @@ class AddPhenotypeModal extends React.Component {
     isFormValid() {
         return !this.state.adding
                 && this.state.name
-                && this.state.values.length > 0;
+                && (
+                    // Para los categoricos al menos debo ingresar 2.
+                    // Y para los numericos solo tiene un unico valor en null
+                    this.state.phenotypeType == 'numeric'
+                    || (
+                        this.state.phenotypeType == 'categoric'
+                        && this.state.values.length > 1
+                        && this.state.values.find((value) => !value.length) === undefined // No haya valores vacios
+                    )
+                );
     }
 
     render() {
-        // Armo una lista con los roles disponibles
-        console.log(this.state.values);
-
         let valuesComponent = null;
 
         // Lista con los valores del fenotipo
@@ -213,15 +219,19 @@ class AddPhenotypeModal extends React.Component {
             let valuesList = this.state.values.map((value, idx) => {
                 let deleteButton = null;
                 let addButton = null;
-    
+                
+                // Agrego el boton de eliminar a todos menos al primero
                 if (idx != 0) {
                     deleteButton = <button className="btn btn-danger" onClick={() => this.removeValue(idx)} title="Eliminar valor">-</button>;
                 }
-    
-                addButton = (<button className="btn btn-success"
-                                onClick={this.addValue}
-                                title="Agregar valor"
-                                disabled={idx != 0 && !this.state.values[idx - 1]}>+</button>);
+                
+                // Agrego el boton de agregar solo al lado del ultimo
+                if (idx == this.state.values.length - 1) {
+                    addButton = (<button className="btn btn-success"
+                                    onClick={this.addValue}
+                                    title="Agregar valor"
+                                    disabled={!this.state.values[idx]}>+</button>);
+                }
     
                 return (
                     <div key={"input-value-div-" + idx} className="row margin-bottom text-center">

@@ -128,7 +128,7 @@ public class PatientServiceImpl implements PatientService {
 		if (search.equals("")) {
 			result = this.getPatientRepository().findAll(pageRequest);
 		} else {
-			result = this.getPatientRepository().findByNameContainsOrSurnameContainsOrDniContainsOrEmailContains(search, pageRequest);
+			result = this.getPatientRepository().findByNameContainsIgnoreCaseOrSurnameContainsIgnoreCaseOrDniContainsIgnoreCaseOrEmailContainsIgnoreCase(search, pageRequest);
 		}
 
 		return result.map(each -> this.getTransformer().toDTO(each));

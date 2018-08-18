@@ -72,7 +72,7 @@ public class PathologyServiceImpl implements PathologyService {
 		if (search.equals("")) {
 			result = this.getPathologyRepository().findAll(pageRequest);
 		} else {
-			result = this.getPathologyRepository().findByNameContains(search, pageRequest);
+			result = this.getPathologyRepository().findByNameContainsIgnoreCase(search, pageRequest);
 		}
 
 		return result.map(each -> this.getTransformer().toDTO(each));

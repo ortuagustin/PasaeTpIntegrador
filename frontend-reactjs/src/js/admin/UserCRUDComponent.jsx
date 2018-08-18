@@ -19,7 +19,7 @@ class UserCRUDComponent extends React.Component {
 
         this.state = {
             users: [],
-            page: 0,
+            page: 1,
             sizePerPage: 10,
             totalSize: 0,
             selectedRow: [],
@@ -64,14 +64,14 @@ class UserCRUDComponent extends React.Component {
     getUsers(actionType = '', newState = {}) {
         let self = this;
         // Genero los parametros del request
-        let pageNumber = newState.page ? newState.page - 1 : self.state.page;
+        let pageNumber = newState.page ? newState.page : self.state.page;
         let sizePerPage = newState.sizePerPage ? newState.sizePerPage : self.state.sizePerPage;
 
         self.setState({ loading: true });
         $.ajax({
             url: 'http://localhost:8080/admin/users/',
             data: {
-                newestPage: pageNumber,
+                newestPage: pageNumber - 1,
                 newestSizePerPage: sizePerPage,
                 newestSortField: newState.sortField,
                 newestSortOrder: newState.sortOrder,
@@ -169,7 +169,6 @@ class UserCRUDComponent extends React.Component {
                     return role.name;
                 }).join(", ");
             }
-            // filter: textFilter()
         }];
 
         const selectRow = {
@@ -180,6 +179,20 @@ class UserCRUDComponent extends React.Component {
                 this.selectRow(row, isSelect);
             },
             selectionHeaderRenderer: () => <span title="Limpiar" className="cursor-pointer" onClick={this.cleanState}>X</span>
+        };
+
+        // Seteos de paginacion
+        let paginationOptions = {
+            page: this.state.page,
+            sizePerPage: this.state.sizePerPage,
+            totalSize: this.state.totalSize,
+            sizePerPageList: [
+                { text: '10', value: 10 },
+                { text: '15', value: 15 },
+                { text: '30', value: 30 }
+            ],
+            prePageText: 'Anterior',
+            nextPageText: 'Siguiente'
         };
     
         return (
@@ -214,12 +227,11 @@ class UserCRUDComponent extends React.Component {
                             keyField='id'
                             data={this.state.users}
                             columns={columns}
-                            page={this.state.page}
-                            sizePerPage={this.state.sizePerPage}
-                            totalSize={this.state.totalSize}
                             noDataIndication="No hay información para mostrar"
                             onTableChange={this.getUsers}
-                            pagination={paginationFactory()}
+                            pagination={
+                                paginationFactory(paginationOptions)
+                            }
                             filter={filterFactory()}
                             loading={this.state.loading}
                             selectRow={selectRow}

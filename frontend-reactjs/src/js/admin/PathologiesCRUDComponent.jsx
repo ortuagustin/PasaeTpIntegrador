@@ -19,7 +19,7 @@ class PathologiesCRUDComponent extends React.Component {
 
         this.state = {
             pathologies: [],
-            page: 0,
+            page: 1,
             sizePerPage: 10,
             totalSize: 0,
             selectedRow: [],
@@ -64,7 +64,7 @@ class PathologiesCRUDComponent extends React.Component {
         let self = this;
 
         // Genero los parametros del request
-        let pageNumber = newState.page ? newState.page - 1 : self.state.page;
+        let pageNumber = newState.page ? newState.page : self.state.page;
         let sizePerPage = newState.sizePerPage ? newState.sizePerPage : self.state.sizePerPage;
 
         // Cargo los fenotipos numericos y categoricos
@@ -72,7 +72,7 @@ class PathologiesCRUDComponent extends React.Component {
             $.ajax({
                 url: 'http://localhost:8080/pathologies/',
                 data: {
-                    newestPage: pageNumber,
+                    newestPage: pageNumber - 1,
                     newestSizePerPage: sizePerPage,
                     newestSortField: newState.sortField,
                     newestSortOrder: newState.sortOrder,
@@ -181,6 +181,20 @@ class PathologiesCRUDComponent extends React.Component {
             },
             selectionHeaderRenderer: () => <span title="Limpiar" className="cursor-pointer" onClick={this.cleanState}>X</span>
         };
+
+        // Seteos de paginacion
+        let paginationOptions = {
+            page: this.state.page,
+            sizePerPage: this.state.sizePerPage,
+            totalSize: this.state.totalSize,
+            sizePerPageList: [
+                { text: '10', value: 10 },
+                { text: '15', value: 15 },
+                { text: '30', value: 30 }
+            ],
+            prePageText: 'Anterior',
+            nextPageText: 'Siguiente'
+        };
     
         return (
             <div>
@@ -215,12 +229,11 @@ class PathologiesCRUDComponent extends React.Component {
                             keyField='id'
                             data={this.state.pathologies}
                             columns={columns}
-                            page={this.state.page}
-                            sizePerPage={this.state.sizePerPage}
-                            totalSize={this.state.totalSize}
                             noDataIndication="No hay información para mostrar"
                             onTableChange={this.getPathologies}
-                            pagination={paginationFactory()}
+                            pagination={
+                                paginationFactory(paginationOptions)
+                            }
                             filter={filterFactory()}
                             loading={this.state.loading}
                             selectRow={selectRow}

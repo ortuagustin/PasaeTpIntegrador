@@ -11,5 +11,5 @@ import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 public interface PatientRepository extends JpaRepository<Patient, Long> {
   Optional<Patient> findByDni(String dni);
   Optional<Patient> findByNameAndSurname(String name, String surname);
-  Page<Patient> findByNameContainsOrSurnameContainsOrDniContainsOrEmailContains(String search, Pageable pageRequest);
+  Page<Patient> findByNameContainsIgnoreCaseOrSurnameContainsIgnoreCaseOrDniContainsIgnoreCaseOrEmailContainsIgnoreCase(String search, Pageable pageRequest);
 }

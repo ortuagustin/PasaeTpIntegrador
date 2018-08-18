@@ -10,5 +10,5 @@ import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
 
 public interface CategoricPhenotypeRepository extends JpaRepository<CategoricPhenotype, Long> {
   Optional<CategoricPhenotype> findByName(String name);
-  Page<CategoricPhenotype> findByNameContains(String search, Pageable pageRequest);
+  Page<CategoricPhenotype> findByNameContainsIgnoreCase(String search, Pageable pageRequest);
 }

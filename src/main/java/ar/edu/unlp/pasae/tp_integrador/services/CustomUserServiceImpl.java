@@ -114,7 +114,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 		if (search.equals("")) {
 			result = userRepository.findAll(pageRequest);
 		} else {
-			result = userRepository.findByUsernameContainingOrFirstNameContainingOrLastNameContaining(search, search, search, pageRequest);
+			result = userRepository.findByUsernameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(search, search, search, pageRequest);
 		}
 		
 		return result.map(each -> this.getTransformer().toDTO(each));

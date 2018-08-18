@@ -11,5 +11,5 @@ import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 public interface CustomUserRepository extends PagingAndSortingRepository<CustomUser, Long> {
 	Optional<CustomUser> findByUsername(String username);
 	Page<CustomUser> findAll(Pageable pageRequest);
-	Page<CustomUser> findByUsernameContainingOrFirstNameContainingOrLastNameContaining(String username, String firstName, String lastName, Pageable pageRequest);
+	Page<CustomUser> findByUsernameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(String username, String firstName, String lastName, Pageable pageRequest);
 }

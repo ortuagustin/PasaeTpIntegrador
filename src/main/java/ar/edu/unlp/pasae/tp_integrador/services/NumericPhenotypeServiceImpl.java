@@ -54,7 +54,7 @@ public class NumericPhenotypeServiceImpl implements NumericPhenotypeService {
 		if (search.equals("")) {
 			result = this.getPhenotypeRepository().findAll(pageRequest);
 		} else {
-			result = this.getPhenotypeRepository().findByNameContains(search, pageRequest);
+			result = this.getPhenotypeRepository().findByNameContainsIgnoreCase(search, pageRequest);
 		}
 
 		return result.map(each -> this.getTransformer().toDTO(each));

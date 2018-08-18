@@ -10,5 +10,5 @@ import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
 
 public interface PathologyRepository extends JpaRepository<Pathology, Long> {
   Optional<Pathology> findByName(String name);
-  Page<Pathology> findByNameContains(String search, Pageable pageRequest);
+  Page<Pathology> findByNameContainsIgnoreCase(String search, Pageable pageRequest);
 }

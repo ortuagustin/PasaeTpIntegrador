@@ -155,13 +155,17 @@ class AddPatientModal extends React.Component {
                             values: ''
                         }
                     });
+
+                    // Selecciono la patologia, limpio el input y las sugerencias
                     self.setState({
                         selectedPathology: jsonReponse,
-                        patient
+                        patient,
+                        pathologyInput: '',
+                        getPathologySuggeretion: []
                     });
                 }
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert("Error al dar de alta la patologia. Intente nuevamente más tarde");
+                alert("Error al obtener los datos de la patologia. Intente nuevamente más tarde");
                 console.log(jqXHR, textStatus, errorThrown);
             });
         })
@@ -209,6 +213,9 @@ class AddPatientModal extends React.Component {
         });
     }
 
+    /**
+     * Hace un request para obtener los datos del paciente seleccionado
+     */
     getPatientData() {
         let self = this;
         
@@ -229,7 +236,7 @@ class AddPatientModal extends React.Component {
             console.log("seteando el nuevo estado de paciente ", newPatientState);
             self.setState({ patient: newPatientState });
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Error al dar de alta la patologia. Intente nuevamente más tarde");
+            alert("Error al obtener los datos del paciente. Intente nuevamente más tarde");
             console.log(jqXHR, textStatus, errorThrown);
         });
     }
@@ -270,37 +277,15 @@ class AddPatientModal extends React.Component {
                 dni: self.state.patient.dni,
                 email: self.state.patient.email,
                 numericPhenotypes: self.state.patient.numericPhenotypesValues,
-                categoricPhenotypes: self.state.patient.categoricPhenotypesValues
-            })
-        }).done(function (jsonReponse, textStatus, jqXHR) {
-            // Una vez que guardamos los datos del paciente, guardo el genotipo
-            self.saveGenotype(jsonReponse.id); // Le doy el id del paciente recien insertado
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Error al dar de alta la patologia. Intente nuevamente más tarde");
-            console.log(jqXHR, textStatus, errorThrown);
-        });
-    }
-
-    /**
-     * Alta/modificacion del genotipo de un paciente en particular
-     * @param {number} patientId Id del paciente que estamos insertando/editando
-     */
-    saveGenotype(patientId) {
-        let self = this;
-
-        $.ajax({
-            url: 'http://localhost:8080/patients/' + patientId + '/genotype',
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            type: self.action == 'add' ? 'PUT' : 'PATCH',
-            data: JSON.stringify({
+                categoricPhenotypes: self.state.patient.categoricPhenotypesValues,
                 genotype: self.state.patient.genotype
             })
         }).done(function (jsonReponse, textStatus, jqXHR) {
+            // En caso de exito...
             self.getPatients(); // Refresco la tabla
             self.actionModal(self.modalId, 'hide'); // Escondo el modal
         }).fail(function (jqXHR, textStatus, errorThrown) {
-            alert("Error al dar de alta la patologia. Intente nuevamente más tarde");
+            alert("Error al dar de alta al paciente. Intente nuevamente más tarde");
             console.log(jqXHR, textStatus, errorThrown);
         });
     }
@@ -328,13 +313,11 @@ class AddPatientModal extends React.Component {
     getPathologySuggeretion(e) {
         let self = this;
         self.setState({ pathologyInput: e.target.value }, () => {
-            let nameSearched = self.state.pathologyInput;
-            
             // Hago el request
             $.ajax({
                 url: 'http://localhost:8080/pathologies/',
                 data: {
-                    search: nameSearched
+                    search: self.state.pathologyInput
                 }
             }).done(function (jsonResponse) {
                 // Actualizo la lista de sugerencias
