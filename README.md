@@ -29,8 +29,6 @@ El resultado de un análisis lo puede convertir en una nueva asociación en esta
 
 * **Médico clínico**: Podrá visualizar todas las asociaciones en estado publicado y correrlas para el genotipo de un paciente nuevo, obteniendo los resultados para cada uno de los fenotipos seleccionados.
 
-* **Epidemiólogo**: Podrá visualizar frecuencias genotípicas y fenotípicas con gráficos amables.
-
 En todos los casos los usuarios deberán loguearse para poder operar y sus operacion estarán restringidas según su rol.
 
 Debe manejar un log utilizando AOP. Las operaciones deberán ser transaccionales.
