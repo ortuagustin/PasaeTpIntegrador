@@ -44,6 +44,32 @@ public class PatientRequestDTO {
 	}
 
 	/**
+	 * Adds the Categoric Phenotype
+	 *
+	 * @param CategoricPhenotypeValueDTO phenotype
+	 *
+	 * @return this
+	 */
+	public PatientRequestDTO addCategoricPhenotype(CategoricPhenotypeValueDTO phenotype) {
+		this.categoricPhenotypes.add(phenotype);
+
+		return this;
+	}
+
+	/**
+	 * Adds the Numeric Phenotype
+	 *
+	 * @param NumericPhenotypeValueDTO phenotype
+	 *
+	 * @return this
+	 */
+	public PatientRequestDTO addNumericPhenotype(NumericPhenotypeValueDTO phenotype) {
+		this.numericPhenotypes.add(phenotype);
+
+		return this;
+	}
+
+	/**
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
 	public void setCategoricPhenotypes(Set<CategoricPhenotypeValueDTO> categoricPhenotypes) {

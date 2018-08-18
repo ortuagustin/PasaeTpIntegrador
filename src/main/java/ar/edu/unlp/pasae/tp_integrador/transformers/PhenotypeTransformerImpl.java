@@ -7,9 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotypeValue;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotypeValue;
 
 @Service
 public class PhenotypeTransformerImpl implements PhenotypeTransformer {
@@ -17,6 +21,28 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
     private Transformer<NumericPhenotype, NumericPhenotypeDTO> numericPhenotypeTransformer;
     @Autowired
     private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer;
+
+    @Override
+    public Set<NumericPhenotypeValueDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes) {
+        Set<NumericPhenotypeValueDTO> dtos = new HashSet<NumericPhenotypeValueDTO>();
+
+        for (NumericPhenotypeValue each : phenotypes) {
+            dtos.add(new NumericPhenotypeValueDTO(each.getPhenotype().getId(), each.getValue()));
+        }
+
+        return dtos;
+    }
+
+    @Override
+    public Set<CategoricPhenotypeValueDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes) {
+        Set<CategoricPhenotypeValueDTO> dtos = new HashSet<CategoricPhenotypeValueDTO>();
+
+        for (CategoricPhenotypeValue each : phenotypes) {
+            dtos.add(new CategoricPhenotypeValueDTO(each.getPhenotype().getId(), each.getValueId(), each.getValue()));
+        }
+
+        return dtos;
+    }
 
     @Override
     public Set<NumericPhenotypeDTO> numericToDtos(Set<NumericPhenotype> phenotypes) {

@@ -76,8 +76,7 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public PatientDTO findByDNI(String dni) throws EntityNotFoundException {
 		final Patient patient = this.getPatientRepository().findByDni(dni)
-				.orElseThrow(() -> new EntityNotFoundException(
-						MessageFormat.format("No Patient found with DNI {0}", dni)));
+				.orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("No Patient found with DNI {0}", dni)));
 
 		return this.getTransformer().toDTO(patient);
 	}
@@ -114,11 +113,11 @@ public class PatientServiceImpl implements PatientService {
 	public Integer count() {
 		return (int) this.getPatientRepository().count();
 	}
-	
+
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
 		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
 	}
-	
+
 	@Override
 	public Page<PatientDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
 		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
@@ -128,7 +127,9 @@ public class PatientServiceImpl implements PatientService {
 		if (search.equals("")) {
 			result = this.getPatientRepository().findAll(pageRequest);
 		} else {
-			result = this.getPatientRepository().findByNameContainsIgnoreCaseOrSurnameContainsIgnoreCaseOrDniContainsIgnoreCaseOrEmailContainsIgnoreCase(search, pageRequest);
+			result = this.getPatientRepository()
+					.findByNameContainsIgnoreCaseOrSurnameContainsIgnoreCaseOrDniContainsIgnoreCaseOrEmailContainsIgnoreCase(
+							search, pageRequest);
 		}
 
 		return result.map(each -> this.getTransformer().toDTO(each));
@@ -153,9 +154,8 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	private Patient findPatientById(Long patientId) throws EntityNotFoundException {
-		final Patient patient = this.getPatientRepository().findById(patientId)
-				.orElseThrow(() -> new EntityNotFoundException(
-						MessageFormat.format("No Patient found with Id {0}", patientId)));
+		final Patient patient = this.getPatientRepository().findById(patientId).orElseThrow(
+				() -> new EntityNotFoundException(MessageFormat.format("No Patient found with Id {0}", patientId)));
 
 		return patient;
 	}
@@ -169,14 +169,10 @@ public class PatientServiceImpl implements PatientService {
 	private Patient buildPatient(PatientRequestDTO patient) {
 		final PatientBuilder builder = Patient.builder();
 
-		 return builder.addName(patient.getName())
-			.addSurname(patient.getSurname())
-			.addEmail(patient.getEmail())
-			.addDni(patient.getDni())
-			.addUser(this.findUser(patient.getUserId()))
-			.addCategoricPhenotypes(this.findCategoricPhenotypes(patient.getCategoricPhenotypes()))
-			.addNumericPhenotypes(this.findNumericPhenotypes(patient.getNumericPhenotypes()))
-			.createPatient();
+		return builder.addName(patient.getName()).addSurname(patient.getSurname()).addEmail(patient.getEmail())
+				.addDni(patient.getDni()).addUser(this.findUser(patient.getUserId()))
+				.addCategoricPhenotypes(this.findCategoricPhenotypes(patient.getCategoricPhenotypes()))
+				.addNumericPhenotypes(this.findNumericPhenotypes(patient.getNumericPhenotypes())).createPatient();
 	}
 
 	private CustomUser findRegistrantUser(Long patientId) {
@@ -187,8 +183,7 @@ public class PatientServiceImpl implements PatientService {
 
 	private CustomUser findUser(Long userId) {
 		return this.getUserRepository().findById(userId)
-				.orElseThrow(() -> new EntityNotFoundException(
-						MessageFormat.format("No User found with id {0}", userId)));
+				.orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("No User found with id {0}", userId)));
 	}
 
 	private Set<CategoricPhenotypeValue> findCategoricPhenotypes(Set<CategoricPhenotypeValueDTO> phenotypes) {
@@ -196,10 +191,10 @@ public class PatientServiceImpl implements PatientService {
 
 		for (CategoricPhenotypeValueDTO each : phenotypes) {
 			final CategoricPhenotype phenotype = this.getCategoricPhenotypesRepository().findById(each.getPhenotypeId())
-				.orElseThrow(() -> new EntityNotFoundException(
-					MessageFormat.format("No Categoric Phenotype found with id {0}", each.getPhenotypeId())));
+					.orElseThrow(() -> new EntityNotFoundException(
+							MessageFormat.format("No Categoric Phenotype found with id {0}", each.getPhenotypeId())));
 
-			entities.add(new CategoricPhenotypeValue(phenotype, each.getValue()));
+			entities.add(new CategoricPhenotypeValue(phenotype, each.getValueId()));
 		}
 
 		return entities;
@@ -210,8 +205,8 @@ public class PatientServiceImpl implements PatientService {
 
 		for (NumericPhenotypeValueDTO each : phenotypes) {
 			final NumericPhenotype phenotype = this.getNumericPhenotypeRepository().findById(each.getPhenotypeId())
-				.orElseThrow(() -> new EntityNotFoundException(
-					MessageFormat.format("No Numeric Phenotype found with id {0}", each.getPhenotypeId())));
+					.orElseThrow(() -> new EntityNotFoundException(
+							MessageFormat.format("No Numeric Phenotype found with id {0}", each.getPhenotypeId())));
 
 			entities.add(new NumericPhenotypeValue(phenotype, each.getValue()));
 		}

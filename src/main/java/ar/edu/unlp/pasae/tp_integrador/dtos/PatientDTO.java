@@ -25,8 +25,8 @@ public class PatientDTO {
 	private String email;
 	@NotNull
 	private CustomUserDTO user;
-	private Set<NumericPhenotypeDTO> numericPhenotypes = new HashSet<NumericPhenotypeDTO>();
-	private Set<CategoricPhenotypeDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeDTO>();
+	private Set<NumericPhenotypeValueDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueDTO>();
+	private Set<CategoricPhenotypeValueDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeValueDTO>();
 
 	public PatientDTO(Long id, String name, String surname, String dni, String email, CustomUserDTO user) {
 		super();
@@ -138,28 +138,28 @@ public class PatientDTO {
 	/**
 	 * @return the categoricPhenotypes
 	 */
-	public Set<CategoricPhenotypeDTO> getCategoricPhenotypes() {
+	public Set<CategoricPhenotypeValueDTO> getCategoricPhenotypes() {
 		return categoricPhenotypes;
 	}
 
 	/**
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
-	public void setCategoricPhenotypes(Set<CategoricPhenotypeDTO> categoricPhenotypes) {
+	public void setCategoricPhenotypes(Set<CategoricPhenotypeValueDTO> categoricPhenotypes) {
 		this.categoricPhenotypes = categoricPhenotypes;
 	}
 
 	/**
 	 * @return the numericPhenotypes
 	 */
-	public Set<NumericPhenotypeDTO> getNumericPhenotypes() {
+	public Set<NumericPhenotypeValueDTO> getNumericPhenotypes() {
 		return numericPhenotypes;
 	}
 
 	/**
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
-	public void setNumericPhenotypes(Set<NumericPhenotypeDTO> numericPhenotypes) {
+	public void setNumericPhenotypes(Set<NumericPhenotypeValueDTO> numericPhenotypes) {
 		this.numericPhenotypes = numericPhenotypes;
 	}
 }

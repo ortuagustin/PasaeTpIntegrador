@@ -2,7 +2,9 @@ package ar.edu.unlp.pasae.tp_integrador;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,12 +24,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Role;
 import ar.edu.unlp.pasae.tp_integrador.repositories.CustomUserRepository;
+import ar.edu.unlp.pasae.tp_integrador.services.CategoricPhenotypeService;
+import ar.edu.unlp.pasae.tp_integrador.services.NumericPhenotypeService;
 import ar.edu.unlp.pasae.tp_integrador.services.PatientService;
 
 @RunWith(SpringRunner.class)
@@ -44,12 +52,78 @@ public class PatientTests {
 	@Autowired
 	private CustomUserRepository userRepository;
 
+	@Autowired
+	private NumericPhenotypeService numericPhenotypeService;
+
+	@Autowired
+	private CategoricPhenotypeService categoricPhenotypeService;
+
 	private CustomUser user;
 
 	@Before
 	public void createUser() {
 		List<Role> roles = new ArrayList<Role>();
 		this.user = userRepository.save(new CustomUser("tester", "tester", "tester@example.com", "test", "test", roles));
+	}
+
+	@Before
+	public void clearNumericPhenotypes() {
+		this.numericPhenotypeService.deleteAll();
+	}
+
+	@Test
+	public void it_returns_patient_numeric_phenotype_with_associated_value() {
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
+
+		CategoricPhenotypeDTO phenotypeRequest = new CategoricPhenotypeDTO("Categoric Phenotype Test", values);
+		Long phenotypeId = this.categoricPhenotypeService.create(phenotypeRequest).getId();
+		CategoricPhenotypeValueDTO patientPhenotype = new CategoricPhenotypeValueDTO(phenotypeId, 1L);
+
+		Long userId = this.user.getId();
+		String name = "Name";
+		String surname = "Surname";
+		String dni = "37058719";
+		String email = "test@example.com";
+
+		PatientRequestDTO patientRequest = new PatientRequestDTO(userId, name, surname, dni, email);
+		patientRequest.addCategoricPhenotype(patientPhenotype);
+		Long patientId = this.patientService.create(patientRequest).getId();
+		PatientDTO patient = this.patientService.find(patientId);
+
+		Assert.assertNotNull(patient);
+		Assert.assertEquals(1, patient.getCategoricPhenotypes().size());
+
+		patientPhenotype = patient.getCategoricPhenotypes().stream().findAny().get();
+		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
+		Assert.assertEquals("Value 1", patientPhenotype.getValue());
+	}
+
+	@Test
+	public void it_returns_patient_categoric_phenotype_with_associated_value() {
+		NumericPhenotypeDTO phenotypeRequest = new NumericPhenotypeDTO("Numeric Phenotype Test");
+		Long phenotypeId = this.numericPhenotypeService.create(phenotypeRequest).getId();
+		NumericPhenotypeValueDTO patientPhenotype = new NumericPhenotypeValueDTO(phenotypeId, 5L);
+
+		Long userId = this.user.getId();
+		String name = "Name";
+		String surname = "Surname";
+		String dni = "37058719";
+		String email = "test@example.com";
+
+		PatientRequestDTO patientRequest = new PatientRequestDTO(userId, name, surname, dni, email);
+		patientRequest.addNumericPhenotype(patientPhenotype);
+		Long patientId = this.patientService.create(patientRequest).getId();
+		PatientDTO patient = this.patientService.find(patientId);
+
+		Assert.assertNotNull(patient);
+		Assert.assertEquals(1, patient.getNumericPhenotypes().size());
+
+		patientPhenotype = patient.getNumericPhenotypes().stream().findAny().get();
+		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
+		Assert.assertEquals((Long) 5L, patientPhenotype.getValue());
 	}
 
 	@Test
@@ -347,7 +421,8 @@ public class PatientTests {
 	@Test
 	public void it_does_not_change_registrant_user() {
 		List<Role> roles = new ArrayList<Role>();
-		CustomUser anotherUser = this.userRepository.save(new CustomUser("other", "other", "other@example.com", "other", "other", roles));
+		CustomUser anotherUser = this.userRepository
+				.save(new CustomUser("other", "other", "other@example.com", "other", "other", roles));
 
 		Long userId = this.user.getId();
 		String name = "Name";

@@ -1,7 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -11,42 +11,44 @@ import javax.validation.constraints.NotEmpty;
 public class CategoricPhenotype extends Phenotype {
   @ElementCollection
   @NotEmpty
-  private Set<String> values = new HashSet<String>();
+  private Map<Long, String> values = new HashMap<Long, String>();
 
   public static final class CategoricPhenotypeBuilder {
-		private String name;
-		private Set<String> values = new HashSet<String>();
+    private String name;
+    private Map<Long, String> values = new HashMap<Long, String>();
 
-		private CategoricPhenotypeBuilder() {
-		}
+    private CategoricPhenotypeBuilder() {
+    }
 
-		public CategoricPhenotypeBuilder addValues(final Set<String> values) {
-			this.values = values;
-			return this;
-		}
+    public CategoricPhenotypeBuilder addValues(final Map<Long, String> values) {
+      this.values = values;
 
-		public CategoricPhenotypeBuilder addName(final String name) {
-			this.name = name;
-			return this;
-		}
+      return this;
+    }
 
-		public CategoricPhenotype createPhenotype() {
+    public CategoricPhenotypeBuilder addName(final String name) {
+      this.name = name;
+
+      return this;
+    }
+
+    public CategoricPhenotype createPhenotype() {
       final CategoricPhenotype phenotype = new CategoricPhenotype(this.name, this.values);
 
-			return phenotype;
-		}
-	}
+      return phenotype;
+    }
+  }
 
-	public static final CategoricPhenotypeBuilder builder() {
-		return new CategoricPhenotypeBuilder();
-	}
+  public static final CategoricPhenotypeBuilder builder() {
+    return new CategoricPhenotypeBuilder();
+  }
 
-  public CategoricPhenotype(String name, Set<String> values) {
+  public CategoricPhenotype(String name, Map<Long, String> values) {
     super(name);
     this.setValues(values);
   }
 
-  public CategoricPhenotype(Long id, String name, Set<String> values) {
+  public CategoricPhenotype(Long id, String name, Map<Long, String> values) {
     super(id, name);
     this.setValues(values);
   }
@@ -58,19 +60,19 @@ public class CategoricPhenotype extends Phenotype {
   /**
    * @return the values
    */
-  public Set<String> getValues() {
+  public Map<Long, String> getValues() {
     return values;
   }
 
   /**
-   * @param values the values to set
+   * @param values the values to Map
    */
-  public void setValues(Set<String> values) {
+  public void setValues(Map<Long, String> values) {
     this.values = values;
   }
 
   @Override
   public Boolean validate(String value) {
-    return this.getValues().contains(value);
+    return this.getValues().containsValue(value);
   }
 }

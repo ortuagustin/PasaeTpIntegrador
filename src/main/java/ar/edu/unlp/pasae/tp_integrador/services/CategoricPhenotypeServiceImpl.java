@@ -3,6 +3,8 @@ package ar.edu.unlp.pasae.tp_integrador.services;
 import java.text.MessageFormat;
 import java.util.stream.Stream;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,9 +14,6 @@ import org.springframework.stereotype.Service;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype.CategoricPhenotypeBuilder;
-
-import javax.persistence.EntityNotFoundException;
-
 import ar.edu.unlp.pasae.tp_integrador.repositories.CategoricPhenotypeRepository;
 import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
@@ -35,15 +34,15 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 
 	@Override
 	public CategoricPhenotypeDTO findByName(String name) throws EntityNotFoundException {
-		final CategoricPhenotype phenotype = this.getPhenotypeRepository().findByName(name)
-				.orElseThrow(() -> new EntityNotFoundException(
-						MessageFormat.format("No Categoric Phenotype found with name {0}", name)));
+		final CategoricPhenotype phenotype = this.getPhenotypeRepository().findByName(name).orElseThrow(
+				() -> new EntityNotFoundException(MessageFormat.format("No Categoric Phenotype found with name {0}", name)));
 
 		return this.getTransformer().toDTO(phenotype);
 	}
 
 	@Override
-	public Page<CategoricPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+	public Page<CategoricPhenotypeDTO> list(int page, int sizePerPage, String sortField, String sortOrder,
+			String search) {
 		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
 		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
 		Page<CategoricPhenotype> result;
@@ -107,7 +106,8 @@ public class CategoricPhenotypeServiceImpl implements CategoricPhenotypeService 
 	private CategoricPhenotype buildPhenotype(CategoricPhenotypeDTO phenotype) {
 		final CategoricPhenotypeBuilder builder = CategoricPhenotype.builder();
 
-		 return builder.addName(phenotype.getName())
+		return builder
+			.addName(phenotype.getName())
 			.addValues(phenotype.getValues())
 			.createPhenotype();
 	}

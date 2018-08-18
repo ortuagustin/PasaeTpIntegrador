@@ -3,6 +3,7 @@ package ar.edu.unlp.pasae.tp_integrador.dtos;
 public class CategoricPhenotypeValueDTO {
 	private Long phenotypeId;
 	private Long valueId;
+	private String value;
 
 	@SuppressWarnings("unused")
 	private CategoricPhenotypeValueDTO() {
@@ -12,20 +13,41 @@ public class CategoricPhenotypeValueDTO {
 	public CategoricPhenotypeValueDTO(Long phenotypeId, Long valueId) {
 		super();
 		this.setPhenotypeId(phenotypeId);
-		this.setValue(valueId);
+		this.setValueId(valueId);
+	}
+
+	public CategoricPhenotypeValueDTO(Long phenotypeId, Long valueId, String value) {
+		super();
+		this.setPhenotypeId(phenotypeId);
+		this.setValueId(valueId);
+		this.setValue(value);
+	}
+
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(String value) {
+		this.value = value;
 	}
 
 	/**
 	 * @return the valueId
 	 */
-	public Long getValue() {
+	public Long getValueId() {
 		return valueId;
 	}
 
 	/**
 	 * @param valueId the valueId to set
 	 */
-	public void setValue(Long valueId) {
+	public void setValueId(Long valueId) {
 		this.valueId = valueId;
 	}
 
@@ -43,4 +65,3 @@ public class CategoricPhenotypeValueDTO {
 		this.phenotypeId = phenotypeId;
 	}
 }
-

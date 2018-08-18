@@ -11,20 +11,27 @@ public class CategoricPhenotypeValue {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-    @OneToOne
-    private CategoricPhenotype phenotype;
-    private Long valueId;
-    
-    @SuppressWarnings("unused")
+	@OneToOne
+	private CategoricPhenotype phenotype;
+	private Long valueId;
+
+	@SuppressWarnings("unused")
 	private CategoricPhenotypeValue() {
 		super();
 	}
 
-    public CategoricPhenotypeValue(CategoricPhenotype phenotype, Long valueId) {
-        super();
-        this.setPhenotype(phenotype);
-        this.setValue(valueId);
-    }
+	public CategoricPhenotypeValue(CategoricPhenotype phenotype, Long valueId) {
+		super();
+		this.setPhenotype(phenotype);
+		this.setValue(valueId);
+	}
+
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return this.getPhenotype().getValues().get(this.getValueId());
+	}
 
 	/**
 	 * @return the valueId
@@ -54,5 +61,3 @@ public class CategoricPhenotypeValue {
 		this.phenotype = phenotype;
 	}
 }
-
-

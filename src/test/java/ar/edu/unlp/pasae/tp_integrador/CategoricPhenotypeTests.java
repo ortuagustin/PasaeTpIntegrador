@@ -1,8 +1,8 @@
 package ar.edu.unlp.pasae.tp_integrador;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -40,7 +40,7 @@ public class CategoricPhenotypeTests {
 		this.phenotypeService.deleteAll();
 	}
 
-  @Test
+	@Test
 	public void it_returns_phenotype_list() {
 		Collection<CategoricPhenotypeDTO> phenotypes;
 
@@ -48,10 +48,10 @@ public class CategoricPhenotypeTests {
 
 		Assert.assertTrue("Phenotype list should be empty", phenotypes.isEmpty());
 
-		for (Integer i = 1; i <= 10; i++) {
+		for (Long i = 1L; i <= 10; i++) {
 			CategoricPhenotypeDTO request;
-			Set<String> values = new HashSet<String>();
-			values.add("Value " + i);
+			Map<Long, String> values = new HashMap<Long, String>();
+			values.put(i, "Value " + i);
 
 			request = new CategoricPhenotypeDTO("Phenotype #" + i, values);
 			this.phenotypeService.create(request);
@@ -67,10 +67,10 @@ public class CategoricPhenotypeTests {
 	public void it_returns_phenotype_count() {
 		Assert.assertEquals((Integer) 0, this.phenotypeService.count());
 
-		for (Integer i = 1; i <= 10; i++) {
+		for (Long i = 1L; i <= 10; i++) {
 			CategoricPhenotypeDTO request;
-			Set<String> values = new HashSet<String>();
-			values.add("Value " + i);
+			Map<Long, String> values = new HashMap<Long, String>();
+			values.put(i, "Value " + i);
 
 			request = new CategoricPhenotypeDTO("Phenotype #" + i, values);
 			this.phenotypeService.create(request);
@@ -82,19 +82,20 @@ public class CategoricPhenotypeTests {
 	@Test
 	public void it_finds_phenotype_by_id() {
 		String name = "Name";
-    Set<String> values = new HashSet<String>();
-    values.add("Value 1");
-    values.add("Value 2");
-    values.add("Value 3");
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
 
 		CategoricPhenotypeDTO request = new CategoricPhenotypeDTO(name, values);
 		Long phenotypeId = this.phenotypeService.create(request).getId();
 		CategoricPhenotypeDTO phenotype = this.phenotypeService.find(phenotypeId);
 
 		Assert.assertNotNull(phenotype);
-    Assert.assertEquals(name, phenotype.getName());
-    Assert.assertEquals(values.size(), phenotype.getValues().size());
-    Assert.assertTrue(phenotype.getValues().containsAll(values));
+		Assert.assertEquals(name, phenotype.getName());
+		Assert.assertEquals(values.size(), phenotype.getValues().size());
+		Assert.assertTrue(phenotype.getValues().keySet().containsAll(values.keySet()));
+		Assert.assertTrue(phenotype.getValues().values().containsAll(values.values()));
 	}
 
 	@Test
@@ -108,19 +109,20 @@ public class CategoricPhenotypeTests {
 	@Test
 	public void it_finds_phenotype_by_name() {
 		String name = "Name";
-    Set<String> values = new HashSet<String>();
-    values.add("Value 1");
-    values.add("Value 2");
-    values.add("Value 3");
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
 
 		CategoricPhenotypeDTO request = new CategoricPhenotypeDTO(name, values);
 		this.phenotypeService.create(request).getId();
 		CategoricPhenotypeDTO phenotype = this.phenotypeService.findByName(name);
 
 		Assert.assertNotNull(phenotype);
-    Assert.assertEquals(name, phenotype.getName());
-    Assert.assertEquals(values.size(), phenotype.getValues().size());
-    Assert.assertTrue(phenotype.getValues().containsAll(values));
+		Assert.assertEquals(name, phenotype.getName());
+		Assert.assertEquals(values.size(), phenotype.getValues().size());
+		Assert.assertTrue(phenotype.getValues().keySet().containsAll(values.keySet()));
+		Assert.assertTrue(phenotype.getValues().values().containsAll(values.values()));
 	}
 
 	@Test
@@ -134,8 +136,8 @@ public class CategoricPhenotypeTests {
 
 	@Test
 	public void it_deletes_phenotype() {
-		Set<String> values = new HashSet<String>();
-		values.add("Value 1");
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
 
 		CategoricPhenotypeDTO request = new CategoricPhenotypeDTO("Name", values);
 		Long phenotypeId = this.phenotypeService.create(request).getId();
@@ -163,93 +165,95 @@ public class CategoricPhenotypeTests {
 	@Test
 	public void it_saves_new_phenotype() {
 		String name = "Name";
-    Set<String> values = new HashSet<String>();
-    values.add("Value 1");
-    values.add("Value 2");
-    values.add("Value 3");
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
 
 		CategoricPhenotypeDTO request = new CategoricPhenotypeDTO(name, values);
 		CategoricPhenotypeDTO phenotype = this.phenotypeService.create(request);
 
 		Assert.assertNotNull(phenotype);
-    Assert.assertEquals(name, phenotype.getName());
-    Assert.assertEquals(values.size(), phenotype.getValues().size());
-    Assert.assertTrue(phenotype.getValues().containsAll(values));
-  }
+		Assert.assertEquals(name, phenotype.getName());
+		Assert.assertEquals(values.size(), phenotype.getValues().size());
+		Assert.assertTrue(phenotype.getValues().keySet().containsAll(values.keySet()));
+		Assert.assertTrue(phenotype.getValues().values().containsAll(values.values()));
+	}
 
 	@Test
 	public void it_updates_existing_phenotype() {
-    Set<String> values = new HashSet<String>();
-    values.add("Value 1");
-    values.add("Value 2");
-    values.add("Value 3");
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
 
-    CategoricPhenotypeDTO createRequest = new CategoricPhenotypeDTO("Name", values);
+		CategoricPhenotypeDTO createRequest = new CategoricPhenotypeDTO("Name", values);
 		CategoricPhenotypeDTO phenotype = this.phenotypeService.create(createRequest);
 
-    String name = "Changed Name";
-    Set<String> updatedValues = new HashSet<String>();
-    updatedValues.add("Value 4");
-    updatedValues.add("Value 5");
+		String name = "Changed Name";
+		Map<Long, String> updatedValues = new HashMap<Long, String>();
+		updatedValues.put(4L, "Value 4");
+		updatedValues.put(5L, "Value 5");
 
 		CategoricPhenotypeDTO updateRequest = new CategoricPhenotypeDTO(name, updatedValues);
 		CategoricPhenotypeDTO updatedPhenotype = this.phenotypeService.update(phenotype.getId(), updateRequest);
 
-    Assert.assertEquals(name, updatedPhenotype.getName());
-    Assert.assertEquals(updatedValues.size(), updatedPhenotype.getValues().size());
-    Assert.assertTrue(updatedPhenotype.getValues().containsAll(updatedValues));
-  }
+		Assert.assertEquals(name, updatedPhenotype.getName());
+		Assert.assertEquals(updatedValues.size(), updatedPhenotype.getValues().size());
+		Assert.assertTrue(updatedPhenotype.getValues().keySet().containsAll(updatedValues.keySet()));
+		Assert.assertTrue(updatedPhenotype.getValues().values().containsAll(updatedValues.values()));
+	}
 
-  @Test
+	@Test
 	public void it_does_not_allow_empty_name() {
 		String name = "";
-    Set<String> values = new HashSet<String>();
-    values.add("Value 1");
-    values.add("Value 2");
-    values.add("Value 3");
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
 
 		CategoricPhenotypeDTO request = new CategoricPhenotypeDTO(name, values);
 
 		thrown.expect(ValidationException.class);
 		this.phenotypeService.create(request);
-  }
+	}
 
-  @Test
+	@Test
 	public void it_does_not_allow_empty_values() {
 		String name = "Name";
-    Set<String> values = new HashSet<String>();
+		Map<Long, String> values = new HashMap<Long, String>();
 
 		CategoricPhenotypeDTO request = new CategoricPhenotypeDTO(name, values);
 
 		thrown.expect(ValidationException.class);
 		this.phenotypeService.create(request);
-  }
+	}
 
-  @Test
-  public void it_returns_true_for_valid_values() {
-    String name = "Name";
-    Set<String> values = new HashSet<String>();
-    values.add("Value 1");
-    values.add("Value 2");
-    values.add("Value 3");
+	@Test
+	public void it_returns_true_for_valid_values() {
+		String name = "Name";
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
 
-    CategoricPhenotype phenotype = new CategoricPhenotype(name, values);
-    Assert.assertTrue(phenotype.validate("Value 1"));
-    Assert.assertTrue(phenotype.validate("Value 2"));
-    Assert.assertTrue(phenotype.validate("Value 3"));
-  }
+		CategoricPhenotype phenotype = new CategoricPhenotype(name, values);
+		Assert.assertTrue(phenotype.validate("Value 1"));
+		Assert.assertTrue(phenotype.validate("Value 2"));
+		Assert.assertTrue(phenotype.validate("Value 3"));
+	}
 
-  @Test
-  public void it_returns_false_for_invalid_values() {
-    String name = "Name";
-    Set<String> values = new HashSet<String>();
-    values.add("Value 1");
-    values.add("Value 2");
-    values.add("Value 3");
+	@Test
+	public void it_returns_false_for_invalid_values() {
+		String name = "Name";
+		Map<Long, String> values = new HashMap<Long, String>();
+		values.put(1L, "Value 1");
+		values.put(2L, "Value 2");
+		values.put(3L, "Value 3");
 
-    CategoricPhenotype phenotype = new CategoricPhenotype(name, values);
-    Assert.assertFalse(phenotype.validate(""));
-    Assert.assertFalse(phenotype.validate("aaa"));
-    Assert.assertFalse(phenotype.validate("Value1"));
-  }
+		CategoricPhenotype phenotype = new CategoricPhenotype(name, values);
+		Assert.assertFalse(phenotype.validate(""));
+		Assert.assertFalse(phenotype.validate("aaa"));
+		Assert.assertFalse(phenotype.validate("Value1"));
+	}
 }

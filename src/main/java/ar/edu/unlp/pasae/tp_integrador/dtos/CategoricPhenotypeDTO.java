@@ -1,6 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
@@ -14,16 +15,28 @@ public class CategoricPhenotypeDTO {
 	private String name;
 	@NotNull
 	@Size(min = 2)
-	private Set<String> values = new HashSet<String>();
+	private Map<Long, String> values = new HashMap<Long, String>();
 
 	public CategoricPhenotypeDTO(Long id, String name, Set<String> values) {
+		super();
+		this.setId(id);
+		this.setName(name);
+
+		Long index = 1L;
+		for (String each : values) {
+			this.values.put(index, each);
+			index++;
+		}
+	}
+
+	public CategoricPhenotypeDTO(Long id, String name, Map<Long, String> values) {
 		super();
 		this.setId(id);
 		this.setName(name);
 		this.setValues(values);
 	}
 
-	public CategoricPhenotypeDTO(String name, Set<String> values) {
+	public CategoricPhenotypeDTO(String name, Map<Long, String> values) {
 		super();
 		this.setName(name);
 		this.setValues(values);
@@ -50,16 +63,16 @@ public class CategoricPhenotypeDTO {
 	/**
 	 * @return the values
 	 */
-	public Set<String> getValues() {
+	public Map<Long, String> getValues() {
 		return values;
 	}
 
 	/**
 	 * @param values the values to set
 	 */
-	public void setValues(Set<String> values) {
+	public void setValues(Map<Long, String> values) {
 		this.values.clear();
-		this.values.addAll(values);
+		this.values.putAll(values);
 	}
 
 	/**

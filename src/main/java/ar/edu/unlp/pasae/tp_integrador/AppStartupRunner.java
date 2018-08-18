@@ -1,9 +1,9 @@
 package ar.edu.unlp.pasae.tp_integrador;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -43,11 +43,11 @@ public class AppStartupRunner implements ApplicationRunner {
 		Role r2 = new Role(RoleName.ADMIN.toString());
 		roles2.add(r2);
 
-
 		// Guardo los elementos
 		this.getRoleRepository().save(r1);
 		this.getRoleRepository().save(r2);
-		this.getUserRepository().save(new CustomUser("genaro", "prueba", "genarocamele@hotmail.com", "genaro", "camele", roles));
+		this.getUserRepository()
+				.save(new CustomUser("genaro", "prueba", "genarocamele@hotmail.com", "genaro", "camele", roles));
 		this.getUserRepository().save(new CustomUser("admin", "admin", "admin@hotmail.com", "admin", "admin", roles2));
 
 		this.createMockPhenotypes();
@@ -55,10 +55,10 @@ public class AppStartupRunner implements ApplicationRunner {
 	}
 
 	private void createMockPhenotypes() {
-		for (Integer i = 1; i <= 10; i++) {
+		for (Long i = 1L; i <= 10; i++) {
 			CategoricPhenotypeDTO request;
-			Set<String> values = new HashSet<String>();
-			values.add("Value " + i);
+			Map<Long, String> values = new HashMap<Long, String>();
+			values.put(i, "Value " + i);
 
 			request = new CategoricPhenotypeDTO("Phenotype #" + i, values);
 			this.getCategoricPhenotypeService().create(request);

@@ -1,7 +1,8 @@
 package ar.edu.unlp.pasae.tp_integrador;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,10 +57,10 @@ public class PathologyTests {
 
 	@Before
 	public void createCategoricPhenotypes() {
-		for (Integer i = 1; i <= 3; i++) {
+		for (Long i = 1L; i <= 3; i++) {
 			CategoricPhenotypeDTO request;
-			Set<String> values = new HashSet<String>();
-			values.add("Value " + i);
+			Map<Long, String> values = new HashMap<Long, String>();
+			values.put(i, "Value " + i);
 
 			request = new CategoricPhenotypeDTO("Phenotype #" + i, values);
 			this.categoricPhenotypeService.create(request);
@@ -115,14 +116,15 @@ public class PathologyTests {
 	public void it_finds_pathology_by_id() {
 		String name = "Name";
 
-		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(), this.getCategoricPhenotypesIds());
+		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(),
+				this.getCategoricPhenotypesIds());
 		Long pathologyId = this.pathologyService.create(request).getId();
 		PathologyDTO pathology = this.pathologyService.find(pathologyId);
 
 		Assert.assertNotNull(pathology);
 		Assert.assertEquals(name, pathology.getName());
-    Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
-    Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
+		Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
+		Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
 	}
 
 	@Test
@@ -137,14 +139,15 @@ public class PathologyTests {
 	public void it_finds_pathology_by_name() {
 		String name = "Name";
 
-		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(), this.getCategoricPhenotypesIds());
+		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(),
+				this.getCategoricPhenotypesIds());
 		this.pathologyService.create(request).getId();
 		PathologyDTO pathology = this.pathologyService.findByName(name);
 
 		Assert.assertNotNull(pathology);
 		Assert.assertEquals(name, pathology.getName());
-    Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
-    Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
+		Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
+		Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
 	}
 
 	@Test
@@ -160,7 +163,8 @@ public class PathologyTests {
 	public void it_deletes_pathology() {
 		String name = "Name";
 
-		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(), this.getCategoricPhenotypesIds());
+		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(),
+				this.getCategoricPhenotypesIds());
 		Long pathologyId = this.pathologyService.create(request).getId();
 
 		PathologyDTO pathology;
@@ -187,13 +191,14 @@ public class PathologyTests {
 	public void it_saves_new_pathology() {
 		String name = "Name";
 
-		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(), this.getCategoricPhenotypesIds());
+		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(),
+				this.getCategoricPhenotypesIds());
 		PathologyDTO pathology = this.pathologyService.create(request);
 
 		Assert.assertNotNull(pathology);
 		Assert.assertEquals(name, pathology.getName());
-    Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
-    Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
+		Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
+		Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
 	}
 
 	@Test
@@ -211,15 +216,16 @@ public class PathologyTests {
 		PathologyDTO updatedPathology = this.pathologyService.update(pathology.getId(), updateRequest);
 
 		Assert.assertEquals(name, updatedPathology.getName());
-    Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
-    Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
+		Assert.assertEquals(this.getNumericPhenotypesIds().size(), pathology.getNumericPhenotypes().size());
+		Assert.assertEquals(this.getCategoricPhenotypesIds().size(), pathology.getCategoricPhenotypes().size());
 	}
 
 	@Test
 	public void it_does_not_allow_empty_name() {
 		String name = "";
 
-		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(), this.getCategoricPhenotypesIds());
+		PathologyRequestDTO request = new PathologyRequestDTO(name, this.getNumericPhenotypesIds(),
+				this.getCategoricPhenotypesIds());
 
 		thrown.expect(ValidationException.class);
 		this.pathologyService.create(request);
