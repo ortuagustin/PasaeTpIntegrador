@@ -1,7 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

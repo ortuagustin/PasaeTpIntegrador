@@ -5,22 +5,20 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
 import ar.edu.unlp.pasae.tp_integrador.entities.Pathology.PathologyBuilder;
-
-import javax.persistence.EntityNotFoundException;
-
 import ar.edu.unlp.pasae.tp_integrador.repositories.CategoricPhenotypeRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.NumericPhenotypeRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PathologyRepository;
@@ -58,11 +56,11 @@ public class PathologyServiceImpl implements PathologyService {
 	public Stream<PathologyDTO> list() {
 		return this.getPathologyRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
 	}
-	
+
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
 		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
 	}
-	
+
 	@Override
 	public Page<PathologyDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
 		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;

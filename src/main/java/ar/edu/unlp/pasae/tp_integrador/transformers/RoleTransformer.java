@@ -20,8 +20,8 @@ public class RoleTransformer extends BaseTransformer<Role, RoleDTO> {
 	public RoleDTO toDTO(Role entity) {
 		return new RoleDTO(entity.getId(), entity.getName());
 	}
-	
-	
+
+
 	public List<RoleDTO> transform(List<Role> usersList) {
 		List<RoleDTO> listAns = new ArrayList<RoleDTO>();
 		for (Role user : usersList) {

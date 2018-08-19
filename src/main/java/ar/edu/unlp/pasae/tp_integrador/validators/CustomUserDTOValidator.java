@@ -31,11 +31,11 @@ public class CustomUserDTOValidator implements Validator {
 	public void validate(Object obj, Errors errors) {
 		// Obtengo el usuario a evaluar
 		CustomUserDTO user = (CustomUserDTO) obj;
-		
+
 		// Chequeo los roles
 		RoleName[] roles = RoleName.class.getEnumConstants(); // Obtengo todos los roles declarados
 		List<Role> userRoles = user.getAuthorities(); // Obtengo los roles que le pasaron al usuario
-		
+
 		// Para cada rol que le dieron al usuario me fijo que realmente sea
 		// un rol declarado en el sistema
 		for (Role userRole : userRoles) {
@@ -46,7 +46,7 @@ public class CustomUserDTOValidator implements Validator {
 					break; // Corto el ciclo
 				}
 			}
-			
+
 			// Si el rol no fue encontrado, informo
 			if (!exists) {
 				String message = new NotValidRoleException().getMessage();

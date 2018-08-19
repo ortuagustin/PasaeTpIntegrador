@@ -29,7 +29,7 @@ public interface PathologyService {
 	 * @return stream de patologias
 	 */
 	Stream<PathologyDTO> list();
-	
+
 	/**
 	 * Devuelve un Paginado de patologiaas, de acuerdo a los parametros dados
 	 * @param page el numero de pagina
