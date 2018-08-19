@@ -1,7 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -18,6 +18,7 @@ public class PatientRequestDTO {
 	private String surname;
 	@NotEmpty
 	private String dni;
+	private String genotype = "";
 	@Email
 	private String email;
 	private Set<NumericPhenotypeValueDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueDTO>();
@@ -30,6 +31,11 @@ public class PatientRequestDTO {
 		this.setSurname(surname);
 		this.setDni(dni);
 		this.setEmail(email);
+	}
+
+	public PatientRequestDTO(Long userId, String name, String surname, String dni, String email, String genotype) {
+		this(userId, name, surname, dni, email);
+		this.setGenotype(genotype);
 	}
 
 	private PatientRequestDTO() {
@@ -104,6 +110,20 @@ public class PatientRequestDTO {
 	 */
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	/**
+	 * @return the genotype
+	 */
+	public String getGenotype() {
+		return genotype;
+	}
+
+	/**
+	 * @param genotype the genotype to set
+	 */
+	public void setGenotype(String genotype) {
+		this.genotype = genotype;
 	}
 
 	/**

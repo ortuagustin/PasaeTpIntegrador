@@ -34,6 +34,12 @@ public class GenotypeDTO {
     super();
   }
 
+  @Override
+  public String toString() {
+    System.out.println(this.value);
+    return this.snp + this.value;
+  }
+
   /**
    * @return el valor del alelo heredado del padre
    */

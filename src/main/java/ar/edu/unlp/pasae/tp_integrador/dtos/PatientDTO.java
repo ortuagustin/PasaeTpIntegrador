@@ -1,13 +1,13 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
 
 /**
  * DTO que se usa para devolver el objeto paciente
@@ -25,18 +25,9 @@ public class PatientDTO {
 	private String email;
 	@NotNull
 	private CustomUserDTO user;
+	private Collection<GenotypeDTO> genotype = new ArrayList<GenotypeDTO>();
 	private Set<NumericPhenotypeValueDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueDTO>();
 	private Set<CategoricPhenotypeValueDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeValueDTO>();
-
-	public PatientDTO(Long id, String name, String surname, String dni, String email, CustomUserDTO user) {
-		super();
-		this.setId(id);
-		this.setName(name);
-		this.setSurname(surname);
-		this.setDni(dni);
-		this.setEmail(email);
-		this.setUser(user);
-	}
 
 	public PatientDTO(String name, String surname, String dni, String email, CustomUserDTO user) {
 		super();
@@ -45,6 +36,11 @@ public class PatientDTO {
 		this.setDni(dni);
 		this.setEmail(email);
 		this.setUser(user);
+	}
+
+	public PatientDTO(Long id, String name, String surname, String dni, String email, CustomUserDTO user) {
+		this(name, surname, dni, email, user);
+		this.setId(id);
 	}
 
 	private PatientDTO() {
@@ -91,6 +87,21 @@ public class PatientDTO {
 	 */
 	public String getEmail() {
 		return email;
+	}
+
+	/**
+	 * @param genotype the id to set
+	 */
+	public void setGenotype(Collection<GenotypeDTO> genotype) {
+		this.genotype.clear();
+		this.genotype.addAll(genotype);
+	}
+
+	/**
+	 * @return the genotype
+	 */
+	public Collection<GenotypeDTO> getGenotype() {
+		return genotype;
 	}
 
 	/**

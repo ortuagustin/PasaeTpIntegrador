@@ -22,7 +22,7 @@ public class GenotypeDecoderTests {
   public void it_correctly_decodes_genotype() {
     String input = "rs111acrs1122at";
 
-    List<ar.edu.unlp.pasae.tp_integrador.entities.Genotype> output = this.genotypeDecoderService.decodeGenotype(input);
+    List<Genotype> output = this.genotypeDecoderService.decodeGenotype(input);
 
     Assert.assertEquals(2, output.size());
 

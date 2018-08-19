@@ -1,10 +1,10 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
-import java.util.List;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -45,7 +45,7 @@ public class Patient {
 		private String dni;
 		private String email;
 		private CustomUser user;
-		private List<Genotype> genotypes = new ArrayList<Genotype>();
+		private Collection<Genotype> genotypes = new ArrayList<Genotype>();
 		private Set<NumericPhenotypeValue> numericPhenotypes = new HashSet<NumericPhenotypeValue>();
 		private Set<CategoricPhenotypeValue> categoricPhenotypes = new HashSet<CategoricPhenotypeValue>();
 
@@ -62,7 +62,7 @@ public class Patient {
 			return this;
 		}
 
-		public PatientBuilder addGenotypes(final List<Genotype> genotypes) {
+		public PatientBuilder addGenotypes(final Collection<Genotype> genotypes) {
 			this.genotypes = genotypes;
 			return this;
 		}

@@ -64,16 +64,6 @@ public class PatientController {
 		return this.getPatientsService().update(id, request);
 	}
 
-	@GetMapping(path = "/{id}/genotype", consumes = "application/json", produces = "application/json")
-	public Collection<GenotypeDTO> getGenotype(@PathVariable(value = "id") Long id) {
-		return this.getPatientsService().getPatientGenotype(id).collect(Collectors.toList());
-	}
-
-	@PutMapping(path = "/{id}/genotype", consumes = "application/json", produces = "application/json")
-	public Collection<GenotypeDTO> setGenotype(@PathVariable(value = "id") Long id, @RequestBody String genotype) {
-		return this.getPatientsService().setPatientGenotype(id, genotype).collect(Collectors.toList());
-	}
-
 	private PatientService getPatientsService() {
 		return this.patientsService;
 	}

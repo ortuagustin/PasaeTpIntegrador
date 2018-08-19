@@ -6,7 +6,6 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 
@@ -73,21 +72,6 @@ public interface PatientService {
 	PatientDTO update(Long patientId, PatientRequestDTO patient);
 
 	/**
-	 * Actualiza el genotipo de un paciente
-	 *
-	 * @param patientId el id del paciente
-	 * @param genotype genotipo del paciente (en formato rsXXXMF)
-	 */
-	Stream<GenotypeDTO> setPatientGenotype(Long patientId, String genotype);
-
-	/**
-	 * Devuelve el genotipo de un paciente
-	 *
-	 * @param patientId el id del paciente
-	 */
-	Stream<GenotypeDTO> getPatientGenotype(Long patientId);
-	
-	/**
 	 * Devuelve un Paginado de pacientes, de acuerdo a los parametros dados
 	 * @param page el numero de pagina
 	 * @param sizePerPage cantidad de elementos por pagina
@@ -97,7 +81,6 @@ public interface PatientService {
 	 * @return pagina de paotologias
 	 */
 	Page<PatientDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
-
 
 	/**
 	 * Elimina un paciente
