@@ -1,13 +1,13 @@
 package ar.edu.unlp.pasae.tp_integrador.config;
 
-import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.HEADER_STRING;
+import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.COOKIE_NAME;
 import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.SECRET;
-import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.TOKEN_PREFIX;
 
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.util.WebUtils;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
   final UserDetailsService userDetailsService;
@@ -32,21 +33,18 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
       throws IOException, ServletException {
-    String header = req.getHeader(HEADER_STRING);
-
-    if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-      chain.doFilter(req, res);
-      return;
-    }
-
-    UsernamePasswordAuthenticationToken authentication = getAuthentication(req);
-
-    SecurityContextHolder.getContext().setAuthentication(authentication);
+    SecurityContextHolder.getContext().setAuthentication(this.getUserFromJwt(req));
     chain.doFilter(req, res);
   }
 
-  private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-    String token = request.getHeader(HEADER_STRING);
+  private UsernamePasswordAuthenticationToken getUserFromJwt(HttpServletRequest request) {
+    Cookie cookie = WebUtils.getCookie(request, COOKIE_NAME);
+
+    if (cookie == null) {
+      return null;
+    }
+
+    String token = cookie.getValue();
 
     if (token == null) {
       return null;
@@ -55,14 +53,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     String username = JWT
         .require(Algorithm.HMAC512(SECRET.getBytes()))
         .build()
-        .verify(token.replace(TOKEN_PREFIX, ""))
+        .verify(token)
         .getSubject();
 
     if (username == null) {
       return null;
     }
 
-    UserDetails user = this.userDetailsService.loadUserByUsername("admin");
+    UserDetails user = this.userDetailsService.loadUserByUsername(username);
 
     return new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
   }

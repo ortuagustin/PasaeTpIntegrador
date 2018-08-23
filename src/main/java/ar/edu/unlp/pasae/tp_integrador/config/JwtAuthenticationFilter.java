@@ -1,9 +1,8 @@
 package ar.edu.unlp.pasae.tp_integrador.config;
 
+import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.COOKIE_NAME;
 import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.EXPIRATION_TIME;
-import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.HEADER_STRING;
 import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.SECRET;
-import static ar.edu.unlp.pasae.tp_integrador.config.JwtConfig.TOKEN_PREFIX;
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 import java.io.IOException;
@@ -12,6 +11,7 @@ import java.util.Date;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -56,11 +56,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                           HttpServletResponse res,
                                           FilterChain chain,
                                           Authentication auth) throws IOException, ServletException {
-
       String token = JWT.create()
               .withSubject(((CustomUser) auth.getPrincipal()).getUsername())
               .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
               .sign(HMAC512(SECRET.getBytes()));
-      res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
+
+
+      res.addCookie(new Cookie(COOKIE_NAME, token));
   }
 }

@@ -18,18 +18,10 @@ import ar.edu.unlp.pasae.tp_integrador.entities.RoleName;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
-	AppAuthenticationProvider authProvider;
-
-	@Autowired
 	UserDetailsService userDetailsService;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-		auth.authenticationProvider(authProvider);
-	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -38,7 +30,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.csrf().disable() // Necesario porque sino ignora los request que no son GET (ncesita el CRSF token)
 		.authorizeRequests()
 			.antMatchers("/login").permitAll()
-			.antMatchers("/patients/**").authenticated()
+			.antMatchers("/patients/**").hasAuthority(RoleName.ADMIN.toString())
 			.antMatchers("/scientist/**").hasAuthority(RoleName.SCIENTIST.toString())
 			.antMatchers("/admin/**").hasAuthority(RoleName.ADMIN.toString())
 			.antMatchers("/clinical-doctor/**").permitAll()//hasAuthority(RoleName.CLINICAL_DOCTOR.toString())
