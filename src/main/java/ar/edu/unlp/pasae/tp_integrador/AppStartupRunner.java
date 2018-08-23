@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
@@ -30,6 +31,8 @@ public class AppStartupRunner implements ApplicationRunner {
 	private CategoricPhenotypeService categoricPhenotypeService;
 	@Autowired
 	private NumericPhenotypeService numericPhenotypeService;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public void run(final ApplicationArguments args) throws Exception {
@@ -46,12 +49,14 @@ public class AppStartupRunner implements ApplicationRunner {
 		// Guardo los elementos
 		this.getRoleRepository().save(r1);
 		this.getRoleRepository().save(r2);
+		this.getUserRepository().save(new CustomUser("genaro", passwordEncoder.encode("prueba"), "genarocamele@hotmail.com",
+				"genaro", "camele", roles));
 		this.getUserRepository()
-				.save(new CustomUser("genaro", "prueba", "genarocamele@hotmail.com", "genaro", "camele", roles));
-		this.getUserRepository().save(new CustomUser("admin", "admin", "admin@hotmail.com", "admin", "admin", roles2));
+				.save(new CustomUser("admin", passwordEncoder.encode("admin"), "admin@hotmail.com", "admin", "admin", roles2));
 
 		this.createMockPhenotypes();
-		this.getUserRepository().save(new CustomUser("admin2", "admin2", "admin2@hotmail.com", "admin2", "admin2", roles2));
+		this.getUserRepository().save(
+				new CustomUser("admin2", passwordEncoder.encode("admin2"), "admin2@hotmail.com", "admin2", "admin2", roles2));
 	}
 
 	private void createMockPhenotypes() {

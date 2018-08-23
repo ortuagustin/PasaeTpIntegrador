@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
@@ -20,24 +21,26 @@ import ar.edu.unlp.pasae.tp_integrador.repositories.RoleRepository;
 import ar.edu.unlp.pasae.tp_integrador.transformers.CustomUserTransformer;
 
 @Service
-public class CustomUserServiceImpl implements CustomUserService { 
+public class CustomUserServiceImpl implements CustomUserService {
 	@Autowired
 	CustomUserRepository userRepository;
 	@Autowired
 	private CustomUserTransformer userTransformer;
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	/**
-	 * Este metodo es necesario para poder obtener los usuarios 
+	 * Este metodo es necesario para poder obtener los usuarios
 	 * en la autenticacion
 	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		CustomUser user = this.getUserRepository().findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No se encontró el usuario"));
 		return user;
-	}	
-	
+	}
+
 	/**
 	 * Obtiene los roles desde la DB y los devuelve en una lista
 	 * @param userAuthorities Arreglo con los nombres de los roles a obtener
@@ -52,7 +55,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 			Role existingRole = this.getRoleRepository().findOneByName(role.getName()).orElse(null);
 			newRoles.add(existingRole);
 		}
-		
+
 		return newRoles;
 	}
 
@@ -60,8 +63,9 @@ public class CustomUserServiceImpl implements CustomUserService {
 	public CustomUserDTO create(CustomUserDTO userDto) {
 		List<Role> roles = this.getRoles(userDto.getAuthorities());
 		CustomUser user = this.getTransformer().toEntity(userDto);
+		user.setPassword(this.encodePassword(userDto.getPassword()));
 		user.setAuthorities(roles); // Asigno los roles
-		
+
 		this.getUserRepository().save(user);
 		return this.getTransformer().toDTO(user); // Devuelvo a DTO el usuario recien creado
 	}
@@ -71,7 +75,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 		Optional<CustomUser> opUser = this.getUserRepository().findById(id);
 		CustomUser u = opUser.get();
 		u.setUsername(user.getUsername());
-		u.setPassword(user.getPassword());
+		u.setPassword(this.encodePassword(user.getPassword()));
 		u.setEmail(user.getEmail());
 		u.setFirstName(user.getFirstName());
 		u.setLastName(user.getLastName());
@@ -94,9 +98,9 @@ public class CustomUserServiceImpl implements CustomUserService {
 		CustomUser user = this.getUserRepository().findById(id).get();
 		return this.getTransformer().toDTO(user);
 	}
-	
+
 	/**
-	 * Genera un Pageable para la paginacion y ordenamiento de 
+	 * Genera un Pageable para la paginacion y ordenamiento de
 	 * los usuarios requeridos
 	 * @param page Pagina actual para obtener desde la DB
 	 * @return La pagina solicitada con el ordenamiento incluido
@@ -104,10 +108,10 @@ public class CustomUserServiceImpl implements CustomUserService {
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
 	    return PageRequest.of(page, sizePerPage, sortDirection, sortField);
 	}
-	
+
 	@Override
 	public Page<CustomUserDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
-		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC; 
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
 		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
 		CustomUserRepository userRepository = this.getUserRepository();
 		Page<CustomUser> result;
@@ -116,10 +120,10 @@ public class CustomUserServiceImpl implements CustomUserService {
 		} else {
 			result = userRepository.findByUsernameContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCase(search, search, search, pageRequest);
 		}
-		
+
 		return result.map(each -> this.getTransformer().toDTO(each));
 	}
-	
+
 	/**
 	 * Chequea si el usuario pasado por parametro existe
 	 * @param user Usuario a evaluar
@@ -129,7 +133,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 	public boolean userExists(CustomUserDTO user) {
 		return this.getUserRepository().findByUsername(user.getUsername()).isPresent();
 	}
-	
+
 	/**
 	 * Chequea si el usuario existe
 	 * @param id Id del usuario a chequear
@@ -147,7 +151,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 	private CustomUserTransformer getTransformer() {
 		return this.userTransformer;
 	}
-	
+
 	/**
 	 * Obtiene el repositorio de usuarios
 	 * @return Repositorio de usuarios
@@ -155,7 +159,7 @@ public class CustomUserServiceImpl implements CustomUserService {
 	private CustomUserRepository getUserRepository() {
 		return this.userRepository;
 	}
-	
+
 	/**
 	 * Obtiene el repositorio de roles
 	 * @return Repositorio de roles
@@ -164,4 +168,12 @@ public class CustomUserServiceImpl implements CustomUserService {
 		return this.roleRepository;
 	}
 
+	/**
+	 * Cifra una contraseña de usuaro
+	 *
+	 * @return la contraseña cifrada
+	 */
+	private String encodePassword(String plainTextPassword) {
+		return this.passwordEncoder.encode(plainTextPassword);
+	}
 }
