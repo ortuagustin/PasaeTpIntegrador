@@ -11,15 +11,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class PruebaSeguridadController {
-
+public class LoginController {
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
-		return "redirect:/login?logout";// You can redirect wherever you want, but generally it's a good practice to
-																		// show login screen again.
+	}
+
+	@RequestMapping(value = "/currentUser", method = RequestMethod.GET)
+	public Object currentUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		return auth.getPrincipal();
 	}
 }
