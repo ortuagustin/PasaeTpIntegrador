@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.services.PatientService;
 
 @RestController
@@ -54,12 +55,12 @@ public class PatientController {
 	}
 
 	@PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-	public PatientDTO create(@RequestBody @Valid PatientRequestDTO request) {
+	public PatientDTO create(@RequestBody @Valid PatientRequestDTO request) throws GenotypeDecoderException {
 		return this.getPatientsService().create(request);
 	}
 
 	@PatchMapping(path = "/{id}", consumes = "application/json")
-	public PatientDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid PatientRequestDTO request) {
+	public PatientDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid PatientRequestDTO request) throws GenotypeDecoderException {
 		return this.getPatientsService().update(id, request);
 	}
 

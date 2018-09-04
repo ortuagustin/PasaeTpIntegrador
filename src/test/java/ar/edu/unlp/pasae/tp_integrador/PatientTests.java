@@ -31,6 +31,7 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Role;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.repositories.CustomUserRepository;
 import ar.edu.unlp.pasae.tp_integrador.services.CategoricPhenotypeService;
 import ar.edu.unlp.pasae.tp_integrador.services.NumericPhenotypeService;
@@ -70,7 +71,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_returns_patient_numeric_phenotype_with_associated_value() {
+	public void it_returns_patient_numeric_phenotype_with_associated_value() throws GenotypeDecoderException {
 		Map<Long, String> values = new HashMap<Long, String>();
 		values.put(1L, "Value 1");
 		values.put(2L, "Value 2");
@@ -100,7 +101,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_returns_patient_categoric_phenotype_with_associated_value() {
+	public void it_returns_patient_categoric_phenotype_with_associated_value() throws GenotypeDecoderException {
 		NumericPhenotypeDTO phenotypeRequest = new NumericPhenotypeDTO("Numeric Phenotype Test");
 		Long phenotypeId = this.numericPhenotypeService.create(phenotypeRequest).getId();
 		NumericPhenotypeValueDTO patientPhenotype = new NumericPhenotypeValueDTO(phenotypeId, 5L);
@@ -125,7 +126,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_returns_patient_list() {
+	public void it_returns_patient_list() throws GenotypeDecoderException {
 		Collection<PatientDTO> patients;
 
 		patients = this.patientService.list().collect(Collectors.toList());
@@ -150,7 +151,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_returns_patient_count() {
+	public void it_returns_patient_count() throws GenotypeDecoderException {
 		Assert.assertEquals((Integer) 0, this.patientService.count());
 
 		Long userId = this.user.getId();
@@ -168,7 +169,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_finds_patient_by_id() {
+	public void it_finds_patient_by_id() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
@@ -195,7 +196,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_finds_patient_by_dni() {
+	public void it_finds_patient_by_dni() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
@@ -223,7 +224,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_finds_patient_by_name_and_surname() {
+	public void it_finds_patient_by_name_and_surname() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
@@ -252,7 +253,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_deletes_patient() {
+	public void it_deletes_patient() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
@@ -283,13 +284,13 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_saves_new_patient() {
+	public void it_saves_new_patient() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
 		String dni = "37058719";
 		String email = "test@example.com";
-		String genotype = "rs111acrs1122at";
+		String genotype = "rs111ac\nrs1122at";
 
 		PatientRequestDTO request = new PatientRequestDTO(userId, name, surname, dni, email, genotype);
 		PatientDTO patient = this.patientService.create(request);
@@ -303,7 +304,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_updates_the_patient_genotype() {
+	public void it_updates_the_patient_genotype() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
@@ -315,7 +316,7 @@ public class PatientTests {
 
 		Assert.assertEquals(0, patient.getGenotype().size());
 
-		String genotype = "rs111acrs1122at";
+		String genotype = "rs111ac\nrs1122at";
 		PatientRequestDTO updateRequest = new PatientRequestDTO(userId, name, surname, dni, email, genotype);
 		PatientDTO updatedPatient = this.patientService.update(patient.getId(), updateRequest);
 
@@ -323,7 +324,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_updates_existing_patient() {
+	public void it_updates_existing_patient() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		PatientRequestDTO createRequest = new PatientRequestDTO(userId, "Name", "Surname", "37058719", "test@example.com");
 		PatientDTO patient = this.patientService.create(createRequest);
@@ -343,7 +344,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_does_not_allow_empty_name() {
+	public void it_does_not_allow_empty_name() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "";
 		String surname = "Surname";
@@ -357,7 +358,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_does_not_allow_empty_surname() {
+	public void it_does_not_allow_empty_surname() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "";
@@ -371,7 +372,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_does_not_allow_empty_dni() {
+	public void it_does_not_allow_empty_dni() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
@@ -385,7 +386,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_does_not_allow_invalid_dni() {
+	public void it_does_not_allow_invalid_dni() throws GenotypeDecoderException {
 		PatientRequestDTO request;
 		Long userId = this.user.getId();
 		String name = "Name";
@@ -402,7 +403,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_does_not_allow_invalid_email() {
+	public void it_does_not_allow_invalid_email() throws GenotypeDecoderException {
 		Long userId = this.user.getId();
 		String name = "Name";
 		String surname = "Surname";
@@ -416,7 +417,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_does_not_change_registrant_user() {
+	public void it_does_not_change_registrant_user() throws GenotypeDecoderException {
 		List<Role> roles = new ArrayList<Role>();
 		CustomUser anotherUser = this.userRepository
 				.save(new CustomUser("other", "other", "other@example.com", "other", "other", roles));

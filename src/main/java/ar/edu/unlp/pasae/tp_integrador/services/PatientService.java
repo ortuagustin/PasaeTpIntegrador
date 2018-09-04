@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 
 public interface PatientService {
 	/**
@@ -51,8 +52,9 @@ public interface PatientService {
 	 * @param patient dto con los datos del paciente
 	 *
 	 * @return dto con los datos del paciente persistido
+	 * @throws GenotypeDecoderException
 	 */
-	PatientDTO create(PatientRequestDTO patient);
+	PatientDTO create(PatientRequestDTO patient) throws GenotypeDecoderException;
 
 	/**
 	 * Devuelve la cantidad de pacientes
@@ -68,8 +70,9 @@ public interface PatientService {
 	 * @param patient dto con los datos a actualizar
 	 *
 	 * @return dto con los datos del paciente actualizado
+	 * @throws GenotypeDecoderException
 	 */
-	PatientDTO update(Long patientId, PatientRequestDTO patient);
+	PatientDTO update(Long patientId, PatientRequestDTO patient) throws GenotypeDecoderException;
 
 	/**
 	 * Devuelve un Paginado de pacientes, de acuerdo a los parametros dados

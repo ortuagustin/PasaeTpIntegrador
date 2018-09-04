@@ -27,6 +27,7 @@ import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotypeValue;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.repositories.CategoricPhenotypeRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.CustomUserRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.NumericPhenotypeRepository;
@@ -82,7 +83,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public PatientDTO update(Long patientId, PatientRequestDTO patient) {
+	public PatientDTO update(Long patientId, PatientRequestDTO patient) throws GenotypeDecoderException {
 		Patient entity = this.buildPatient(patient);
 		entity.setId(patientId);
 		entity.setUser(this.findRegistrantUser(patientId));
@@ -91,7 +92,7 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public PatientDTO create(PatientRequestDTO patient) {
+	public PatientDTO create(PatientRequestDTO patient) throws GenotypeDecoderException {
 		Patient entity = this.buildPatient(patient);
 
 		return this.save(entity);
@@ -152,7 +153,7 @@ public class PatientServiceImpl implements PatientService {
 		return this.toDto(patient);
 	}
 
-	private Patient buildPatient(PatientRequestDTO patient) {
+	private Patient buildPatient(PatientRequestDTO patient) throws GenotypeDecoderException {
 		final PatientBuilder builder = Patient.builder();
 		final Collection<Genotype> genotypes = this.getGenotypeDecoderService().decodeGenotype(patient.getGenotype());
 
