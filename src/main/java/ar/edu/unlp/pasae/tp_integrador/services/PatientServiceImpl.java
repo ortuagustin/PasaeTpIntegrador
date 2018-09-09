@@ -47,8 +47,6 @@ public class PatientServiceImpl implements PatientService {
 	private NumericPhenotypeRepository numericPhenotypeRepository;
 	@Autowired
 	private GenotypeDecoderService genotypeDecoderService;
-	@Autowired
-	private GenotypeService genotypeService;
 
 	@Autowired
 	private Transformer<Patient, PatientDTO> transformer;
@@ -158,15 +156,7 @@ public class PatientServiceImpl implements PatientService {
 	private Patient buildPatient(PatientRequestDTO patient) throws GenotypeDecoderException {
 		final PatientBuilder builder = Patient.builder();
 		final Collection<Genotype> genotypes = this.getGenotypeDecoderService().decodeGenotype(patient.getGenotype());
-		
-		// Salvo los genotypos
-		GenotypeService genotypeService = this.getGenotypeService();
-		Collection<GenotypeDTO> genotypesDto = this.getGenotypeTransformer().manyToDto(genotypes);
-		for (GenotypeDTO genotypeDto: genotypesDto) {
-			genotypeService.create(genotypeDto);
-		}
-		
-		// Armo y guardo el paciente final
+
 		final Patient entity = builder
 			.addName(patient.getName())
 			.addSurname(patient.getSurname())
@@ -281,9 +271,5 @@ public class PatientServiceImpl implements PatientService {
 
 	public void setGenotypeDecoderService(GenotypeDecoderService genotypeDecoderService) {
 		this.genotypeDecoderService = genotypeDecoderService;
-	}
-	
-	public GenotypeService getGenotypeService() {
-		return this.genotypeService;
 	}
 }
