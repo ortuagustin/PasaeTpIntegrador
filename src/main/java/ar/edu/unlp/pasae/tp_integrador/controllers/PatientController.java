@@ -7,6 +7,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -55,13 +57,21 @@ public class PatientController {
 	}
 
 	@PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-	public PatientDTO create(@RequestBody @Valid PatientRequestDTO request) throws GenotypeDecoderException {
-		return this.getPatientsService().create(request);
+	public Object create(@RequestBody @Valid PatientRequestDTO request) {
+		try {
+			return this.getPatientsService().create(request);
+		} catch (GenotypeDecoderException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrors());
+		}
 	}
 
 	@PatchMapping(path = "/{id}", consumes = "application/json")
-	public PatientDTO update(@PathVariable(value = "id") Long id, @RequestBody @Valid PatientRequestDTO request) throws GenotypeDecoderException {
-		return this.getPatientsService().update(id, request);
+	public Object update(@PathVariable(value = "id") Long id, @RequestBody @Valid PatientRequestDTO request) {
+		try {
+			return this.getPatientsService().update(id, request);
+		} catch (GenotypeDecoderException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrors());
+		}
 	}
 
 	private PatientService getPatientsService() {
