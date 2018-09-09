@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @SuppressWarnings("unused")
@@ -16,7 +17,7 @@ public class Genotype {
   /**
    * posicion en el genoma para este "valor"
    */
-  @NotEmpty
+  @NotNull
   private Integer snp;
 
   /**
