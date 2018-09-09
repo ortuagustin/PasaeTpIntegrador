@@ -22,7 +22,7 @@ public class GenotypeDecoderTests {
 
   @Test
   public void it_correctly_decodes_one_genotype() throws GenotypeDecoderException {
-    String input = "rs111ac";
+    String input = "rs111 ac";
 
     List<Genotype> output = this.genotypeDecoderService.decodeGenotype(input);
 
@@ -38,7 +38,7 @@ public class GenotypeDecoderTests {
 
   @Test
   public void it_correctly_decodes_two_genotypes() throws GenotypeDecoderException {
-    String input = "rs111ac\nrs1122at";
+    String input = "rs111 ac\nrs1122 at";
 
     List<Genotype> output = this.genotypeDecoderService.decodeGenotype(input);
 
@@ -106,7 +106,7 @@ public class GenotypeDecoderTests {
 
   @Test
   public void it_fails_to_decode_with_mixed_valid_and_invalid_inputs() {
-    String input = "sdafasf\nrs111ac";
+    String input = "sdafasf\nrs111 ac";
 
     try {
       this.genotypeDecoderService.decodeGenotype(input);

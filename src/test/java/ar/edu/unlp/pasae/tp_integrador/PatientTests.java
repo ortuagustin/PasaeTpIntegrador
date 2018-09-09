@@ -290,7 +290,7 @@ public class PatientTests {
 		String surname = "Surname";
 		String dni = "37058719";
 		String email = "test@example.com";
-		String genotype = "rs111ac\nrs1122at";
+		String genotype = "rs111 ac\nrs1122 at";
 
 		PatientRequestDTO request = new PatientRequestDTO(userId, name, surname, dni, email, genotype);
 		PatientDTO patient = this.patientService.create(request);
@@ -316,7 +316,7 @@ public class PatientTests {
 
 		Assert.assertEquals(0, patient.getGenotype().size());
 
-		String genotype = "rs111ac\nrs1122at";
+		String genotype = "rs111 ac\nrs1122 at";
 		PatientRequestDTO updateRequest = new PatientRequestDTO(userId, name, surname, dni, email, genotype);
 		PatientDTO updatedPatient = this.patientService.update(patient.getId(), updateRequest);
 
