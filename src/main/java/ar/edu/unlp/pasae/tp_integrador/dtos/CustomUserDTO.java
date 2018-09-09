@@ -11,8 +11,7 @@ public class CustomUserDTO {
 	private Long id;
 	@NotEmpty
 	private String username;
-	@NotEmpty
-	private String password;
+	private String password; // Puede estar vacia!
 	@NotEmpty
 	private String email;
 	@NotEmpty

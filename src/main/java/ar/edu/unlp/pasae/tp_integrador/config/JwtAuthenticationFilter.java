@@ -27,43 +27,54 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-  private AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 
-  public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
-      this.authenticationManager = authenticationManager;
-  }
+	public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+		this.authenticationManager = authenticationManager;
+	}
 
-  @Override
-  public Authentication attemptAuthentication(HttpServletRequest req,
-                                              HttpServletResponse res) throws AuthenticationException {
-      try {
-          CustomUser creds = new ObjectMapper()
-                  .readValue(req.getInputStream(), CustomUser.class);
+	@Override
+	public Authentication attemptAuthentication(HttpServletRequest req,
+			HttpServletResponse res) throws AuthenticationException {
+		try {
+			CustomUser creds = new ObjectMapper()
+					.readValue(req.getInputStream(), CustomUser.class);
 
-          return authenticationManager.authenticate(
-                  new UsernamePasswordAuthenticationToken(
-                          creds.getUsername(),
-                          creds.getPassword(),
-                          new ArrayList<>())
-          );
-      } catch (IOException e) {
-          throw new RuntimeException(e);
-      }
-  }
+			return authenticationManager.authenticate(
+					new UsernamePasswordAuthenticationToken(
+							creds.getUsername(),
+							creds.getPassword(),
+							new ArrayList<>())
+					);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-  @Override
-  protected void successfulAuthentication(HttpServletRequest req,
-                                          HttpServletResponse res,
-                                          FilterChain chain,
-                                          Authentication auth) throws IOException, ServletException {
-      String token = JWT.create()
-              .withSubject(((CustomUser) auth.getPrincipal()).getUsername())
-              .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-              .sign(HMAC512(SECRET.getBytes()));
+	@Override
+	protected void successfulAuthentication(HttpServletRequest req,
+			HttpServletResponse response,
+			FilterChain chain,
+			Authentication auth) throws IOException, ServletException {
+		String token = JWT.create()
+				.withSubject(((CustomUser) auth.getPrincipal()).getUsername())
+				.withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+				.sign(HMAC512(SECRET.getBytes()));
 
 
-    Cookie cookie = new Cookie(COOKIE_NAME, token);
-    cookie.setPath("/");
-	res.addCookie(cookie);
-  }
+		Cookie cookie = new Cookie(COOKIE_NAME, token);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+		response.setContentType("application/json");
+		response.setStatus(HttpServletResponse.SC_ACCEPTED);
+		response.getOutputStream().println("{\"success\": true}");
+	}
+
+	@Override
+	protected void unsuccessfulAuthentication(HttpServletRequest request,
+			HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+		response.setContentType("application/json");
+		response.setStatus(HttpServletResponse.SC_ACCEPTED); // Mando un status 200 para que jQuery no lo tome como erroneo
+		response.getOutputStream().println("{\"success\": false}");
+	}
 }

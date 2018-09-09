@@ -72,15 +72,27 @@ public class CustomUserServiceImpl implements CustomUserService {
 
 	@Override
 	public CustomUserDTO update(Long id, CustomUserDTO user) {
+		// Obtengo el objeto a modificar
 		Optional<CustomUser> opUser = this.getUserRepository().findById(id);
 		CustomUser u = opUser.get();
+		
+		// En caso de que no envien una nueva password 
+		// uso la que ya tiene
+		String validPassword = user.getPassword();
+		validPassword = (validPassword != null) ? validPassword : u.getPassword();
+		
+		// Seteo los nuevos campos		
 		u.setUsername(user.getUsername());
-		u.setPassword(this.encodePassword(user.getPassword()));
+		u.setPassword(this.encodePassword(validPassword));
 		u.setEmail(user.getEmail());
 		u.setFirstName(user.getFirstName());
 		u.setLastName(user.getLastName());
 		u.setAuthorities(this.getRoles(user.getAuthorities()));
+		
+		// Guardo los cambios
 		this.getUserRepository().save(u);
+		
+		// Devuelvo el DTO
 		return this.getTransformer().toDTO(u);
 	}
 

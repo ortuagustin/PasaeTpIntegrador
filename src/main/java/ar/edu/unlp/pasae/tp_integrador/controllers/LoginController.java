@@ -12,15 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class LoginController {
+	/**
+	 * Cierra la sesion
+	 * @param request Request enviado
+	 * @param response Respuesta a enviar
+	 */
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public void logout(HttpServletRequest request, HttpServletResponse response) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-		if (auth != null) {
+		if (auth != null){    
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
+		SecurityContextHolder.getContext().setAuthentication(null);
 	}
 
+	/**
+	 * Para obtener el usuario actual
+	 * @return El usuario logueado actualmente
+	 */
 	@RequestMapping(value = "/currentUser", method = RequestMethod.GET)
 	public Object currentUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -1,6 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
 import ar.edu.unlp.pasae.tp_integrador.entities.RoleName;
 
@@ -41,7 +43,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			// this disables session creation on Spring Security
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and()
-			.exceptionHandling().accessDeniedPage("/Access_Denied");
+			.exceptionHandling().accessDeniedPage("/Access_Denied")
+		.and()
+			.logout().logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)));
 
 		// Para poder utilizar la consola H2 con Spring Security
 		http.headers().frameOptions().disable();

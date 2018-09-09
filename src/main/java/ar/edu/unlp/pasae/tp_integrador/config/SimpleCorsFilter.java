@@ -17,32 +17,32 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class SimpleCorsFilter implements Filter {
-  public SimpleCorsFilter() {
-  }
+	public SimpleCorsFilter() {
+	}
 
-  @Override
-  public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-      throws IOException, ServletException {
-    HttpServletResponse response = (HttpServletResponse) res;
-    HttpServletRequest request = (HttpServletRequest) req;
-    response.setHeader("Access-Control-Allow-Origin", "http://localhost:8081");
-    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, PATCH");
-    response.setHeader("Access-Control-Max-Age", "3600");
-    response.setHeader("Access-Control-Allow-Credentials", "true");
-    response.setHeader("Access-Control-Allow-Headers",
-        "access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,authorization,content-type");
-    if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-      response.setStatus(HttpServletResponse.SC_OK);
-    } else {
-      chain.doFilter(req, res);
-    }
-  }
+	@Override
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException {
+		HttpServletResponse response = (HttpServletResponse) res;
+		HttpServletRequest request = (HttpServletRequest) req;
+		response.setHeader("Access-Control-Allow-Origin", "http://localhost:8091");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, PATCH");
+		response.setHeader("Access-Control-Max-Age", "3600");
+		response.setHeader("Access-Control-Allow-Credentials", "true");
+		response.setHeader("Access-Control-Allow-Headers",
+				"access-control-allow-headers,access-control-allow-methods,access-control-allow-origin,authorization,content-type");
+		if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+			response.setStatus(HttpServletResponse.SC_OK);
+		} else {
+			chain.doFilter(req, res);
+		}
+	}
 
-  @Override
-  public void init(FilterConfig filterConfig) {
-  }
+	@Override
+	public void init(FilterConfig filterConfig) {
+	}
 
-  @Override
-  public void destroy() {
-  }
+	@Override
+	public void destroy() {
+	}
 }
