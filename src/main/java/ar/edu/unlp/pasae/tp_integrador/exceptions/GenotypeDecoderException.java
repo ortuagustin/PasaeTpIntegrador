@@ -17,4 +17,8 @@ public class GenotypeDecoderException extends Exception {
 	public List<GenotypeDecoderError> getErrors() {
 		return this.errors;
 	}
+
+	public String getErrorsMessage() {
+		return this.getErrors().stream().map(each -> each.toString()).reduce("", String::concat);
+	}
 }

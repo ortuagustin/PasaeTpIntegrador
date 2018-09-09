@@ -17,4 +17,9 @@ public class GenotypeDecoderError {
   public String getInput() {
     return input;
   }
+
+  @Override
+  public String toString() {
+    return "index: " + this.getIndex().toString() + "input: " + this.getInput();
+  }
 }

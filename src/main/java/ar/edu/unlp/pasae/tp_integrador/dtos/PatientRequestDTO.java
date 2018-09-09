@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import ar.edu.unlp.pasae.tp_integrador.constraints.GenotypeConstraint;
+
 /**
  * DTO que se usa para altas/modificaciones de pacientes
  */
@@ -18,6 +20,7 @@ public class PatientRequestDTO {
 	private String surname;
 	@NotEmpty
 	private String dni;
+	@GenotypeConstraint
 	private String genotype = "";
 	@Email
 	private String email;
