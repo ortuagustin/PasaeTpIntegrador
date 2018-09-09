@@ -36,19 +36,29 @@ public class AppStartupRunner implements ApplicationRunner {
 
 	@Override
 	public void run(final ApplicationArguments args) throws Exception {
+		// Declaro los roles
+		Role r1 = new Role(RoleName.SCIENTIST.toString());
+		Role r2 = new Role(RoleName.ADMIN.toString());
+		Role r3 = new Role(RoleName.CLINICAL_DOCTOR.toString());
+		Role r4 = new Role(RoleName.REGISTER.toString());
+		
 		// Usuario cientifico de prueba
 		List<Role> roles = new ArrayList<Role>();
-		Role r1 = new Role(RoleName.SCIENTIST.toString());
 		roles.add(r1);
 
 		// Usuario admin de prueba
 		List<Role> roles2 = new ArrayList<Role>();
-		Role r2 = new Role(RoleName.ADMIN.toString());
 		roles2.add(r2);
 
 		// Guardo los elementos
+		
+		// Guardo los roles
 		this.getRoleRepository().save(r1);
 		this.getRoleRepository().save(r2);
+		this.getRoleRepository().save(r3);
+		this.getRoleRepository().save(r4);
+		
+		// Guardo los usuarios de prueba
 		this.getUserRepository().save(new CustomUser("genaro", passwordEncoder.encode("prueba"), "genarocamele@hotmail.com",
 				"genaro", "camele", roles));
 		this.getUserRepository()
@@ -59,6 +69,9 @@ public class AppStartupRunner implements ApplicationRunner {
 				new CustomUser("admin2", passwordEncoder.encode("admin2"), "admin2@hotmail.com", "admin2", "admin2", roles2));
 	}
 
+	/**
+	 * Crea los Fenotipos Mock
+	 */
 	private void createMockPhenotypes() {
 		for (Long i = 1L; i <= 10; i++) {
 			CategoricPhenotypeDTO request;
