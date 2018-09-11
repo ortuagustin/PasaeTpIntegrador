@@ -32,7 +32,7 @@ public class Patient {
 	private String email;
 	@OneToOne
 	private CustomUser user;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Genotype> genotypes = new ArrayList<Genotype>();
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<NumericPhenotypeValue> numericPhenotypes = new HashSet<NumericPhenotypeValue>();
