@@ -8,6 +8,12 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import ar.edu.unlp.pasae.tp_integrador.services.MapToCoupleArraySerializer;
+
 @SuppressWarnings("unused")
 public class CategoricPhenotypeDTO {
 	private Long id;
@@ -15,7 +21,20 @@ public class CategoricPhenotypeDTO {
 	private String name;
 	@NotNull
 	@Size(min = 2)
+	@JsonSerialize(using = MapToCoupleArraySerializer.class)
 	private Map<Long, String> values = new HashMap<Long, String>();
+
+	@JsonCreator
+	public CategoricPhenotypeDTO(@JsonProperty("name") String name, @JsonProperty("values") Set<String> values) {
+		super();
+		this.setName(name);
+
+		Long index = 1L;
+		for (String each : values) {
+			this.values.put(index, each);
+			index++;
+		}
+	}
 
 	public CategoricPhenotypeDTO(Long id, String name, Set<String> values) {
 		super();
