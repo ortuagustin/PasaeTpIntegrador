@@ -63,7 +63,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 	private Analysis buildAnalysis(AnalysisDTO analysis) {
 		final AnalysisBuilder builder = Analysis.builder();
 
-		 return builder.addDate(analysis.getDate())
+		 return builder
+		 	.addDate(analysis.getDate())
 			.addState(analysis.getState())
 			.createAnalysis();
 	}
