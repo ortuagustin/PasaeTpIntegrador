@@ -45,7 +45,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.and()
 			.exceptionHandling().accessDeniedPage("/Access_Denied")
 		.and()
-			.logout().logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)));
+			.logout()
+				.clearAuthentication(true)
+				.invalidateHttpSession(true)
+				.logoutSuccessUrl("http://localhost:8081")
+				.deleteCookies(JwtConfig.COOKIE_NAME);
 
 		// Para poder utilizar la consola H2 con Spring Security
 		http.headers().frameOptions().disable();
