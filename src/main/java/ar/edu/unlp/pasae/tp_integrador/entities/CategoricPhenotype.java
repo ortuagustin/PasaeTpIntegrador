@@ -75,4 +75,9 @@ public class CategoricPhenotype extends Phenotype {
   public Boolean validate(String value) {
     return this.getValues().containsValue(value);
   }
+
+  @Override
+  public String getKind() {
+    return "Categoric";
+  }
 }

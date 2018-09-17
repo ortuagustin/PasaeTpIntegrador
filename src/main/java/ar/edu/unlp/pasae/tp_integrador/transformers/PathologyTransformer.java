@@ -20,7 +20,8 @@ public class PathologyTransformer extends BaseTransformer<Pathology, PathologyDT
 	public Pathology toEntity(PathologyDTO dto) {
 		final PathologyBuilder builder = Pathology.builder();
 
-		 return builder.addName(dto.getName())
+		 return builder
+		 	.addName(dto.getName())
 			.createPathology();
 	}
 

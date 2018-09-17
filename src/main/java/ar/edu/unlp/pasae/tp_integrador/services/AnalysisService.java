@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import javax.persistence.EntityNotFoundException;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
 
 public interface AnalysisService {
 	/**
@@ -15,6 +16,13 @@ public interface AnalysisService {
 	 * @return dto con los datos del analisis solicitado
 	 */
 	AnalysisDTO find(Long analysisId) throws EntityNotFoundException;
+
+	/**
+	 * Devuelve un Stream con todos los analisis en estado Pendiente
+	 *
+	 * @return stream de analisis
+	 */
+	Stream<AnalysisDTO> listPending();
 
 	/**
 	 * Devuelve un Stream con todos los analisis en estado Borrador
@@ -37,14 +45,24 @@ public interface AnalysisService {
 	 *
 	 * @return dto con los datos del analisis persistido
 	 */
-	AnalysisDTO create(AnalysisDTO analysis);
+	AnalysisDTO create(AnalysisRequestDTO analysis);
 
 	/**
-	 * Actualiza un analisis
+	 * Actualiza un analisis a estado Borrador
 	 *
-	 * @param analysisId el id del analisis a publicar
+	 * @param analysisId el id del analisis
+	 *
+	 * @return dto con los datos del analisis actualizado
+	 */
+	AnalysisDTO draft(Long analysisId);
+
+	/**
+	 * Actualiza un analisis a estado Publicado
+	 *
+	 * @param analysisId el id del analisis
 	 *
 	 * @return dto con los datos del analisis actualizado
 	 */
 	AnalysisDTO publish(Long analysisId);
+
 }

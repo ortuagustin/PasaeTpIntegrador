@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 
 @RestController
@@ -22,6 +23,11 @@ import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 public class AnalysisController {
   @Autowired
   private AnalysisService analysisService;
+
+  @GetMapping(path = "/pending", produces = "application/json")
+  public Collection<AnalysisDTO> listPending() {
+    return this.getAnalysisService().listPending().collect(Collectors.toList());
+  }
 
   @GetMapping(path = "/draft", produces = "application/json")
   public Collection<AnalysisDTO> listDraft() {
@@ -39,8 +45,13 @@ public class AnalysisController {
   }
 
   @PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-  public AnalysisDTO create(@RequestBody @Valid AnalysisDTO analysis) {
+  public AnalysisDTO create(@RequestBody @Valid AnalysisRequestDTO analysis) {
     return this.getAnalysisService().create(analysis);
+  }
+
+  @PatchMapping(path = "/draft/{id}", consumes = "application/json")
+  public AnalysisDTO draft(@PathVariable(value = "id") Long id) {
+    return this.getAnalysisService().draft(id);
   }
 
   @PatchMapping(path = "/publish/{id}", consumes = "application/json")

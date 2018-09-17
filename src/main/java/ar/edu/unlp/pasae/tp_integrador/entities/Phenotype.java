@@ -1,12 +1,17 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotEmpty;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "PHENOTYPE_KIND")
 public abstract class Phenotype {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +43,8 @@ public abstract class Phenotype {
    * @return True if the validation passes; False otherwise
    */
   public abstract Boolean validate(String value);
+
+  public abstract String getKind();
 
   /**
    * @return the id

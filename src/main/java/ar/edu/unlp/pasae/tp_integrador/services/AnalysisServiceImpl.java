@@ -1,32 +1,50 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
 import java.text.MessageFormat;
+import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
+import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
+import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
+import ar.edu.unlp.pasae.tp_integrador.entities.Phenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis.AnalysisBuilder;
 import ar.edu.unlp.pasae.tp_integrador.repositories.AnalysisRepository;
+import ar.edu.unlp.pasae.tp_integrador.repositories.PathologyRepository;
+import ar.edu.unlp.pasae.tp_integrador.repositories.PatientRepository;
+import ar.edu.unlp.pasae.tp_integrador.repositories.PhenotypeRepository;
 
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
 	@Autowired
 	private AnalysisRepository analysisRepository;
 	@Autowired
-	private Transformer<Analysis, AnalysisDTO> transformer;
+	private PathologyRepository pathologyRepository;
+	@Autowired
+	private PatientRepository patientRepository;
+	@Autowired
+	private PhenotypeRepository phenotypeRepository;
 
 	@Override
 	public AnalysisDTO find(Long analysisId) throws EntityNotFoundException {
 		final Analysis analysis = this.findAnalysisById(analysisId);
 
-		return this.getTransformer().toDTO(analysis);
+		return this.toDTO(analysis);
+	}
+
+	@Override
+	public Stream<AnalysisDTO> listPending() {
+		return this.listByState(AnalysisState.PENDING);
 	}
 
 	@Override
@@ -40,8 +58,16 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	public AnalysisDTO create(AnalysisDTO analysis) {
+	public AnalysisDTO create(AnalysisRequestDTO analysis) {
 		Analysis entity = this.buildAnalysis(analysis);
+
+		return this.save(entity);
+	}
+
+	@Override
+	public AnalysisDTO draft(Long analysisId) {
+		final Analysis entity = this.findAnalysisById(analysisId);
+		entity.setState(AnalysisState.DRAFT);
 
 		return this.save(entity);
 	}
@@ -57,20 +83,46 @@ public class AnalysisServiceImpl implements AnalysisService {
 	private AnalysisDTO save(Analysis analysis) {
 		analysis = this.getAnalysisRepository().save(analysis);
 
-		return this.getTransformer().toDTO(analysis);
+		return this.toDTO(analysis);
 	}
 
-	private Analysis buildAnalysis(AnalysisDTO analysis) {
+	private Analysis buildAnalysis(AnalysisRequestDTO analysis) {
 		final AnalysisBuilder builder = Analysis.builder();
 
 		 return builder
-		 	.addDate(analysis.getDate())
-			.addState(analysis.getState())
+		 	.addDate(new Date())
+			.addState(AnalysisState.PENDING)
+			.addPatients(this.findPatients(analysis.getPatientsIds()))
+			.addPathology(this.findPathology(analysis.getPathologyId()))
+			.addSnps(analysis.getSnps())
+			.addPhenotype(this.findPhenotype(analysis.getPhenotypeId()))
 			.createAnalysis();
 	}
 
+	private Pathology findPathology(Long pathologyId) {
+		final Pathology pathology = this.pathologyRepository.findById(pathologyId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						MessageFormat.format("No pathology found with Id {0}", pathologyId)));
+
+		return pathology;
+	}
+
+	private Phenotype findPhenotype(Long phenotypeId) {
+		final Phenotype phenotype = this.phenotypeRepository.findById(phenotypeId)
+				.orElseThrow(() -> new EntityNotFoundException(
+						MessageFormat.format("No phenotype found with Id {0}", phenotypeId)));
+
+		return phenotype;
+	}
+
+	private Set<Patient> findPatients(Set<Long> patientsIds) {
+		return this.patientRepository.findAllById(patientsIds)
+			.stream()
+			.collect(Collectors.toSet());
+	}
+
 	private Stream<AnalysisDTO> listByState(AnalysisState state) {
-		return this.getAnalysisRepository().findByState(state).stream().map(each -> this.getTransformer().toDTO(each));
+		return this.getAnalysisRepository().findByState(state).stream().map(each -> this.toDTO(each));
 	}
 
 	private Analysis findAnalysisById(Long analysisId) throws EntityNotFoundException {
@@ -79,6 +131,27 @@ public class AnalysisServiceImpl implements AnalysisService {
 						MessageFormat.format("No Analysis found with Id {0}", analysisId)));
 
 		return analysis;
+	}
+
+	private Set<Long> getPatientIds(Analysis entity) {
+		return entity.getPatients()
+			.stream()
+			.map(each -> each.getId())
+			.collect(Collectors.toSet());
+	}
+
+	private AnalysisDTO toDTO(Analysis entity) {
+		AnalysisDTO dto = new AnalysisDTO();
+		dto.setId(entity.getId());
+		dto.setDate(entity.getDate());
+		dto.setState(entity.getState());
+		dto.setSnps(entity.getSnps());
+		dto.setPatients(this.getPatientIds(entity));
+		dto.setPathologyId(entity.getPathology().getId());
+		dto.setPhenotypeKind(entity.getPhenotype().getKind());
+		dto.setPhenotypeId(entity.getPhenotype().getId());
+
+		return dto;
 	}
 
 	/**
@@ -93,19 +166,5 @@ public class AnalysisServiceImpl implements AnalysisService {
 	 */
 	public void setAnalysisRepository(AnalysisRepository analysisRepository) {
 		this.analysisRepository = analysisRepository;
-	}
-
-	/**
-	 * @return the transformer
-	 */
-	public Transformer<Analysis, AnalysisDTO> getTransformer() {
-		return transformer;
-	}
-
-	/**
-	 * @param transformer the transformer to set
-	 */
-	public void setTransformer(Transformer<Analysis, AnalysisDTO> transformer) {
-		this.transformer = transformer;
 	}
 }

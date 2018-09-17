@@ -47,4 +47,9 @@ public class NumericPhenotype extends Phenotype {
       return false;
     }
   }
+
+  @Override
+  public String getKind() {
+    return "Numeric";
+  }
 }
