@@ -20,7 +20,6 @@ public class PatientRequestDTO {
 	private String surname;
 	@NotEmpty
 	private String dni;
-	@GenotypeConstraint
 	private String genotype = "";
 	@Email
 	private String email;
