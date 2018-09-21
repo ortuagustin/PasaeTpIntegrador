@@ -119,7 +119,8 @@ public class PathologyServiceImpl implements PathologyService {
 	private Pathology buildPathology(PathologyRequestDTO pathology) {
 		final PathologyBuilder builder = Pathology.builder();
 
-		 return builder.addName(pathology.getName())
+		 return builder
+		 	.addName(pathology.getName())
 			.addCategoricPhenotypes(this.findCategoricPhenotypes(pathology.getCategoricPhenotypes()))
 			.addNumericPhenotypes(this.findNumericPhenotypes(pathology.getNumericPhenotypes()))
 			.createPathology();
