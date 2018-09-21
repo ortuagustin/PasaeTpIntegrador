@@ -14,6 +14,7 @@ public class AnalysisRequestDTO {
   private Long phenotypeId;
   @NotEmpty
   private Set<String> snps;
+  private Double cutoffValue;
 
   public AnalysisRequestDTO(Long pathologyId, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Set<String> snps) {
     super();
@@ -22,6 +23,12 @@ public class AnalysisRequestDTO {
     this.setPhenotypeKind(phenotypeKind);
     this.setPhenotypeId(phenotypeId);
     this.setSnps(snps);
+    this.setCutoffValue(null);
+  }
+
+  public AnalysisRequestDTO(Long pathologyId, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Set<String> snps, Double cutoffValue) {
+    this(pathologyId, patientsIds, phenotypeKind, phenotypeId, snps);
+    this.setCutoffValue(cutoffValue);
   }
 
   /**
@@ -92,5 +99,19 @@ public class AnalysisRequestDTO {
    */
   public void setPathologyId(Long pathologyId) {
     this.pathologyId = pathologyId;
+  }
+
+  /**
+   * @return the cutoffValue
+   */
+  public Double getcutoffValue() {
+    return cutoffValue;
+  }
+
+  /**
+   * @param cutoffValue the cutoffValue to set
+   */
+  public void setCutoffValue(Double cutoffValue) {
+    this.cutoffValue = cutoffValue;
   }
 }

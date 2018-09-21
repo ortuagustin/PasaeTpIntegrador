@@ -33,6 +33,7 @@ public class Analysis {
 	private Set<String> snps = new HashSet<String>();
 	@OneToOne
 	private Phenotype phenotype;
+	private Double cutoffValue;
 
 	public static final class AnalysisBuilder {
 		private Date date;
@@ -41,11 +42,17 @@ public class Analysis {
 		private Set<Patient> patients = new HashSet<Patient>();
 		private Set<String> snps = new HashSet<String>();
 		private Phenotype phenotype;
+		private Double cutoffValue;
 
 		private AnalysisBuilder() {}
 
 		public AnalysisBuilder addPhenotype(final Phenotype phenotype) {
 			this.phenotype = phenotype;
+			return this;
+		}
+
+		public AnalysisBuilder addCutoffValue(final Double cutoffValue) {
+			this.cutoffValue = cutoffValue;
 			return this;
 		}
 
@@ -75,7 +82,7 @@ public class Analysis {
 		}
 
 		public Analysis createAnalysis() {
-      final Analysis analysis = new Analysis(this.date, this.state, this.patients, this.pathology, this.snps, this.phenotype);
+      final Analysis analysis = new Analysis(this.date, this.state, this.patients, this.pathology, this.snps, this.phenotype, this.cutoffValue);
 
 			return analysis;
 		}
@@ -85,12 +92,14 @@ public class Analysis {
 		return new AnalysisBuilder();
 	}
 
-	public Analysis(Long id, Date date, AnalysisState state, Set<Patient> patients, Pathology pathology, Set<String> snps, Phenotype phenotype) {
-		this(date, state, patients, pathology, snps, phenotype);
+	public Analysis(Long id, Date date, AnalysisState state, Set<Patient> patients, Pathology pathology, Set<String> snps,
+			Phenotype phenotype, Double cutoffValue) {
+		this(date, state, patients, pathology, snps, phenotype, cutoffValue);
 		this.setId(id);
 	}
 
-	public Analysis(Date date, AnalysisState state, Collection<Patient> patients, Pathology pathology, Collection<String> snps, Phenotype phenotype) {
+	public Analysis(Date date, AnalysisState state, Collection<Patient> patients, Pathology pathology,
+			Collection<String> snps, Phenotype phenotype, Double cutoffValue) {
 		super();
 		this.setDate(date);
 		this.setState(state);
@@ -98,6 +107,7 @@ public class Analysis {
 		this.setPathology(pathology);
 		this.setSnps(snps);
 		this.setPhenotype(phenotype);
+		this.setCutoffValue(cutoffValue);
 	}
 
 	private Analysis() {
@@ -204,4 +214,19 @@ public class Analysis {
 	public void setPhenotype(Phenotype phenotype) {
 		this.phenotype = phenotype;
 	}
+
+
+  /**
+   * @return the cutoffValue
+   */
+  public Double getCutoffValue() {
+    return cutoffValue;
+  }
+
+  /**
+   * @param cutoffValue the cutoffValue to set
+   */
+  public void setCutoffValue(Double cutoffValue) {
+    this.cutoffValue = cutoffValue;
+  }
 }

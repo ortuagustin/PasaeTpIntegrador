@@ -120,7 +120,7 @@ public class AnalysisTests {
 	}
 
 	@Test
-	public void it_creates_new_draft_analysis() {
+	public void it_creates_new_draft_analysis_with_categoric_phenotype() {
 		Long pathologyId = this.pathology.getId();
 		Set<String> snps = new HashSet<>();
 		snps.add("rs111");
@@ -135,7 +135,30 @@ public class AnalysisTests {
 		Assert.assertTrue(analysis.getPatients().containsAll(this.patientsIds));
 		Assert.assertEquals(pathologyId, analysis.getPathologyId());
 		Assert.assertEquals(this.color.getId(), analysis.getPhenotypeId());
+		Assert.assertNull(analysis.getCutoffValue());
 		Assert.assertEquals("Categoric", analysis.getPhenotypeKind());
+		Assert.assertTrue(analysis.getSnps().containsAll(snps));
+	}
+
+	@Test
+	public void it_creates_new_draft_analysis_with_numeric_phenotype() {
+		Long pathologyId = this.pathology.getId();
+		Double cutoffValue = 10.0;
+		Set<String> snps = new HashSet<>();
+		snps.add("rs111");
+		snps.add("rs333");
+		AnalysisRequestDTO request = new AnalysisRequestDTO(pathologyId, this.patientsIds, "Numeric", this.weigth.getId(), snps, cutoffValue);
+		Long analysisId = this.analysisService.create(request).getId();
+		AnalysisDTO analysis = this.analysisService.find(analysisId);
+
+		Assert.assertNotNull(analysis);
+		Assert.assertNotNull(analysis.getDate());
+		Assert.assertEquals(AnalysisState.PENDING, analysis.getState());
+		Assert.assertTrue(analysis.getPatients().containsAll(this.patientsIds));
+		Assert.assertEquals(pathologyId, analysis.getPathologyId());
+		Assert.assertEquals(this.weigth.getId(), analysis.getPhenotypeId());
+		Assert.assertEquals("Numeric", analysis.getPhenotypeKind());
+		Assert.assertEquals(cutoffValue, analysis.getCutoffValue());
 		Assert.assertTrue(analysis.getSnps().containsAll(snps));
 	}
 }

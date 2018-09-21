@@ -95,6 +95,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 			.addPatients(this.findPatients(analysis.getPatientsIds()))
 			.addPathology(this.findPathology(analysis.getPathologyId()))
 			.addSnps(analysis.getSnps())
+			.addCutoffValue(analysis.getcutoffValue())
 			.addPhenotype(this.findPhenotype(analysis.getPhenotypeId()))
 			.createAnalysis();
 	}
@@ -146,6 +147,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		dto.setDate(entity.getDate());
 		dto.setState(entity.getState());
 		dto.setSnps(entity.getSnps());
+		dto.setCutoffValue(entity.getCutoffValue());
 		dto.setPatients(this.getPatientIds(entity));
 		dto.setPathologyId(entity.getPathology().getId());
 		dto.setPhenotypeKind(entity.getPhenotype().getKind());

@@ -14,9 +14,24 @@ public class AnalysisDTO {
   private Long pathologyId;
   private Set<Long> patients;
   private Set<String> snps;
+  private Double cutoffValue;
 
   public AnalysisDTO() {
     super();
+  }
+
+  /**
+   * @return the cutoffValue
+   */
+  public Double getCutoffValue() {
+    return cutoffValue;
+  }
+
+  /**
+   * @param cutoffValue the cutoffValue to set
+   */
+  public void setCutoffValue(Double cutoffValue) {
+    this.cutoffValue = cutoffValue;
   }
 
   /**
