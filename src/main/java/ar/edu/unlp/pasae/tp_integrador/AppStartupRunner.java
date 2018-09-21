@@ -70,13 +70,16 @@ public class AppStartupRunner implements ApplicationRunner {
 	}
 
 	/**
-	 * Crea los Fenotipos Mock
+	 * Crea los Fenotipos mock numericos y categoricos 
 	 */
 	private void createMockPhenotypes() {
 		for (Long i = 1L; i <= 10; i++) {
 			CategoricPhenotypeDTO request;
 			Map<Long, String> values = new HashMap<Long, String>();
-			values.put(i, "Value " + i);
+			int maxValue = (i % 2 == 0) ? 4 : 3; // Cantidad de opciones que va a tener un fenotipo categorico
+			for (Long j = 0L; j < maxValue; j++) {
+				values.put(j, "Value " + j);
+			}
 
 			request = new CategoricPhenotypeDTO("Phenotype #" + i, values);
 			this.getCategoricPhenotypeService().create(request);
