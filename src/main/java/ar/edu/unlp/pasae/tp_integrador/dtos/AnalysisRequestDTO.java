@@ -31,6 +31,10 @@ public class AnalysisRequestDTO {
     this.setCutoffValue(cutoffValue);
   }
 
+  public AnalysisRequestDTO() {
+    super();
+  }
+
   /**
    * @return the snps
    */
