@@ -71,11 +71,11 @@ public class AppStartupRunner implements ApplicationRunner {
 		String genotype = "rs111 ac\nrs1122 at";
 
 		PatientRequestDTO request = new PatientRequestDTO(userId, name, surname, dni, email, genotype);
-		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Adenocarcinoma"), 1L));
-		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Nivel de glucosa"), 2L));
-		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Color de pelo"), 4L));
-		request.addNumericPhenotype(new NumericPhenotypeValueDTO(this.numericPhenotype("Peso"), 50L));
-		request.addNumericPhenotype(new NumericPhenotypeValueDTO(this.numericPhenotype("Presión Arterial"), 100L));
+		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Adenocarcinoma"), "", 1L));
+		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Nivel de glucosa"), "", 2L));
+		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Color de pelo"), "", 4L));
+		request.addNumericPhenotype(new NumericPhenotypeValueDTO(this.numericPhenotype("Peso"), "", 50L));
+		request.addNumericPhenotype(new NumericPhenotypeValueDTO(this.numericPhenotype("Presión Arterial"), "", 100L));
 		this.patientService.create(request);
 	}
 
