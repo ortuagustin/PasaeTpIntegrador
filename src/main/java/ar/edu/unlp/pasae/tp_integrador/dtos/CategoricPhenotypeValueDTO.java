@@ -4,20 +4,23 @@ public class CategoricPhenotypeValueDTO {
 	private Long phenotypeId;
 	private Long valueId;
 	private String value;
+	private String name;
 
 	@SuppressWarnings("unused")
 	private CategoricPhenotypeValueDTO() {
 		super();
 	}
 
-	public CategoricPhenotypeValueDTO(Long phenotypeId, Long valueId) {
+	public CategoricPhenotypeValueDTO(Long phenotypeId, String name, Long valueId) {
 		super();
+		this.setName(name);
 		this.setPhenotypeId(phenotypeId);
 		this.setValueId(valueId);
 	}
 
-	public CategoricPhenotypeValueDTO(Long phenotypeId, Long valueId, String value) {
+	public CategoricPhenotypeValueDTO(Long phenotypeId, String name, Long valueId, String value) {
 		super();
+		this.setName(name);
 		this.setPhenotypeId(phenotypeId);
 		this.setValueId(valueId);
 		this.setValue(value);
@@ -63,5 +66,19 @@ public class CategoricPhenotypeValueDTO {
 	 */
 	public void setPhenotypeId(Long phenotypeId) {
 		this.phenotypeId = phenotypeId;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 }

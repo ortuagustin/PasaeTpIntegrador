@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -17,9 +17,9 @@ public class Pathology {
 	private Long id;
 	@NotEmpty
 	private String name;
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<NumericPhenotype> numericPhenotypes = new HashSet<NumericPhenotype>();
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<CategoricPhenotype> categoricPhenotypes = new HashSet<CategoricPhenotype>();
 
 	public static final class PathologyBuilder {

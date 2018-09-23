@@ -17,112 +17,114 @@ import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotypeValue;
 
 @Service
 public class PhenotypeTransformerImpl implements PhenotypeTransformer {
-    @Autowired
-    private Transformer<NumericPhenotype, NumericPhenotypeDTO> numericPhenotypeTransformer;
-    @Autowired
-    private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer;
+  @Autowired
+  private Transformer<NumericPhenotype, NumericPhenotypeDTO> numericPhenotypeTransformer;
+  @Autowired
+  private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer;
 
-    @Override
-    public Set<NumericPhenotypeValueDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes) {
-        Set<NumericPhenotypeValueDTO> dtos = new HashSet<NumericPhenotypeValueDTO>();
+  @Override
+  public Set<NumericPhenotypeValueDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes) {
+    Set<NumericPhenotypeValueDTO> dtos = new HashSet<NumericPhenotypeValueDTO>();
 
-        for (NumericPhenotypeValue each : phenotypes) {
-            dtos.add(new NumericPhenotypeValueDTO(each.getPhenotype().getId(), each.getValue()));
-        }
-
-        return dtos;
+    for (NumericPhenotypeValue each : phenotypes) {
+      dtos.add(
+          new NumericPhenotypeValueDTO(each.getPhenotype().getId(), each.getPhenotype().getName(), each.getValue()));
     }
 
-    @Override
-    public Set<CategoricPhenotypeValueDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes) {
-        Set<CategoricPhenotypeValueDTO> dtos = new HashSet<CategoricPhenotypeValueDTO>();
+    return dtos;
+  }
 
-        for (CategoricPhenotypeValue each : phenotypes) {
-            dtos.add(new CategoricPhenotypeValueDTO(each.getPhenotype().getId(), each.getValueId(), each.getValue()));
-        }
+  @Override
+  public Set<CategoricPhenotypeValueDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes) {
+    Set<CategoricPhenotypeValueDTO> dtos = new HashSet<CategoricPhenotypeValueDTO>();
 
-        return dtos;
+    for (CategoricPhenotypeValue each : phenotypes) {
+      dtos.add(new CategoricPhenotypeValueDTO(each.getPhenotype().getId(), each.getPhenotype().getName(),
+          each.getValueId(), each.getValue()));
     }
 
-    @Override
-    public Set<NumericPhenotypeDTO> numericToDtos(Set<NumericPhenotype> phenotypes) {
-        Set<NumericPhenotypeDTO> dtos = new HashSet<NumericPhenotypeDTO>();
+    return dtos;
+  }
 
-        for (NumericPhenotype each : phenotypes) {
-            dtos.add(this.getNumericPhenotypeTransformer().toDTO(each));
-        }
+  @Override
+  public Set<NumericPhenotypeDTO> numericToDtos(Set<NumericPhenotype> phenotypes) {
+    Set<NumericPhenotypeDTO> dtos = new HashSet<NumericPhenotypeDTO>();
 
-        return dtos;
+    for (NumericPhenotype each : phenotypes) {
+      dtos.add(this.getNumericPhenotypeTransformer().toDTO(each));
     }
 
-    @Override
-    public Set<CategoricPhenotypeDTO> categoricToDtos(Set<CategoricPhenotype> phenotypes) {
-        Set<CategoricPhenotypeDTO> dtos = new HashSet<CategoricPhenotypeDTO>();
+    return dtos;
+  }
 
-        for (CategoricPhenotype each : phenotypes) {
-            dtos.add(this.getCategoricPhenotypeTransformer().toDTO(each));
-        }
+  @Override
+  public Set<CategoricPhenotypeDTO> categoricToDtos(Set<CategoricPhenotype> phenotypes) {
+    Set<CategoricPhenotypeDTO> dtos = new HashSet<CategoricPhenotypeDTO>();
 
-        return dtos;
+    for (CategoricPhenotype each : phenotypes) {
+      dtos.add(this.getCategoricPhenotypeTransformer().toDTO(each));
     }
 
-    @Override
-    public Set<CategoricPhenotype> categoricToEntities(Set<CategoricPhenotypeDTO> phenotypes) {
-        Set<CategoricPhenotype> entities = new HashSet<CategoricPhenotype>();
+    return dtos;
+  }
 
-        for (CategoricPhenotypeDTO each : phenotypes) {
-            entities.add(this.getCategoricPhenotypeTransformer().toEntity(each));
-        }
+  @Override
+  public Set<CategoricPhenotype> categoricToEntities(Set<CategoricPhenotypeDTO> phenotypes) {
+    Set<CategoricPhenotype> entities = new HashSet<CategoricPhenotype>();
 
-        return entities;
+    for (CategoricPhenotypeDTO each : phenotypes) {
+      entities.add(this.getCategoricPhenotypeTransformer().toEntity(each));
     }
 
-    @Override
-    public Set<NumericPhenotype> numericToEntities(Set<NumericPhenotypeDTO> phenotypes) {
-        Set<NumericPhenotype> entities = new HashSet<NumericPhenotype>();
+    return entities;
+  }
 
-        for (NumericPhenotypeDTO each : phenotypes) {
-            entities.add(this.getNumericPhenotypeTransformer().toEntity(each));
-        }
+  @Override
+  public Set<NumericPhenotype> numericToEntities(Set<NumericPhenotypeDTO> phenotypes) {
+    Set<NumericPhenotype> entities = new HashSet<NumericPhenotype>();
 
-        return entities;
+    for (NumericPhenotypeDTO each : phenotypes) {
+      entities.add(this.getNumericPhenotypeTransformer().toEntity(each));
     }
 
-    /**
-     * @return the categoricPhenotypeTransformer
-     *
-     * @Override
-     */
-    public Transformer<CategoricPhenotype, CategoricPhenotypeDTO> getCategoricPhenotypeTransformer() {
-        return categoricPhenotypeTransformer;
-    }
+    return entities;
+  }
 
-    /**
-     * @param categoricPhenotypeTransformer the categoricPhenotypeTransformer to set
-     *
-     * @Override
-     */
-    public void setCategoricPhenotypeTransformer(
-            Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer) {
-        this.categoricPhenotypeTransformer = categoricPhenotypeTransformer;
-    }
+  /**
+   * @return the categoricPhenotypeTransformer
+   *
+   * @Override
+   */
+  public Transformer<CategoricPhenotype, CategoricPhenotypeDTO> getCategoricPhenotypeTransformer() {
+    return categoricPhenotypeTransformer;
+  }
 
-    /**
-     * @return the numericPhenotypeTransformer
-     *
-     * @Override
-     */
-    public Transformer<NumericPhenotype, NumericPhenotypeDTO> getNumericPhenotypeTransformer() {
-        return numericPhenotypeTransformer;
-    }
+  /**
+   * @param categoricPhenotypeTransformer the categoricPhenotypeTransformer to set
+   *
+   * @Override
+   */
+  public void setCategoricPhenotypeTransformer(
+      Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer) {
+    this.categoricPhenotypeTransformer = categoricPhenotypeTransformer;
+  }
 
-    /**
-     * @param numericPhenotypeTransformer the numericPhenotypeTransformer to set
-     *
-     * @Override
-     */
-    public void setNumericPhenotypeTransformer(
-            Transformer<NumericPhenotype, NumericPhenotypeDTO> numericPhenotypeTransformer) {
-        this.numericPhenotypeTransformer = numericPhenotypeTransformer;
-    }
+  /**
+   * @return the numericPhenotypeTransformer
+   *
+   * @Override
+   */
+  public Transformer<NumericPhenotype, NumericPhenotypeDTO> getNumericPhenotypeTransformer() {
+    return numericPhenotypeTransformer;
+  }
+
+  /**
+   * @param numericPhenotypeTransformer the numericPhenotypeTransformer to set
+   *
+   * @Override
+   */
+  public void setNumericPhenotypeTransformer(
+      Transformer<NumericPhenotype, NumericPhenotypeDTO> numericPhenotypeTransformer) {
+    this.numericPhenotypeTransformer = numericPhenotypeTransformer;
+  }
 }
