@@ -4,7 +4,6 @@ import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
-@SuppressWarnings("unused")
 public class AnalysisRequestDTO {
   private Long pathologyId;
   @NotEmpty

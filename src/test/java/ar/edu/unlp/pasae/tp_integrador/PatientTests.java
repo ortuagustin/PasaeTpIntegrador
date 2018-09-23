@@ -77,9 +77,10 @@ public class PatientTests {
 		values.put(2L, "Value 2");
 		values.put(3L, "Value 3");
 
-		CategoricPhenotypeDTO phenotypeRequest = new CategoricPhenotypeDTO("Categoric Phenotype Test", values);
+		String phenotypeName = "Categoric Phenotype Test";
+		CategoricPhenotypeDTO phenotypeRequest = new CategoricPhenotypeDTO(phenotypeName, values);
 		Long phenotypeId = this.categoricPhenotypeService.create(phenotypeRequest).getId();
-		CategoricPhenotypeValueDTO patientPhenotype = new CategoricPhenotypeValueDTO(phenotypeId, 1L);
+		CategoricPhenotypeValueDTO patientPhenotype = new CategoricPhenotypeValueDTO(phenotypeId, phenotypeName, 1L);
 
 		Long userId = this.user.getId();
 		String name = "Name";
@@ -98,13 +99,15 @@ public class PatientTests {
 		patientPhenotype = patient.getCategoricPhenotypes().stream().findAny().get();
 		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
 		Assert.assertEquals("Value 1", patientPhenotype.getValue());
+		Assert.assertEquals(phenotypeName, patientPhenotype.getName());
 	}
 
 	@Test
 	public void it_returns_patient_categoric_phenotype_with_associated_value() throws GenotypeDecoderException {
-		NumericPhenotypeDTO phenotypeRequest = new NumericPhenotypeDTO("Numeric Phenotype Test");
+		String phenotypeName = "Numeric Phenotype Test";
+		NumericPhenotypeDTO phenotypeRequest = new NumericPhenotypeDTO(phenotypeName);
 		Long phenotypeId = this.numericPhenotypeService.create(phenotypeRequest).getId();
-		NumericPhenotypeValueDTO patientPhenotype = new NumericPhenotypeValueDTO(phenotypeId, 5L);
+		NumericPhenotypeValueDTO patientPhenotype = new NumericPhenotypeValueDTO(phenotypeId, phenotypeName, 5L);
 
 		Long userId = this.user.getId();
 		String name = "Name";
@@ -123,6 +126,7 @@ public class PatientTests {
 		patientPhenotype = patient.getNumericPhenotypes().stream().findAny().get();
 		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
 		Assert.assertEquals((Long) 5L, patientPhenotype.getValue());
+		Assert.assertEquals(phenotypeName, patientPhenotype.getName());
 	}
 
 	@Test
