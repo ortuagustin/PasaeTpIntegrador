@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 import ar.edu.unlp.pasae.tp_integrador.constraints.GenotypeConstraint;
 
@@ -18,7 +19,7 @@ public class PatientRequestDTO {
 	private String name;
 	@NotEmpty
 	private String surname;
-	@NotEmpty
+	@Pattern(regexp = "\\d{7,8}")
 	private String dni;
 	private String genotype = "";
 	@Email

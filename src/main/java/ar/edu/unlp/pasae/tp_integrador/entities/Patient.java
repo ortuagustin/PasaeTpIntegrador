@@ -26,7 +26,6 @@ public class Patient {
 	private String name;
 	@NotEmpty
 	private String surname;
-	@Pattern(regexp = "\\d{7,8}")
 	private String dni;
 	@Email
 	private String email;

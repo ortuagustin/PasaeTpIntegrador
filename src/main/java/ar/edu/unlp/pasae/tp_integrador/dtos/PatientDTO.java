@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * DTO que se usa para devolver el objeto paciente
@@ -19,7 +20,7 @@ public class PatientDTO {
 	private String name;
 	@NotEmpty
 	private String surname;
-	@NotEmpty
+	@Pattern(regexp = "\\d{7,8}")
 	private String dni;
 	@Email
 	private String email;

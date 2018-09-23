@@ -1,6 +1,8 @@
 package ar.edu.unlp.pasae.tp_integrador.controllers;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -61,7 +63,10 @@ public class PatientController {
 		try {
 			return this.getPatientsService().create(request);
 		} catch (GenotypeDecoderException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getErrors());
+			Map<String, Object> response = new HashMap<String, Object>();
+			response.put("genotype_error", true);
+			response.put("errors", e.getErrors());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
 	}
 

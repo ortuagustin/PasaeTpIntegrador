@@ -158,17 +158,17 @@ public class PatientServiceImpl implements PatientService {
 		final Collection<Genotype> genotypes = this.getGenotypeDecoderService().decodeGenotype(patient.getGenotype());
 
 		final Patient entity = builder
-			.addName(patient.getName())
-			.addSurname(patient.getSurname())
-			.addEmail(patient.getEmail())
-			.addDni(patient.getDni())
-			.addUser(this.findUser(patient.getUserId()))
-			.addCategoricPhenotypes(this.findCategoricPhenotypes(patient.getCategoricPhenotypes()))
-			.addNumericPhenotypes(this.findNumericPhenotypes(patient.getNumericPhenotypes()))
-			.addGenotypes(genotypes)
-			.createPatient();
+				.addName(patient.getName())
+				.addSurname(patient.getSurname())
+				.addEmail(patient.getEmail())
+				.addDni(patient.getDni())
+				.addUser(this.findUser(patient.getUserId()))
+				.addCategoricPhenotypes(this.findCategoricPhenotypes(patient.getCategoricPhenotypes()))
+				.addNumericPhenotypes(this.findNumericPhenotypes(patient.getNumericPhenotypes()))
+				.addGenotypes(genotypes)
+				.createPatient();
 
-			return entity;
+		return entity;
 	}
 
 	private CustomUser findRegistrantUser(Long patientId) {
