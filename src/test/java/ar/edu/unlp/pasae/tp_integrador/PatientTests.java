@@ -73,7 +73,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_returns_patient_numeric_phenotype_with_associated_value() throws GenotypeDecoderException {
+	public void it_returns_patient_categoric_phenotype_with_associated_value() throws GenotypeDecoderException {
 		Map<Long, String> values = new HashMap<Long, String>();
 		values.put(1L, "Value 1");
 		values.put(2L, "Value 2");
@@ -103,7 +103,7 @@ public class PatientTests {
 	}
 
 	@Test
-	public void it_returns_patient_categoric_phenotype_with_associated_value() throws GenotypeDecoderException {
+	public void it_returns_patient_numeric_phenotype_with_associated_value() throws GenotypeDecoderException {
 		NumericPhenotypeDTO phenotypeRequest = new NumericPhenotypeDTO("Numeric Phenotype Test");
 		Long phenotypeId = this.numericPhenotypeService.create(phenotypeRequest).getId();
 		NumericPhenotypeValueDTO patientPhenotype = new NumericPhenotypeValueDTO(phenotypeId, 5L);
