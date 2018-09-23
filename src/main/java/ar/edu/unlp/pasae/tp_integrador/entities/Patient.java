@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 @Entity
 public class Patient {
@@ -25,6 +26,8 @@ public class Patient {
 	private String name;
 	@NotEmpty
 	private String surname;
+	@NotEmpty
+	@Pattern(regexp = "\\d{7,8}")
 	private String dni;
 	@Email
 	private String email;

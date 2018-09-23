@@ -19,6 +19,7 @@ public class PatientRequestDTO {
 	private String name;
 	@NotEmpty
 	private String surname;
+	@NotEmpty
 	@Pattern(regexp = "\\d{7,8}")
 	private String dni;
 	private String genotype = "";
