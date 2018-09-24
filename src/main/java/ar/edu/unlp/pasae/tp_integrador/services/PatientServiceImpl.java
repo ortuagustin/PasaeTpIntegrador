@@ -79,7 +79,7 @@ public class PatientServiceImpl implements PatientService {
 
 	@Override
 	public Stream<PatientDTO> list() {
-		return this.getPatientRepository().findAll().stream().map(each -> this.getTransformer().toDTO(each));
+		return this.getPatientRepository().findAll().stream().map(each -> this.toDto(each));
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class PatientServiceImpl implements PatientService {
 							search, pageRequest);
 		}
 
-		return result.map(each -> this.getTransformer().toDTO(each));
+		return result.map(each -> this.toDto(each));
 	}
 
 	/**

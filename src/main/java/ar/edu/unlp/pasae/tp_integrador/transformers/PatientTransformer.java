@@ -24,8 +24,12 @@ public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
 	public Patient toEntity(PatientDTO dto) {
 		final PatientBuilder builder = Patient.builder();
 
-		return builder.addName(dto.getName()).addSurname(dto.getSurname()).addEmail(dto.getEmail()).addDni(dto.getDni())
-				.createPatient();
+		return builder
+			.addName(dto.getName())
+			.addSurname(dto.getSurname())
+			.addEmail(dto.getEmail())
+			.addDni(dto.getDni())
+			.createPatient();
 	}
 
 	@Override
