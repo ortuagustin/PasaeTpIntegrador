@@ -10,6 +10,9 @@ import java.util.stream.Stream;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
@@ -84,6 +87,25 @@ public class AnalysisServiceImpl implements AnalysisService {
 		entity.setState(AnalysisState.PUBLISHED);
 
 		return this.save(entity);
+	}
+	
+	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
+		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
+	}
+
+	@Override
+	public Page<AnalysisDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
+		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
+		Page<Analysis> result;
+
+		if (search.equals("")) {
+			result = this.getAnalysisRepository().findAll(pageRequest);
+		} else {
+			result = this.getAnalysisRepository().findByDescriptionContainingIgnoreCase(search, pageRequest);
+		}
+
+		return result.map(each -> this.toDTO(each));
 	}
 
 	private AnalysisDTO save(Analysis analysis) {
