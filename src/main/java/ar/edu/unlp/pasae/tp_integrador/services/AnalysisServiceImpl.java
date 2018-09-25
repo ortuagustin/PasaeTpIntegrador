@@ -1,6 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
 import java.text.MessageFormat;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -12,8 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisGroupDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
+import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisGroup;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
 import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
@@ -23,6 +27,7 @@ import ar.edu.unlp.pasae.tp_integrador.repositories.AnalysisRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PathologyRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PatientRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PhenotypeRepository;
+import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
 
 @Service
 public class AnalysisServiceImpl implements AnalysisService {
@@ -34,6 +39,8 @@ public class AnalysisServiceImpl implements AnalysisService {
 	private PatientRepository patientRepository;
 	@Autowired
 	private PhenotypeRepository phenotypeRepository;
+	@Autowired
+	private Transformer<Patient, PatientDTO> patientsTransformer;
 
 	@Override
 	public AnalysisDTO find(Long analysisId) throws EntityNotFoundException {
@@ -151,8 +158,20 @@ public class AnalysisServiceImpl implements AnalysisService {
 		dto.setPatients(this.getPatientIds(entity));
 		dto.setPhenotypeKind(entity.getPhenotype().getKind());
 		dto.setPhenotypeId(entity.getPhenotype().getId());
+		dto.setAnalysisGroups(this.analysisGroupsToDTO(entity.getAnalysisGroups()));
 
 		return dto;
+	}
+
+	private Collection<AnalysisGroupDTO> analysisGroupsToDTO(Collection<AnalysisGroup> analysisGroups) {
+		return analysisGroups
+			.stream()
+			.map(each -> new AnalysisGroupDTO(each.getPhenotype(), this.patientsToDTO(each.getPatients())))
+			.collect(Collectors.toList());
+	}
+
+	private Collection<PatientDTO> patientsToDTO(Collection<Patient> patients) {
+		return this.patientsTransformer.manyToDto(patients);
 	}
 
 	/**

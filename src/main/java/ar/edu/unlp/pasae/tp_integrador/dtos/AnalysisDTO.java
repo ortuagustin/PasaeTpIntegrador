@@ -1,5 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ public class AnalysisDTO {
   private Set<Long> patients;
   private Set<String> snps;
   private Long cutoffValue;
+  private Collection<AnalysisGroupDTO> analysisGroups = new ArrayList<>();
 
   public AnalysisDTO() {
     super();
@@ -129,5 +132,13 @@ public class AnalysisDTO {
    */
   public void setPhenotypeKind(String phenotypeKind) {
     this.phenotypeKind = phenotypeKind;
+  }
+
+	public Collection<AnalysisGroupDTO> getAnalysisGroups() {
+		return this.analysisGroups;
+  }
+
+  public void setAnalysisGroups(Collection<AnalysisGroupDTO> analysisGroups) {
+    this.analysisGroups = analysisGroups;
   }
 }
