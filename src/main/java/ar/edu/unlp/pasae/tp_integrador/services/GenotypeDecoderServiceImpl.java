@@ -16,7 +16,7 @@ public class GenotypeDecoderServiceImpl implements GenotypeDecoderService {
 
   public GenotypeDecoderServiceImpl() {
     super();
-    pattern = Pattern.compile("(?:rs)(\\d+)\\s([actg]{2})", Pattern.CASE_INSENSITIVE);
+    pattern = Pattern.compile("(?:rs)(\\d+)\\s([actg]{2})$", Pattern.CASE_INSENSITIVE);
   }
 
   public List<Genotype> decodeGenotype(String genotype) throws GenotypeDecoderException {

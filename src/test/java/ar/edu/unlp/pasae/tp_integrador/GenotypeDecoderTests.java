@@ -78,6 +78,20 @@ public class GenotypeDecoderTests {
   }
 
   @Test
+  public void it_fails_to_decode_with_invalid_input2() {
+    String input = "rs111 ac\nrs1122 AADDSA";
+    Boolean exception = false;
+
+    try {
+      this.genotypeDecoderService.decodeGenotype(input);
+    } catch (GenotypeDecoderException e) {
+      exception = true;
+    }
+
+    Assert.assertTrue(exception);
+  }
+
+  @Test
   public void it_does_not_fail_with_empty_input() throws GenotypeDecoderException {
     List<Genotype> output = this.genotypeDecoderService.decodeGenotype("");
 
