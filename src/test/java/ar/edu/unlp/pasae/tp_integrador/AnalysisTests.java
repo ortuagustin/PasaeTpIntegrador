@@ -130,4 +130,25 @@ public class AnalysisTests {
 		Assert.assertTrue(group.isPresent());
 		Assert.assertEquals(1, group.get().getPatients().size());
 	}
+
+	@Test
+	public void it_returns_two_analysis_groups_when_using_numeric_phenotype() {
+		Long pathologyId = this.pathologyId("Cancer de Pulmón");
+		Set<String> snps = new HashSet<>();
+		snps.add("rs111");
+		snps.add("rs333");
+		AnalysisRequestDTO request = new AnalysisRequestDTO(pathologyId, this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), snps, 50L);
+		Long analysisId = this.analysisService.create(request).getId();
+		Analysis analysis = this.analysisRepository.findById(analysisId).get();
+
+		Collection<AnalysisGroup> groups = analysis.getAnalysisGroups();
+		Assert.assertEquals(groups.size(), 2);
+
+		Optional<AnalysisGroup> highersGroup = analysis.getAnalysisGroup(">=");
+		Optional<AnalysisGroup> lowersGroup = analysis.getAnalysisGroup("<");
+		Assert.assertTrue(highersGroup.isPresent());
+		Assert.assertTrue(lowersGroup.isPresent());
+		Assert.assertEquals(1, highersGroup.get().getPatients().size());
+		Assert.assertTrue(lowersGroup.get().getPatients().isEmpty());
+	}
 }

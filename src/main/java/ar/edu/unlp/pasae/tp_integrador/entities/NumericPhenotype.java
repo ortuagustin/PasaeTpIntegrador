@@ -71,8 +71,8 @@ public class NumericPhenotype extends Phenotype {
       }
     }
 
-    groups.add(new AnalysisGroup(">=" + cutoffValue, higher));
-    groups.add(new AnalysisGroup("<" + cutoffValue, lower));
+    groups.add(new AnalysisGroup(">=", higher));
+    groups.add(new AnalysisGroup("<", lower));
 
     return groups;
   }
