@@ -13,7 +13,6 @@ public class AnalysisDTO {
   private AnalysisState state;
   private String phenotypeKind;
   private Long phenotypeId;
-  private Set<Long> patients;
   private Set<String> snps;
   private Long cutoffValue;
   private Collection<AnalysisGroupDTO> analysisGroups = new ArrayList<>();
@@ -48,20 +47,6 @@ public class AnalysisDTO {
    */
   public void setSnps(Set<String> snps) {
     this.snps = snps;
-  }
-
-  /**
-   * @return the patients
-   */
-  public Set<Long> getPatients() {
-    return patients;
-  }
-
-  /**
-   * @param patients the patients to set
-   */
-  public void setPatients(Set<Long> patients) {
-    this.patients = patients;
   }
 
   /**

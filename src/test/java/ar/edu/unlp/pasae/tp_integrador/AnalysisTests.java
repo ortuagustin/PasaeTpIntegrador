@@ -85,7 +85,6 @@ public class AnalysisTests {
 		Assert.assertNotNull(analysis);
 		Assert.assertNotNull(analysis.getDate());
 		Assert.assertEquals(AnalysisState.PENDING, analysis.getState());
-		Assert.assertTrue(analysis.getPatients().containsAll(this.patientsIds()));
 		Assert.assertEquals(this.categoricPhenotypeId("Adenocarcinoma"), analysis.getPhenotypeId());
 		Assert.assertNull(analysis.getCutoffValue());
 		Assert.assertEquals("Categoric", analysis.getPhenotypeKind());
@@ -106,7 +105,6 @@ public class AnalysisTests {
 		Assert.assertNotNull(analysis);
 		Assert.assertNotNull(analysis.getDate());
 		Assert.assertEquals(AnalysisState.PENDING, analysis.getState());
-		Assert.assertTrue(analysis.getPatients().containsAll(this.patientsIds()));
 		Assert.assertEquals(this.numericPhenotypeId("Peso"), analysis.getPhenotypeId());
 		Assert.assertEquals("Numeric", analysis.getPhenotypeKind());
 		Assert.assertEquals(cutoffValue, analysis.getCutoffValue());

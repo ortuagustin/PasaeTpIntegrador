@@ -141,13 +141,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return analysis;
 	}
 
-	private Set<Long> getPatientIds(Analysis entity) {
-		return entity.getPatients()
-			.stream()
-			.map(each -> each.getId())
-			.collect(Collectors.toSet());
-	}
-
 	private AnalysisDTO toDTO(Analysis entity) {
 		AnalysisDTO dto = new AnalysisDTO();
 		dto.setId(entity.getId());
@@ -155,7 +148,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 		dto.setState(entity.getState());
 		dto.setSnps(entity.getSnps());
 		dto.setCutoffValue(entity.getCutoffValue());
-		dto.setPatients(this.getPatientIds(entity));
 		dto.setPhenotypeKind(entity.getPhenotype().getKind());
 		dto.setPhenotypeId(entity.getPhenotype().getId());
 		dto.setAnalysisGroups(this.analysisGroupsToDTO(entity.getAnalysisGroups()));
