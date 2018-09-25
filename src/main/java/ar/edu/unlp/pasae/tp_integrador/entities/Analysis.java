@@ -23,13 +23,11 @@ public class Analysis {
 	private Long id;
 	private Date date;
 	private AnalysisState state;
-	@OneToOne
-	private Pathology pathology;
 	@NotEmpty
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Patient> patients = new HashSet<Patient>();
 	@ElementCollection
-  @NotEmpty
+	@NotEmpty
 	private Set<String> snps = new HashSet<String>();
 	@OneToOne
 	private Phenotype phenotype;
@@ -82,7 +80,7 @@ public class Analysis {
 		}
 
 		public Analysis createAnalysis() {
-      final Analysis analysis = new Analysis(this.date, this.state, this.patients, this.pathology, this.snps, this.phenotype, this.cutoffValue);
+			final Analysis analysis = new Analysis(this.date, this.state, this.patients, this.snps, this.phenotype, this.cutoffValue);
 
 			return analysis;
 		}
@@ -94,17 +92,16 @@ public class Analysis {
 
 	public Analysis(Long id, Date date, AnalysisState state, Set<Patient> patients, Pathology pathology, Set<String> snps,
 			Phenotype phenotype, Double cutoffValue) {
-		this(date, state, patients, pathology, snps, phenotype, cutoffValue);
+		this(date, state, patients, snps, phenotype, cutoffValue);
 		this.setId(id);
 	}
 
-	public Analysis(Date date, AnalysisState state, Collection<Patient> patients, Pathology pathology,
+	public Analysis(Date date, AnalysisState state, Collection<Patient> patients,
 			Collection<String> snps, Phenotype phenotype, Double cutoffValue) {
 		super();
 		this.setDate(date);
 		this.setState(state);
 		this.setPatients(patients);
-		this.setPathology(pathology);
 		this.setSnps(snps);
 		this.setPhenotype(phenotype);
 		this.setCutoffValue(cutoffValue);
@@ -158,8 +155,8 @@ public class Analysis {
 	}
 
 	/**
-	* @return the snps
-	*/
+	 * @return the snps
+	 */
 	public Set<String> getSnps() {
 		return this.snps;
 	}
@@ -173,8 +170,8 @@ public class Analysis {
 	}
 
 	/**
-	* @return the patients
-	*/
+	 * @return the patients
+	 */
 	public Set<Patient> getPatients() {
 		return this.patients;
 	}
@@ -188,22 +185,8 @@ public class Analysis {
 	}
 
 	/**
-	* @return the Pathology
-	*/
-	public Pathology getPathology() {
-		return this.pathology;
-	}
-
-	/**
-	 * @param pathology the pathology to set
+	 * @return the Phenotype
 	 */
-	public void setPathology(Pathology pathology) {
-		this.pathology = pathology;
-	}
-
-	/**
-	* @return the Phenotype
-	*/
 	public Phenotype getPhenotype() {
 		return this.phenotype;
 	}
@@ -216,17 +199,17 @@ public class Analysis {
 	}
 
 
-  /**
-   * @return the cutoffValue
-   */
-  public Double getCutoffValue() {
-    return cutoffValue;
-  }
+	/**
+	 * @return the cutoffValue
+	 */
+	public Double getCutoffValue() {
+		return cutoffValue;
+	}
 
-  /**
-   * @param cutoffValue the cutoffValue to set
-   */
-  public void setCutoffValue(Double cutoffValue) {
-    this.cutoffValue = cutoffValue;
-  }
+	/**
+	 * @param cutoffValue the cutoffValue to set
+	 */
+	public void setCutoffValue(Double cutoffValue) {
+		this.cutoffValue = cutoffValue;
+	}
 }

@@ -149,7 +149,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 		dto.setSnps(entity.getSnps());
 		dto.setCutoffValue(entity.getCutoffValue());
 		dto.setPatients(this.getPatientIds(entity));
-		dto.setPathologyId(entity.getPathology().getId());
 		dto.setPhenotypeKind(entity.getPhenotype().getKind());
 		dto.setPhenotypeId(entity.getPhenotype().getId());
 
