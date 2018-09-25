@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.validation.constraints.NotEmpty;
 
 public class AnalysisRequestDTO {
-  private Long pathologyId;
   @NotEmpty
   private Set<Long> patientsIds;
   @NotEmpty
@@ -15,9 +14,8 @@ public class AnalysisRequestDTO {
   private Set<String> snps;
   private Long cutoffValue;
 
-  public AnalysisRequestDTO(Long pathologyId, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Set<String> snps) {
+  public AnalysisRequestDTO(Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Set<String> snps) {
     super();
-    this.setPathologyId(pathologyId);
     this.setPatientsIds(patientsIds);
     this.setPhenotypeKind(phenotypeKind);
     this.setPhenotypeId(phenotypeId);
@@ -25,8 +23,8 @@ public class AnalysisRequestDTO {
     this.setCutoffValue(null);
   }
 
-  public AnalysisRequestDTO(Long pathologyId, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Set<String> snps, Long cutoffValue) {
-    this(pathologyId, patientsIds, phenotypeKind, phenotypeId, snps);
+  public AnalysisRequestDTO(Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Set<String> snps, Long cutoffValue) {
+    this(patientsIds, phenotypeKind, phenotypeId, snps);
     this.setCutoffValue(cutoffValue);
   }
 
@@ -88,20 +86,6 @@ public class AnalysisRequestDTO {
    */
   public void setPatientsIds(Set<Long> patientsIds) {
     this.patientsIds = patientsIds;
-  }
-
-  /**
-   * @return the pathologyId
-   */
-  public Long getPathologyId() {
-    return pathologyId;
-  }
-
-  /**
-   * @param pathologyId the pathologyId to set
-   */
-  public void setPathologyId(Long pathologyId) {
-    this.pathologyId = pathologyId;
   }
 
   /**
