@@ -11,10 +11,9 @@ public class AnalysisDTO {
   private AnalysisState state;
   private String phenotypeKind;
   private Long phenotypeId;
-  private Long pathologyId;
   private Set<Long> patients;
   private Set<String> snps;
-  private Double cutoffValue;
+  private Long cutoffValue;
 
   public AnalysisDTO() {
     super();
@@ -23,14 +22,14 @@ public class AnalysisDTO {
   /**
    * @return the cutoffValue
    */
-  public Double getCutoffValue() {
+  public Long getCutoffValue() {
     return cutoffValue;
   }
 
   /**
    * @param cutoffValue the cutoffValue to set
    */
-  public void setCutoffValue(Double cutoffValue) {
+  public void setCutoffValue(Long cutoffValue) {
     this.cutoffValue = cutoffValue;
   }
 
@@ -60,20 +59,6 @@ public class AnalysisDTO {
    */
   public void setPatients(Set<Long> patients) {
     this.patients = patients;
-  }
-
-  /**
-   * @return the pathology
-   */
-  public Long getPathologyId() {
-    return pathologyId;
-  }
-
-  /**
-   * @param pathology the pathology to set
-   */
-  public void setPathologyId(Long pathologyId) {
-    this.pathologyId = pathologyId;
   }
 
   /**

@@ -95,7 +95,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 			.addPatients(this.findPatients(analysis.getPatientsIds()))
 			.addPathology(this.findPathology(analysis.getPathologyId()))
 			.addSnps(analysis.getSnps())
-			.addCutoffValue(analysis.getcutoffValue())
+			.addCutoffValue(analysis.getCutoffValue())
 			.addPhenotype(this.findPhenotype(analysis.getPhenotypeId()))
 			.createAnalysis();
 	}

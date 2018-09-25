@@ -1,5 +1,8 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.Entity;
 
 @Entity
@@ -51,5 +54,26 @@ public class NumericPhenotype extends Phenotype {
   @Override
   public String getKind() {
     return "Numeric";
+  }
+
+  @Override
+  public Collection<AnalysisGroup> getAnalysisGroups(Analysis analysis) {
+    Collection<AnalysisGroup> groups = new ArrayList<>();
+    Collection<Patient> higher = new ArrayList<>();
+    Collection<Patient> lower = new ArrayList<>();
+    Long cutoffValue = analysis.getCutoffValue();
+
+    for (Patient patient : analysis.getPatients()) {
+      if (patient.numericPhenotypeValue(this) >= cutoffValue) {
+        higher.add(patient);
+      } else {
+        lower.add(patient);
+      }
+    }
+
+    groups.add(new AnalysisGroup(">=" + cutoffValue, higher));
+    groups.add(new AnalysisGroup("<" + cutoffValue, lower));
+
+    return groups;
   }
 }

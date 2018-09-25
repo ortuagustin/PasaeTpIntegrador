@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -285,5 +286,29 @@ public class Patient {
 	 */
 	public void setNumericPhenotypes(Set<NumericPhenotypeValue> numericPhenotypes) {
 		this.numericPhenotypes = numericPhenotypes;
+	}
+
+	public Boolean hasCategoricPhenotypeValue(CategoricPhenotype categoricPhenotype, String value) {
+		Optional<CategoricPhenotypeValue> phenotype = this.findCategoricPhenotypeValue(categoricPhenotype);
+
+		if (phenotype.isPresent()) {
+			return phenotype.get().getValue().equals(value);
+		}
+
+		return false;
+	}
+
+	private Optional<CategoricPhenotypeValue> findCategoricPhenotypeValue(CategoricPhenotype categoricPhenotype) {
+		return this.categoricPhenotypes.stream().filter(each -> each.getPhenotype().equals(categoricPhenotype)).findFirst();
+	}
+
+	public Long numericPhenotypeValue(NumericPhenotype numericPhenotype) {
+		NumericPhenotypeValue phenotypeValue = this.findNumericPhenotypeValue(numericPhenotype);
+
+		return phenotypeValue.getValue();
+	}
+
+	private NumericPhenotypeValue findNumericPhenotypeValue(NumericPhenotype numericPhenotype) {
+		return this.numericPhenotypes.stream().filter(each -> each.getPhenotype().equals(numericPhenotype)).findFirst().get();
 	}
 }

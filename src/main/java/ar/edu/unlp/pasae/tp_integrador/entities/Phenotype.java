@@ -1,5 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import java.util.Collection;
+
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,6 +47,8 @@ public abstract class Phenotype {
   public abstract Boolean validate(String value);
 
   public abstract String getKind();
+
+  public abstract Collection<AnalysisGroup> getAnalysisGroups(Analysis analysis);
 
   /**
    * @return the id

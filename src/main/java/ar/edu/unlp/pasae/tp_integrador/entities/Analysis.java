@@ -1,8 +1,10 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
+
+import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 
 @Entity
 @SuppressWarnings("unused")
@@ -31,7 +35,7 @@ public class Analysis {
 	private Set<String> snps = new HashSet<String>();
 	@OneToOne
 	private Phenotype phenotype;
-	private Double cutoffValue;
+	private Long cutoffValue;
 
 	public static final class AnalysisBuilder {
 		private Date date;
@@ -40,7 +44,7 @@ public class Analysis {
 		private Set<Patient> patients = new HashSet<Patient>();
 		private Set<String> snps = new HashSet<String>();
 		private Phenotype phenotype;
-		private Double cutoffValue;
+		private Long cutoffValue;
 
 		private AnalysisBuilder() {}
 
@@ -49,7 +53,7 @@ public class Analysis {
 			return this;
 		}
 
-		public AnalysisBuilder addCutoffValue(final Double cutoffValue) {
+		public AnalysisBuilder addCutoffValue(final Long cutoffValue) {
 			this.cutoffValue = cutoffValue;
 			return this;
 		}
@@ -91,13 +95,13 @@ public class Analysis {
 	}
 
 	public Analysis(Long id, Date date, AnalysisState state, Set<Patient> patients, Pathology pathology, Set<String> snps,
-			Phenotype phenotype, Double cutoffValue) {
+			Phenotype phenotype, Long cutoffValue) {
 		this(date, state, patients, snps, phenotype, cutoffValue);
 		this.setId(id);
 	}
 
 	public Analysis(Date date, AnalysisState state, Collection<Patient> patients,
-			Collection<String> snps, Phenotype phenotype, Double cutoffValue) {
+			Collection<String> snps, Phenotype phenotype, Long cutoffValue) {
 		super();
 		this.setDate(date);
 		this.setState(state);
@@ -110,6 +114,16 @@ public class Analysis {
 	private Analysis() {
 		super();
 		this.setState(AnalysisState.PENDING);
+	}
+
+	public Collection<AnalysisGroup> getAnalysisGroups() {
+		Collection<AnalysisGroup> groups = this.phenotype.getAnalysisGroups(this);
+
+		return groups;
+	}
+
+	public Optional<AnalysisGroup> getAnalysisGroup(String phenotypeValue) {
+		return this.getAnalysisGroups().stream().filter(each -> each.getPhenotype().equals(phenotypeValue)).findFirst();
 	}
 
 	/**
@@ -198,18 +212,17 @@ public class Analysis {
 		this.phenotype = phenotype;
 	}
 
-
 	/**
 	 * @return the cutoffValue
 	 */
-	public Double getCutoffValue() {
+	public Long getCutoffValue() {
 		return cutoffValue;
 	}
 
 	/**
 	 * @param cutoffValue the cutoffValue to set
 	 */
-	public void setCutoffValue(Double cutoffValue) {
+	public void setCutoffValue(Long cutoffValue) {
 		this.cutoffValue = cutoffValue;
 	}
 }

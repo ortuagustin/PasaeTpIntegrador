@@ -1,7 +1,11 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -79,5 +83,20 @@ public class CategoricPhenotype extends Phenotype {
   @Override
   public String getKind() {
     return "Categoric";
+  }
+
+  @Override
+  public Collection<AnalysisGroup> getAnalysisGroups(Analysis analysis) {
+    Collection<AnalysisGroup> groups = new ArrayList<>();
+
+    for (String each : this.getValues().values()) {
+      groups.add(new AnalysisGroup(each, this.patientsWithPhenotypeValue(each, analysis.getPatients().stream())));
+    }
+
+    return groups;
+  }
+
+  private Collection<Patient> patientsWithPhenotypeValue(String each, Stream<Patient> patients) {
+    return patients.filter(patient -> patient.hasCategoricPhenotypeValue(this, each)).collect(Collectors.toList());
   }
 }
