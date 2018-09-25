@@ -6,6 +6,7 @@ import javax.persistence.EntityNotFoundException;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 
 public interface AnalysisService {
 	/**
@@ -45,7 +46,7 @@ public interface AnalysisService {
 	 *
 	 * @return dto con los datos del analisis persistido
 	 */
-	AnalysisDTO create(AnalysisRequestDTO analysis);
+	AnalysisDTO create(AnalysisRequestDTO analysis) throws GenotypeDecoderException;
 
 	/**
 	 * Actualiza un analisis a estado Borrador

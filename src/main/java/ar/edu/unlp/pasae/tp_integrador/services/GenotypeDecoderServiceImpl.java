@@ -12,14 +12,38 @@ import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 
 @Service
 public class GenotypeDecoderServiceImpl implements GenotypeDecoderService {
-  private Pattern pattern;
+  public List<String> decodeSnps(String input) throws GenotypeDecoderException {
+    Pattern pattern = Pattern.compile("(?:rs)(\\d+)\\s$", Pattern.CASE_INSENSITIVE);
+    List<String> snps = new ArrayList<String>();
 
-  public GenotypeDecoderServiceImpl() {
-    super();
-    pattern = Pattern.compile("(?:rs)(\\d+)\\s([actg]{2})$", Pattern.CASE_INSENSITIVE);
+    if (snps.isEmpty()) {
+      return snps;
+    }
+
+    List<GenotypeDecoderError> errors = new ArrayList<GenotypeDecoderError>();
+
+    int index = 0;
+    for (String line : input.split("\\n")) {
+      Matcher matcher = pattern.matcher(line);
+
+      if (matcher.find()) {
+        snps.add(matcher.group(1));
+      } else {
+        errors.add(new GenotypeDecoderError(line, index));
+      }
+
+      index++;
+    }
+
+    if (!errors.isEmpty()) {
+      throw new GenotypeDecoderException("Failed to decode snps", errors);
+    }
+
+    return snps;
   }
 
   public List<Genotype> decodeGenotype(String genotype) throws GenotypeDecoderException {
+    Pattern pattern = Pattern.compile("(?:rs)(\\d+)\\s([actg]{2})$", Pattern.CASE_INSENSITIVE);
     List<Genotype> genotypes = new ArrayList<Genotype>();
 
     if (genotype.isEmpty()) {
@@ -31,7 +55,7 @@ public class GenotypeDecoderServiceImpl implements GenotypeDecoderService {
     int index = 0;
     for (String line : genotype.split("\\n")) {
 
-      Matcher matcher = this.pattern.matcher(line);
+      Matcher matcher = pattern.matcher(line);
 
       if (matcher.find()) {
         // la regex arma 3 grupos:

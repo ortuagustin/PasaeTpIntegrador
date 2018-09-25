@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
@@ -30,9 +31,8 @@ public class Analysis {
 	@NotEmpty
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Patient> patients = new HashSet<Patient>();
-	@ElementCollection
-	@NotEmpty
-	private Set<String> snps = new HashSet<String>();
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Snp> snps = new HashSet<Snp>();
 	@OneToOne
 	private Phenotype phenotype;
 	private Long cutoffValue;
@@ -41,8 +41,8 @@ public class Analysis {
 		private Date date;
 		private AnalysisState state;
 		private Pathology pathology;
-		private Set<Patient> patients = new HashSet<Patient>();
-		private Set<String> snps = new HashSet<String>();
+		private Collection<Patient> patients = new HashSet<Patient>();
+		private Collection<String> snps = new HashSet<String>();
 		private Phenotype phenotype;
 		private Long cutoffValue;
 
@@ -63,7 +63,7 @@ public class Analysis {
 			return this;
 		}
 
-		public AnalysisBuilder addSnps(final Set<String> snps) {
+		public AnalysisBuilder addSnps(final Collection<String> snps) {
 			this.snps = snps;
 			return this;
 		}
@@ -100,15 +100,30 @@ public class Analysis {
 		this.setId(id);
 	}
 
-	public Analysis(Date date, AnalysisState state, Collection<Patient> patients,
-			Collection<String> snps, Phenotype phenotype, Long cutoffValue) {
+	public Analysis(Date date, AnalysisState state, Collection<Patient> patients, Collection<String> snps,
+			Phenotype phenotype, Long cutoffValue) {
 		super();
 		this.setDate(date);
 		this.setState(state);
 		this.setPatients(patients);
-		this.setSnps(snps);
+		this.createSnps(snps);
 		this.setPhenotype(phenotype);
 		this.setCutoffValue(cutoffValue);
+	}
+
+	private void createSnps(Collection<String> snps) {
+		for (String each : snps) {
+			Snp snp = new Snp(each, this.getEstadistico(), this.getPValue());
+			this.snps.add(snp);
+		}
+	}
+
+	private Double getPValue() {
+		return Math.random();
+	}
+
+	private Double getEstadistico() {
+		return Math.random();
 	}
 
 	private Analysis() {
@@ -171,14 +186,14 @@ public class Analysis {
 	/**
 	 * @return the snps
 	 */
-	public Set<String> getSnps() {
+	public Set<Snp> getSnps() {
 		return this.snps;
 	}
 
 	/**
 	 * @param snps the snps to set
 	 */
-	public void setSnps(Collection<String> snps) {
+	public void setSnps(Collection<Snp> snps) {
 		this.snps.clear();
 		this.snps.addAll(snps);
 	}

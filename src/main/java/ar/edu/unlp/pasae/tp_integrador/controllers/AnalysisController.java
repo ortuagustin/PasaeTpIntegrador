@@ -1,11 +1,15 @@
 package ar.edu.unlp.pasae.tp_integrador.controllers;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 
 @RestController
@@ -45,8 +50,15 @@ public class AnalysisController {
   }
 
   @PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-  public AnalysisDTO create(@RequestBody @Valid AnalysisRequestDTO analysis) {
-    return this.getAnalysisService().create(analysis);
+  public Object create(@RequestBody @Valid AnalysisRequestDTO analysis) {
+		try {
+			return this.getAnalysisService().create(analysis);
+		} catch (GenotypeDecoderException e) {
+			Map<String, Object> response = new HashMap<String, Object>();
+			response.put("genotype_error", true);
+			response.put("errors", e.getErrors());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
   }
 
   @PatchMapping(path = "/draft/{id}", consumes = "application/json")

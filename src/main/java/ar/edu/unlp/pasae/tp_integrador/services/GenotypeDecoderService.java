@@ -7,7 +7,7 @@ import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 
 public interface GenotypeDecoderService {
   /**
-   * Decodifica el genotipo siguiendo el formato "rsXXXXXYZ", donde:
+   * Decodifica el genotipo siguiendo el formato "rsXXXXX YZ", donde:
    *  rs es fijo
    *  XXXX es un numero (cualquier cantidad de digitos) y representa el snp
    *  Y es el alelo paterno
@@ -16,4 +16,13 @@ public interface GenotypeDecoderService {
    * Se debe separar cada rs por una nueva linea, es decir un "\n"
    */
   List<Genotype> decodeGenotype(String genotype) throws GenotypeDecoderException;
+
+  /**
+   * Decodifica el genotipo siguiendo el formato "rsXXXXX", donde:
+   *  rs es fijo
+   *  XXXX es un numero (cualquier cantidad de digitos) y representa el snp
+   *
+   * Se debe separar cada rs por una nueva linea, es decir un "\n"
+   */
+  List<String> decodeSnps(String snps) throws GenotypeDecoderException;
 }

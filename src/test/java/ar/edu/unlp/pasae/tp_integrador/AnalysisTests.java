@@ -1,7 +1,6 @@
 package ar.edu.unlp.pasae.tp_integrador;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,12 +23,11 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisGroup;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
-import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.repositories.AnalysisRepository;
 import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 import ar.edu.unlp.pasae.tp_integrador.services.CategoricPhenotypeService;
 import ar.edu.unlp.pasae.tp_integrador.services.NumericPhenotypeService;
-import ar.edu.unlp.pasae.tp_integrador.services.PathologyService;
 import ar.edu.unlp.pasae.tp_integrador.services.PatientService;
 
 @RunWith(SpringRunner.class)
@@ -40,8 +38,6 @@ public class AnalysisTests {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 	@Autowired
-	private PathologyService pathologyService;
-	@Autowired
 	private AnalysisService analysisService;
 	@Autowired
 	private AnalysisRepository analysisRepository;
@@ -51,10 +47,6 @@ public class AnalysisTests {
 	private NumericPhenotypeService numericPhenotypeService;
 	@Autowired
 	private PatientService patientService;
-
-	private Long pathologyId(String name) {
-		return this.pathologyService.findByName(name).getId();
-	}
 
 	private Long categoricPhenotypeId(String name) {
 		return this.categoricPhenotype(name).getId();
@@ -73,12 +65,8 @@ public class AnalysisTests {
 	}
 
 	@Test
-	public void it_creates_new_draft_analysis_with_categoric_phenotype() {
-		Long pathologyId = this.pathologyId("Cancer de Pulmón");
-		Set<String> snps = new HashSet<>();
-		snps.add("rs111");
-		snps.add("rs333");
-		AnalysisRequestDTO request = new AnalysisRequestDTO(pathologyId, this.patientsIds(), "Categoric", this.categoricPhenotypeId("Adenocarcinoma"), snps);
+	public void it_creates_new_draft_analysis_with_categoric_phenotype() throws GenotypeDecoderException {
+		AnalysisRequestDTO request = new AnalysisRequestDTO(this.patientsIds(), "Categoric", this.categoricPhenotypeId("Adenocarcinoma"), "rs111");
 		Long analysisId = this.analysisService.create(request).getId();
 		AnalysisDTO analysis = this.analysisService.find(analysisId);
 
@@ -88,17 +76,13 @@ public class AnalysisTests {
 		Assert.assertEquals(this.categoricPhenotypeId("Adenocarcinoma"), analysis.getPhenotypeId());
 		Assert.assertNull(analysis.getCutoffValue());
 		Assert.assertEquals("Categoric", analysis.getPhenotypeKind());
-		Assert.assertTrue(analysis.getSnps().containsAll(snps));
 	}
 
 	@Test
-	public void it_creates_new_draft_analysis_with_numeric_phenotype() {
-		Long pathologyId = this.pathologyId("Obesidad");
+	public void it_creates_new_draft_analysis_with_numeric_phenotype() throws GenotypeDecoderException {
 		Long cutoffValue = 10L;
-		Set<String> snps = new HashSet<>();
-		snps.add("rs111");
-		snps.add("rs333");
-		AnalysisRequestDTO request = new AnalysisRequestDTO(pathologyId, this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), snps, cutoffValue);
+
+		AnalysisRequestDTO request = new AnalysisRequestDTO(this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", cutoffValue);
 		Long analysisId = this.analysisService.create(request).getId();
 		AnalysisDTO analysis = this.analysisService.find(analysisId);
 
@@ -108,16 +92,11 @@ public class AnalysisTests {
 		Assert.assertEquals(this.numericPhenotypeId("Peso"), analysis.getPhenotypeId());
 		Assert.assertEquals("Numeric", analysis.getPhenotypeKind());
 		Assert.assertEquals(cutoffValue, analysis.getCutoffValue());
-		Assert.assertTrue(analysis.getSnps().containsAll(snps));
 	}
 
 	@Test
-	public void it_returns_one_analysis_groups_per_categoric_phenotype_value() {
-		Long pathologyId = this.pathologyId("Cancer de Pulmón");
-		Set<String> snps = new HashSet<>();
-		snps.add("rs111");
-		snps.add("rs333");
-		AnalysisRequestDTO request = new AnalysisRequestDTO(pathologyId, this.patientsIds(), "Categoric", this.categoricPhenotypeId("Adenocarcinoma"), snps);
+	public void it_returns_one_analysis_groups_per_categoric_phenotype_value() throws GenotypeDecoderException {
+		AnalysisRequestDTO request = new AnalysisRequestDTO(this.patientsIds(), "Categoric", this.categoricPhenotypeId("Adenocarcinoma"), "rs333");
 		Long analysisId = this.analysisService.create(request).getId();
 		Analysis analysis = this.analysisRepository.findById(analysisId).get();
 
@@ -130,12 +109,8 @@ public class AnalysisTests {
 	}
 
 	@Test
-	public void it_returns_two_analysis_groups_when_using_numeric_phenotype() {
-		Long pathologyId = this.pathologyId("Cancer de Pulmón");
-		Set<String> snps = new HashSet<>();
-		snps.add("rs111");
-		snps.add("rs333");
-		AnalysisRequestDTO request = new AnalysisRequestDTO(pathologyId, this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), snps, 50L);
+	public void it_returns_two_analysis_groups_when_using_numeric_phenotype() throws GenotypeDecoderException {
+		AnalysisRequestDTO request = new AnalysisRequestDTO(this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
 		Long analysisId = this.analysisService.create(request).getId();
 		Analysis analysis = this.analysisRepository.findById(analysisId).get();
 

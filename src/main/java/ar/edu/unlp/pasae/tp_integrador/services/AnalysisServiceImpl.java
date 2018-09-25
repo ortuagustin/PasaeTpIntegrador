@@ -17,14 +17,13 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisGroupDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
+import ar.edu.unlp.pasae.tp_integrador.entities.Analysis.AnalysisBuilder;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisGroup;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
-import ar.edu.unlp.pasae.tp_integrador.entities.Pathology;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Phenotype;
-import ar.edu.unlp.pasae.tp_integrador.entities.Analysis.AnalysisBuilder;
+import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.repositories.AnalysisRepository;
-import ar.edu.unlp.pasae.tp_integrador.repositories.PathologyRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PatientRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PhenotypeRepository;
 import ar.edu.unlp.pasae.tp_integrador.transformers.Transformer;
@@ -34,13 +33,13 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Autowired
 	private AnalysisRepository analysisRepository;
 	@Autowired
-	private PathologyRepository pathologyRepository;
-	@Autowired
 	private PatientRepository patientRepository;
 	@Autowired
 	private PhenotypeRepository phenotypeRepository;
 	@Autowired
 	private Transformer<Patient, PatientDTO> patientsTransformer;
+	@Autowired
+	private GenotypeDecoderService genotypeDecoderService;
 
 	@Override
 	public AnalysisDTO find(Long analysisId) throws EntityNotFoundException {
@@ -65,7 +64,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	public AnalysisDTO create(AnalysisRequestDTO analysis) {
+	public AnalysisDTO create(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
 		Analysis entity = this.buildAnalysis(analysis);
 
 		return this.save(entity);
@@ -93,26 +92,18 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return this.toDTO(analysis);
 	}
 
-	private Analysis buildAnalysis(AnalysisRequestDTO analysis) {
+	private Analysis buildAnalysis(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
 		final AnalysisBuilder builder = Analysis.builder();
+		final Collection<String> snps = this.getGenotypeDecoderService().decodeSnps(analysis.getSnps());
 
 		 return builder
 		 	.addDate(new Date())
 			.addState(AnalysisState.PENDING)
 			.addPatients(this.findPatients(analysis.getPatientsIds()))
-			.addPathology(this.findPathology(analysis.getPathologyId()))
-			.addSnps(analysis.getSnps())
+			.addSnps(snps)
 			.addCutoffValue(analysis.getCutoffValue())
 			.addPhenotype(this.findPhenotype(analysis.getPhenotypeId()))
 			.createAnalysis();
-	}
-
-	private Pathology findPathology(Long pathologyId) {
-		final Pathology pathology = this.pathologyRepository.findById(pathologyId)
-				.orElseThrow(() -> new EntityNotFoundException(
-						MessageFormat.format("No pathology found with Id {0}", pathologyId)));
-
-		return pathology;
 	}
 
 	private Phenotype findPhenotype(Long phenotypeId) {
@@ -146,7 +137,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		dto.setId(entity.getId());
 		dto.setDate(entity.getDate());
 		dto.setState(entity.getState());
-		dto.setSnps(entity.getSnps());
+		// dto.setSnps(entity.getSnps());
 		dto.setCutoffValue(entity.getCutoffValue());
 		dto.setPhenotypeKind(entity.getPhenotype().getKind());
 		dto.setPhenotypeId(entity.getPhenotype().getId());
@@ -178,5 +169,13 @@ public class AnalysisServiceImpl implements AnalysisService {
 	 */
 	public void setAnalysisRepository(AnalysisRepository analysisRepository) {
 		this.analysisRepository = analysisRepository;
+	}
+
+	public GenotypeDecoderService getGenotypeDecoderService() {
+		return this.genotypeDecoderService;
+	}
+
+	public void setGenotypeDecoderService(GenotypeDecoderService genotypeDecoderService) {
+		this.genotypeDecoderService = genotypeDecoderService;
 	}
 }
