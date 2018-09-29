@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
@@ -29,11 +31,13 @@ public class Analysis {
 	private Date date;
 	private AnalysisState state;
 	@NotEmpty
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private String description;
+	@NotEmpty
+	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Patient> patients = new HashSet<Patient>();
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Snp> snps = new HashSet<Snp>();
-	@OneToOne
+	@ManyToOne
 	private Phenotype phenotype;
 	private Long cutoffValue;
 
@@ -41,6 +45,7 @@ public class Analysis {
 		private Date date;
 		private AnalysisState state;
 		private Pathology pathology;
+		private String description;
 		private Collection<Patient> patients = new HashSet<Patient>();
 		private Collection<String> snps = new HashSet<String>();
 		private Phenotype phenotype;
@@ -84,9 +89,14 @@ public class Analysis {
 		}
 
 		public Analysis createAnalysis() {
-			final Analysis analysis = new Analysis(this.date, this.state, this.patients, this.snps, this.phenotype, this.cutoffValue);
+			final Analysis analysis = new Analysis(this.date, this.state, this.description, this.patients, this.snps, this.phenotype, this.cutoffValue);
 
 			return analysis;
+		}
+
+		public AnalysisBuilder addDescription(String description) {
+			this.description = description;
+			return this;
 		}
 	}
 
@@ -94,18 +104,19 @@ public class Analysis {
 		return new AnalysisBuilder();
 	}
 
-	public Analysis(Long id, Date date, AnalysisState state, Set<Patient> patients, Pathology pathology, Set<String> snps,
+	public Analysis(Long id, Date date, AnalysisState state, String description, Set<Patient> patients, Pathology pathology, Set<String> snps,
 			Phenotype phenotype, Long cutoffValue) {
-		this(date, state, patients, snps, phenotype, cutoffValue);
+		this(date, state, description, patients, snps, phenotype, cutoffValue);
 		this.setId(id);
 	}
 
-	public Analysis(Date date, AnalysisState state, Collection<Patient> patients, Collection<String> snps,
+	public Analysis(Date date, AnalysisState state, String description, Collection<Patient> patients, Collection<String> snps,
 			Phenotype phenotype, Long cutoffValue) {
 		super();
 		this.setDate(date);
 		this.setState(state);
 		this.setPatients(patients);
+		this.setDescription(description);
 		this.createSnps(snps);
 		this.setPhenotype(phenotype);
 		this.setCutoffValue(cutoffValue);
@@ -239,5 +250,13 @@ public class Analysis {
 	 */
 	public void setCutoffValue(Long cutoffValue) {
 		this.cutoffValue = cutoffValue;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

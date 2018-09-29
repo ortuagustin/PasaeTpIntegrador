@@ -50,7 +50,7 @@ public class AnalysisController {
 	public Page<AnalysisDTO> indexPageable(
 			@RequestParam(value="newestPage", defaultValue="0") int page,
 			@RequestParam(value="newestSizePerPage", defaultValue="10") int sizePerPage,
-			@RequestParam(value="newestSortField", defaultValue="name") String sortField,
+			@RequestParam(value="newestSortField", defaultValue="date") String sortField,
 			@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder,
 			@RequestParam(value="search", defaultValue="") String search
 			) {
