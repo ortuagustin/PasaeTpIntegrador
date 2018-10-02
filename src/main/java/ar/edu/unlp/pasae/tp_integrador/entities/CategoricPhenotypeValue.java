@@ -13,6 +13,8 @@ public class CategoricPhenotypeValue {
 	private Long id;
 	@OneToOne
 	private CategoricPhenotype phenotype;
+	@OneToOne
+	private Patient patient;
 	private Long valueId;
 
 	@SuppressWarnings("unused")
@@ -22,8 +24,23 @@ public class CategoricPhenotypeValue {
 
 	public CategoricPhenotypeValue(CategoricPhenotype phenotype, Long valueId) {
 		super();
+		this.setPatient(patient);
 		this.setPhenotype(phenotype);
 		this.setValue(valueId);
+	}
+
+	/**
+	 * @return the patient
+	 */
+	public Patient getPatient() {
+		return patient;
+	}
+
+	/**
+	 * @param patient the patient to set
+	 */
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
 	/**

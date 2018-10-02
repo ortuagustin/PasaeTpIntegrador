@@ -106,6 +106,11 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
+	public void deleteAll() {
+		this.getPatientRepository().deleteAll();
+	}
+
+	@Override
 	public Integer count() {
 		return (int) this.getPatientRepository().count();
 	}

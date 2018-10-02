@@ -91,4 +91,9 @@ public interface PatientService {
 	 * @param patientId el id del paciente
 	 */
 	void delete(Long patientId) throws EntityNotFoundException;
+
+	/**
+	 * Elimina todos los pacientes
+	 */
+	void deleteAll();
 }

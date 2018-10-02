@@ -143,6 +143,7 @@ public class Patient {
 	 * @return this
 	 */
 	public Patient addPhenotype(NumericPhenotypeValue phenotype) {
+		phenotype.setPatient(this);
 		this.getNumericPhenotypes().add(phenotype);
 
 		return this;
@@ -156,6 +157,7 @@ public class Patient {
 	 * @return this
 	 */
 	public Patient addPhenotype(CategoricPhenotypeValue phenotype) {
+		phenotype.setPatient(this);
 		this.getCategoricPhenotypes().add(phenotype);
 
 		return this;
@@ -271,6 +273,10 @@ public class Patient {
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
 	public void setCategoricPhenotypes(Set<CategoricPhenotypeValue> categoricPhenotypes) {
+		for (CategoricPhenotypeValue each : categoricPhenotypes) {
+			each.setPatient(this);
+		}
+
 		this.categoricPhenotypes = categoricPhenotypes;
 	}
 
@@ -285,6 +291,10 @@ public class Patient {
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
 	public void setNumericPhenotypes(Set<NumericPhenotypeValue> numericPhenotypes) {
+		for (NumericPhenotypeValue each : numericPhenotypes) {
+			each.setPatient(this);
+		}
+
 		this.numericPhenotypes = numericPhenotypes;
 	}
 

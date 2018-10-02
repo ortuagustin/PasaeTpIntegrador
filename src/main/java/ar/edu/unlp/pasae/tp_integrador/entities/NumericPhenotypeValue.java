@@ -8,50 +8,66 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class NumericPhenotypeValue {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-    @OneToOne
-    private NumericPhenotype phenotype;
-    private Long value;
-    
-    @SuppressWarnings("unused")
-	private NumericPhenotypeValue() {
-		super();
-	}
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  @OneToOne
+  private NumericPhenotype phenotype;
+  @OneToOne
+  private Patient patient;
+  private Long value;
 
-    public NumericPhenotypeValue(NumericPhenotype phenotype, Long value) {
-        super();
-        this.setPhenotype(phenotype);
-        this.setValue(value);
-    }
+  @SuppressWarnings("unused")
+  private NumericPhenotypeValue() {
+    super();
+  }
 
-	/**
-	 * @return the value
-	 */
-	public Long getValue() {
-		return value;
-	}
+  public NumericPhenotypeValue(NumericPhenotype phenotype, Long value) {
+    super();
+    this.setPatient(patient);
+    this.setPhenotype(phenotype);
+    this.setValue(value);
+  }
 
 	/**
-	 * @param value the value to set
+	 * @return the patient
 	 */
-	public void setValue(Long value) {
-		this.value = value;
+	public Patient getPatient() {
+		return patient;
 	}
 
 	/**
-	 * @return the phenotype
+	 * @param patient the patient to set
 	 */
-	public NumericPhenotype getPhenotype() {
-		return phenotype;
+	public void setPatient(Patient patient) {
+		this.patient = patient;
 	}
 
-	/**
-	 * @param phenotype the phenotype to set
-	 */
-	public void setPhenotype(NumericPhenotype phenotype) {
-		this.phenotype = phenotype;
-	}
+  /**
+   * @return the value
+   */
+  public Long getValue() {
+    return value;
+  }
+
+  /**
+   * @param value the value to set
+   */
+  public void setValue(Long value) {
+    this.value = value;
+  }
+
+  /**
+   * @return the phenotype
+   */
+  public NumericPhenotype getPhenotype() {
+    return phenotype;
+  }
+
+  /**
+   * @param phenotype the phenotype to set
+   */
+  public void setPhenotype(NumericPhenotype phenotype) {
+    this.phenotype = phenotype;
+  }
 }
-
