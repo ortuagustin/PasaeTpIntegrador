@@ -16,7 +16,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
@@ -24,7 +23,6 @@ import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.services.NumericPhenotypeService;
 
 @RunWith(SpringRunner.class)
-@ActiveProfiles("test")
 @SpringBootTest
 @Transactional
 @Rollback(true)
@@ -34,11 +32,6 @@ public class NumericPhenotypeTests {
 
 	@Autowired
 	private NumericPhenotypeService phenotypeService;
-
-	@Before
-	public void clearPhenotypes() {
-		this.phenotypeService.deleteAll();
-	}
 
   @Test
 	public void it_returns_phenotype_list() {
