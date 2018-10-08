@@ -5,9 +5,9 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
@@ -34,10 +34,10 @@ public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
 
 	@Override
 	public PatientDTO toDTO(Patient entity) {
-		Set<NumericPhenotypeValueDTO> numericPhenotypes = this.getPhenotypeTransformer()
+		Set<NumericPhenotypeValueRequestDTO> numericPhenotypes = this.getPhenotypeTransformer()
 				.numericValuedToDtos(entity.getNumericPhenotypes());
 
-		Set<CategoricPhenotypeValueDTO> categoricPhenotypes = this.getPhenotypeTransformer()
+		Set<CategoricPhenotypeValueRequestDTO> categoricPhenotypes = this.getPhenotypeTransformer()
 				.categoricValuedToDtos(entity.getCategoricPhenotypes());
 
 		CustomUserDTO user = this.getCustomUserTransformer().toDTO(entity.getUser());

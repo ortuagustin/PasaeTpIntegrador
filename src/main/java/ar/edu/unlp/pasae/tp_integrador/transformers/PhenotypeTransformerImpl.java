@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotypeValue;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
@@ -23,24 +23,22 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
   private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer;
 
   @Override
-  public Set<NumericPhenotypeValueDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes) {
-    Set<NumericPhenotypeValueDTO> dtos = new HashSet<NumericPhenotypeValueDTO>();
+  public Set<NumericPhenotypeValueRequestDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes) {
+    Set<NumericPhenotypeValueRequestDTO> dtos = new HashSet<NumericPhenotypeValueRequestDTO>();
 
     for (NumericPhenotypeValue each : phenotypes) {
-      dtos.add(
-          new NumericPhenotypeValueDTO(each.getPhenotype().getId(), each.getPhenotype().getName(), each.getValue()));
+      dtos.add(new NumericPhenotypeValueRequestDTO(each.getPhenotype().getId(), each.getValue()));
     }
 
     return dtos;
   }
 
   @Override
-  public Set<CategoricPhenotypeValueDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes) {
-    Set<CategoricPhenotypeValueDTO> dtos = new HashSet<CategoricPhenotypeValueDTO>();
+  public Set<CategoricPhenotypeValueRequestDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes) {
+    Set<CategoricPhenotypeValueRequestDTO> dtos = new HashSet<CategoricPhenotypeValueRequestDTO>();
 
     for (CategoricPhenotypeValue each : phenotypes) {
-      dtos.add(new CategoricPhenotypeValueDTO(each.getPhenotype().getId(), each.getPhenotype().getName(),
-          each.getValueId(), each.getValue()));
+      dtos.add(new CategoricPhenotypeValueRequestDTO(each.getPhenotype().getId(), each.getValueId()));
     }
 
     return dtos;

@@ -25,8 +25,8 @@ public class PatientRequestDTO {
 	private String genotype = "";
 	@Email
 	private String email;
-	private Set<NumericPhenotypeValueDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueDTO>();
-	private Set<CategoricPhenotypeValueDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeValueDTO>();
+	private Set<NumericPhenotypeValueRequestDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueRequestDTO>();
+	private Set<CategoricPhenotypeValueRequestDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeValueRequestDTO>();
 
 	public PatientRequestDTO(Long userId, String name, String surname, String dni, String email) {
 		super();
@@ -49,18 +49,18 @@ public class PatientRequestDTO {
 	/**
 	 * @return the categoricPhenotypes
 	 */
-	public Set<CategoricPhenotypeValueDTO> getCategoricPhenotypes() {
+	public Set<CategoricPhenotypeValueRequestDTO> getCategoricPhenotypes() {
 		return categoricPhenotypes;
 	}
 
 	/**
 	 * Adds the Categoric Phenotype
 	 *
-	 * @param CategoricPhenotypeValueDTO phenotype
+	 * @param CategoricPhenotypeValueRequestDTO phenotype
 	 *
 	 * @return this
 	 */
-	public PatientRequestDTO addCategoricPhenotype(CategoricPhenotypeValueDTO phenotype) {
+	public PatientRequestDTO addCategoricPhenotype(CategoricPhenotypeValueRequestDTO phenotype) {
 		this.categoricPhenotypes.add(phenotype);
 
 		return this;
@@ -69,11 +69,11 @@ public class PatientRequestDTO {
 	/**
 	 * Adds the Numeric Phenotype
 	 *
-	 * @param NumericPhenotypeValueDTO phenotype
+	 * @param NumericPhenotypeValueRequestDTO phenotype
 	 *
 	 * @return this
 	 */
-	public PatientRequestDTO addNumericPhenotype(NumericPhenotypeValueDTO phenotype) {
+	public PatientRequestDTO addNumericPhenotype(NumericPhenotypeValueRequestDTO phenotype) {
 		this.numericPhenotypes.add(phenotype);
 
 		return this;
@@ -82,7 +82,7 @@ public class PatientRequestDTO {
 	/**
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
-	public void setCategoricPhenotypes(Set<CategoricPhenotypeValueDTO> categoricPhenotypes) {
+	public void setCategoricPhenotypes(Set<CategoricPhenotypeValueRequestDTO> categoricPhenotypes) {
 		this.categoricPhenotypes.clear();
 		this.categoricPhenotypes.addAll(categoricPhenotypes);
 	}
@@ -90,14 +90,14 @@ public class PatientRequestDTO {
 	/**
 	 * @return the numericPhenotypes
 	 */
-	public Set<NumericPhenotypeValueDTO> getNumericPhenotypes() {
+	public Set<NumericPhenotypeValueRequestDTO> getNumericPhenotypes() {
 		return numericPhenotypes;
 	}
 
 	/**
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
-	public void setNumericPhenotypes(Set<NumericPhenotypeValueDTO> numericPhenotypes) {
+	public void setNumericPhenotypes(Set<NumericPhenotypeValueRequestDTO> numericPhenotypes) {
 		this.numericPhenotypes.clear();
 		this.numericPhenotypes.addAll(numericPhenotypes);
 	}

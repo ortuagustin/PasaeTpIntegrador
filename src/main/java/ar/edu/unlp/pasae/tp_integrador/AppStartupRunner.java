@@ -18,9 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PathologyRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
@@ -71,11 +71,11 @@ public class AppStartupRunner implements ApplicationRunner {
 		String genotype = "rs111 ac\nrs1122 at";
 
 		PatientRequestDTO request = new PatientRequestDTO(userId, name, surname, dni, email, genotype);
-		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Adenocarcinoma"), "", 1L));
-		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Nivel de glucosa"), "", 2L));
-		request.addCategoricPhenotype(new CategoricPhenotypeValueDTO(this.categoricPhenotype("Color de pelo"), "", 4L));
-		request.addNumericPhenotype(new NumericPhenotypeValueDTO(this.numericPhenotype("Peso"), "", 50L));
-		request.addNumericPhenotype(new NumericPhenotypeValueDTO(this.numericPhenotype("Presión Arterial"), "", 100L));
+		request.addCategoricPhenotype(new CategoricPhenotypeValueRequestDTO(this.categoricPhenotype("Adenocarcinoma"), 1L));
+		request.addCategoricPhenotype(new CategoricPhenotypeValueRequestDTO(this.categoricPhenotype("Nivel de glucosa"), 2L));
+		request.addCategoricPhenotype(new CategoricPhenotypeValueRequestDTO(this.categoricPhenotype("Color de pelo"), 4L));
+		request.addNumericPhenotype(new NumericPhenotypeValueRequestDTO(this.numericPhenotype("Peso"), 50L));
+		request.addNumericPhenotype(new NumericPhenotypeValueRequestDTO(this.numericPhenotype("Presión Arterial"), 100L));
 		this.patientService.create(request);
 	}
 

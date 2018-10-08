@@ -14,9 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
@@ -187,10 +187,10 @@ public class PatientServiceImpl implements PatientService {
 				.orElseThrow(() -> new EntityNotFoundException(MessageFormat.format("No User found with id {0}", userId)));
 	}
 
-	private Set<CategoricPhenotypeValue> findCategoricPhenotypes(Set<CategoricPhenotypeValueDTO> phenotypes) {
+	private Set<CategoricPhenotypeValue> findCategoricPhenotypes(Set<CategoricPhenotypeValueRequestDTO> phenotypes) {
 		Set<CategoricPhenotypeValue> entities = new HashSet<CategoricPhenotypeValue>();
 
-		for (CategoricPhenotypeValueDTO each : phenotypes) {
+		for (CategoricPhenotypeValueRequestDTO each : phenotypes) {
 			final CategoricPhenotype phenotype = this.getCategoricPhenotypesRepository().findById(each.getPhenotypeId())
 					.orElseThrow(() -> new EntityNotFoundException(
 							MessageFormat.format("No Categoric Phenotype found with id {0}", each.getPhenotypeId())));
@@ -201,10 +201,10 @@ public class PatientServiceImpl implements PatientService {
 		return entities;
 	}
 
-	private Set<NumericPhenotypeValue> findNumericPhenotypes(Set<NumericPhenotypeValueDTO> phenotypes) {
+	private Set<NumericPhenotypeValue> findNumericPhenotypes(Set<NumericPhenotypeValueRequestDTO> phenotypes) {
 		Set<NumericPhenotypeValue> entities = new HashSet<NumericPhenotypeValue>();
 
-		for (NumericPhenotypeValueDTO each : phenotypes) {
+		for (NumericPhenotypeValueRequestDTO each : phenotypes) {
 			final NumericPhenotype phenotype = this.getNumericPhenotypeRepository().findById(each.getPhenotypeId())
 					.orElseThrow(() -> new EntityNotFoundException(
 							MessageFormat.format("No Numeric Phenotype found with id {0}", each.getPhenotypeId())));

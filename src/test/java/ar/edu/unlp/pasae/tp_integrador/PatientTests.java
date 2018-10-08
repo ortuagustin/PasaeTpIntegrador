@@ -24,9 +24,9 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
@@ -75,7 +75,8 @@ public class PatientTests {
 		String phenotypeName = "Categoric Phenotype Test";
 		CategoricPhenotypeDTO phenotypeRequest = new CategoricPhenotypeDTO(phenotypeName, values);
 		Long phenotypeId = this.categoricPhenotypeService.create(phenotypeRequest).getId();
-		CategoricPhenotypeValueDTO patientPhenotype = new CategoricPhenotypeValueDTO(phenotypeId, phenotypeName, 1L);
+		Long valueId = 1L;
+		CategoricPhenotypeValueRequestDTO patientPhenotype = new CategoricPhenotypeValueRequestDTO(phenotypeId, valueId);
 
 		Long userId = this.user.getId();
 		String name = "Name";
@@ -93,8 +94,7 @@ public class PatientTests {
 
 		patientPhenotype = patient.getCategoricPhenotypes().stream().findAny().get();
 		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
-		Assert.assertEquals("Value 1", patientPhenotype.getValue());
-		Assert.assertEquals(phenotypeName, patientPhenotype.getName());
+		Assert.assertEquals(valueId, patientPhenotype.getValueId());
 	}
 
 	@Test
@@ -102,7 +102,8 @@ public class PatientTests {
 		String phenotypeName = "Numeric Phenotype Test";
 		NumericPhenotypeDTO phenotypeRequest = new NumericPhenotypeDTO(phenotypeName);
 		Long phenotypeId = this.numericPhenotypeService.create(phenotypeRequest).getId();
-		NumericPhenotypeValueDTO patientPhenotype = new NumericPhenotypeValueDTO(phenotypeId, phenotypeName, 5L);
+		Long valueId = 5L;
+		NumericPhenotypeValueRequestDTO patientPhenotype = new NumericPhenotypeValueRequestDTO(phenotypeId, valueId);
 
 		Long userId = this.user.getId();
 		String name = "Name";
@@ -120,8 +121,7 @@ public class PatientTests {
 
 		patientPhenotype = patient.getNumericPhenotypes().stream().findAny().get();
 		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
-		Assert.assertEquals((Long) 5L, patientPhenotype.getValue());
-		Assert.assertEquals(phenotypeName, patientPhenotype.getName());
+		Assert.assertEquals(valueId, patientPhenotype.getValue());
 	}
 
 	@Test

@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@SuppressWarnings("unused")
 public class Snp {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
