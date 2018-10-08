@@ -28,7 +28,7 @@ public class PatientDTO {
 	@NotNull
 	private CustomUserDTO user;
 	private Collection<GenotypeDTO> genotype = new ArrayList<GenotypeDTO>();
-	private Set<NumericPhenotypeValueRequestDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueRequestDTO>();
+	private Set<NumericPhenotypeValueDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueDTO>();
 	private Set<CategoricPhenotypeValueRequestDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeValueRequestDTO>();
 
 	public PatientDTO(String name, String surname, String dni, String email, CustomUserDTO user) {
@@ -165,14 +165,14 @@ public class PatientDTO {
 	/**
 	 * @return the numericPhenotypes
 	 */
-	public Set<NumericPhenotypeValueRequestDTO> getNumericPhenotypes() {
+	public Set<NumericPhenotypeValueDTO> getNumericPhenotypes() {
 		return numericPhenotypes;
 	}
 
 	/**
 	 * @param numericPhenotypes the numericPhenotypes to set
 	 */
-	public void setNumericPhenotypes(Set<NumericPhenotypeValueRequestDTO> numericPhenotypes) {
+	public void setNumericPhenotypes(Set<NumericPhenotypeValueDTO> numericPhenotypes) {
 		this.numericPhenotypes = numericPhenotypes;
 	}
 }

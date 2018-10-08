@@ -1,7 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.transformers;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotypeValue;
 import ar.edu.unlp.pasae.tp_integrador.entities.NumericPhenotype;
@@ -23,11 +23,11 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
   private Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer;
 
   @Override
-  public Set<NumericPhenotypeValueRequestDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes) {
-    Set<NumericPhenotypeValueRequestDTO> dtos = new HashSet<NumericPhenotypeValueRequestDTO>();
+  public Set<NumericPhenotypeValueDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes) {
+    Set<NumericPhenotypeValueDTO> dtos = new HashSet<NumericPhenotypeValueDTO>();
 
     for (NumericPhenotypeValue each : phenotypes) {
-      dtos.add(new NumericPhenotypeValueRequestDTO(each.getPhenotype().getId(), each.getValue()));
+      dtos.add(new NumericPhenotypeValueDTO(this.numericToDto(each.getPhenotype()), each.getValue()));
     }
 
     return dtos;
@@ -49,7 +49,7 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
     Set<NumericPhenotypeDTO> dtos = new HashSet<NumericPhenotypeDTO>();
 
     for (NumericPhenotype each : phenotypes) {
-      dtos.add(this.getNumericPhenotypeTransformer().toDTO(each));
+      dtos.add(this.numericToDto(each));
     }
 
     return dtos;
@@ -102,8 +102,7 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
    *
    * @Override
    */
-  public void setCategoricPhenotypeTransformer(
-      Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer) {
+  public void setCategoricPhenotypeTransformer(Transformer<CategoricPhenotype, CategoricPhenotypeDTO> categoricPhenotypeTransformer) {
     this.categoricPhenotypeTransformer = categoricPhenotypeTransformer;
   }
 
@@ -124,5 +123,9 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
   public void setNumericPhenotypeTransformer(
       Transformer<NumericPhenotype, NumericPhenotypeDTO> numericPhenotypeTransformer) {
     this.numericPhenotypeTransformer = numericPhenotypeTransformer;
+  }
+
+  private NumericPhenotypeDTO numericToDto(NumericPhenotype entity) {
+    return this.getNumericPhenotypeTransformer().toDTO(entity);
   }
 }

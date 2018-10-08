@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CustomUserDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient.PatientBuilder;
@@ -34,7 +34,7 @@ public class PatientTransformer extends BaseTransformer<Patient, PatientDTO> {
 
 	@Override
 	public PatientDTO toDTO(Patient entity) {
-		Set<NumericPhenotypeValueRequestDTO> numericPhenotypes = this.getPhenotypeTransformer()
+		Set<NumericPhenotypeValueDTO> numericPhenotypes = this.getPhenotypeTransformer()
 				.numericValuedToDtos(entity.getNumericPhenotypes());
 
 		Set<CategoricPhenotypeValueRequestDTO> categoricPhenotypes = this.getPhenotypeTransformer()

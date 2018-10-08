@@ -26,6 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
@@ -103,7 +104,7 @@ public class PatientTests {
 		NumericPhenotypeDTO phenotypeRequest = new NumericPhenotypeDTO(phenotypeName);
 		Long phenotypeId = this.numericPhenotypeService.create(phenotypeRequest).getId();
 		Long valueId = 5L;
-		NumericPhenotypeValueRequestDTO patientPhenotype = new NumericPhenotypeValueRequestDTO(phenotypeId, valueId);
+		NumericPhenotypeValueRequestDTO patientPhenotypeRequest = new NumericPhenotypeValueRequestDTO(phenotypeId, valueId);
 
 		Long userId = this.user.getId();
 		String name = "Name";
@@ -112,15 +113,15 @@ public class PatientTests {
 		String email = "test@example.com";
 
 		PatientRequestDTO patientRequest = new PatientRequestDTO(userId, name, surname, dni, email);
-		patientRequest.addNumericPhenotype(patientPhenotype);
+		patientRequest.addNumericPhenotype(patientPhenotypeRequest);
 		Long patientId = this.patientService.create(patientRequest).getId();
 		PatientDTO patient = this.patientService.find(patientId);
 
 		Assert.assertNotNull(patient);
 		Assert.assertEquals(1, patient.getNumericPhenotypes().size());
 
-		patientPhenotype = patient.getNumericPhenotypes().stream().findAny().get();
-		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
+		NumericPhenotypeValueDTO patientPhenotype = patient.getNumericPhenotypes().stream().findAny().get();
+		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotype().getId());
 		Assert.assertEquals(valueId, patientPhenotype.getValue());
 	}
 
