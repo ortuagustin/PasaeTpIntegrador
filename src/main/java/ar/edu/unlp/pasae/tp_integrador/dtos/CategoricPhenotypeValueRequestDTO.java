@@ -1,7 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
 public class CategoricPhenotypeValueRequestDTO {
-	private Long phenotypeId;
+	private Long id;
 	private Long valueId;
 
 	@SuppressWarnings("unused")
@@ -9,9 +9,9 @@ public class CategoricPhenotypeValueRequestDTO {
 		super();
 	}
 
-	public CategoricPhenotypeValueRequestDTO(Long phenotypeId, Long valueId) {
+	public CategoricPhenotypeValueRequestDTO(Long id, Long valueId) {
 		super();
-		this.setPhenotypeId(phenotypeId);
+		this.setId(id);
 		this.setValueId(valueId);
 	}
 
@@ -30,16 +30,16 @@ public class CategoricPhenotypeValueRequestDTO {
 	}
 
 	/**
-	 * @return the phenotypeId
+	 * @return the id
 	 */
-	public Long getPhenotypeId() {
-		return phenotypeId;
+	public Long getId() {
+		return id;
 	}
 
 	/**
-	 * @param phenotypeId the phenotypeId to set
+	 * @param id the id to set
 	 */
-	public void setPhenotypeId(Long phenotypeId) {
-		this.phenotypeId = phenotypeId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 }

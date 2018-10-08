@@ -1,7 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
 public class NumericPhenotypeValueRequestDTO {
-	private Long phenotypeId;
+	private Long id;
 	private Long value;
 
 	@SuppressWarnings("unused")
@@ -9,9 +9,9 @@ public class NumericPhenotypeValueRequestDTO {
 		super();
 	}
 
-	public NumericPhenotypeValueRequestDTO(Long phenotypeId, Long value) {
+	public NumericPhenotypeValueRequestDTO(Long id, Long value) {
 		super();
-		this.setPhenotypeId(phenotypeId);
+		this.setPhenotypeId(id);
 		this.setValue(value);
 	}
 
@@ -30,16 +30,16 @@ public class NumericPhenotypeValueRequestDTO {
 	 }
 
 	 /**
-	  * @return the phenotypeId
+	  * @return the id
 	  */
-	 public Long getPhenotypeId() {
-		 return phenotypeId;
+	 public Long getId() {
+		 return id;
 	 }
 
 	 /**
-	  * @param phenotypeId the phenotypeId to set
+	  * @param id the id to set
 	  */
-	 public void setPhenotypeId(Long phenotypeId) {
-		 this.phenotypeId = phenotypeId;
+	 public void setId(Long id) {
+		 this.id = id;
 	 }
 }
