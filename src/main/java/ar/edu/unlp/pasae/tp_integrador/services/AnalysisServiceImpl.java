@@ -70,6 +70,9 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public AnalysisDTO create(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
 		Analysis entity = this.buildAnalysis(analysis);
 
+		System.out.println("ACA::: " + entity.getPatients());
+		System.out.println("ACA::: " + entity.getDescription());
+
 		return this.save(entity);
 	}
 
@@ -88,7 +91,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 		return this.save(entity);
 	}
-	
+
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
 		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
 	}
@@ -160,6 +163,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		dto.setId(entity.getId());
 		dto.setDate(entity.getDate());
 		dto.setState(entity.getState());
+		dto.setDescription(entity.getDescription());
 		// dto.setSnps(entity.getSnps());
 		dto.setCutoffValue(entity.getCutoffValue());
 		dto.setPhenotypeKind(entity.getPhenotype().getKind());
