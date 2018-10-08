@@ -36,7 +36,6 @@ public class GenotypeDTO {
 
   @Override
   public String toString() {
-    System.out.println(this.value);
     return this.snp + this.value;
   }
 
