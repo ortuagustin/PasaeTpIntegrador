@@ -191,9 +191,9 @@ public class PatientServiceImpl implements PatientService {
 		Set<CategoricPhenotypeValue> entities = new HashSet<CategoricPhenotypeValue>();
 
 		for (CategoricPhenotypeValueRequestDTO each : phenotypes) {
-			final CategoricPhenotype phenotype = this.getCategoricPhenotypesRepository().findById(each.getPhenotypeId())
+			final CategoricPhenotype phenotype = this.getCategoricPhenotypesRepository().findById(each.getId())
 					.orElseThrow(() -> new EntityNotFoundException(
-							MessageFormat.format("No Categoric Phenotype found with id {0}", each.getPhenotypeId())));
+							MessageFormat.format("No Categoric Phenotype found with id {0}", each.getId())));
 
 			entities.add(new CategoricPhenotypeValue(phenotype, each.getValueId()));
 		}
@@ -205,9 +205,9 @@ public class PatientServiceImpl implements PatientService {
 		Set<NumericPhenotypeValue> entities = new HashSet<NumericPhenotypeValue>();
 
 		for (NumericPhenotypeValueRequestDTO each : phenotypes) {
-			final NumericPhenotype phenotype = this.getNumericPhenotypeRepository().findById(each.getPhenotypeId())
+			final NumericPhenotype phenotype = this.getNumericPhenotypeRepository().findById(each.getId())
 					.orElseThrow(() -> new EntityNotFoundException(
-							MessageFormat.format("No Numeric Phenotype found with id {0}", each.getPhenotypeId())));
+							MessageFormat.format("No Numeric Phenotype found with id {0}", each.getId())));
 
 			entities.add(new NumericPhenotypeValue(phenotype, each.getValue()));
 		}
