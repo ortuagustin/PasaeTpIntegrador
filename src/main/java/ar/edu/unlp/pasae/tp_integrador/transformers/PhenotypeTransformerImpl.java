@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
@@ -34,11 +34,11 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
   }
 
   @Override
-  public Set<CategoricPhenotypeValueRequestDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes) {
-    Set<CategoricPhenotypeValueRequestDTO> dtos = new HashSet<CategoricPhenotypeValueRequestDTO>();
+  public Set<CategoricPhenotypeValueDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes) {
+    Set<CategoricPhenotypeValueDTO> dtos = new HashSet<CategoricPhenotypeValueDTO>();
 
     for (CategoricPhenotypeValue each : phenotypes) {
-      dtos.add(new CategoricPhenotypeValueRequestDTO(each.getPhenotype().getId(), each.getValueId()));
+      dtos.add(new CategoricPhenotypeValueDTO(this.categoricToDto(each.getPhenotype()), each.getValueId()));
     }
 
     return dtos;
@@ -60,7 +60,7 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
     Set<CategoricPhenotypeDTO> dtos = new HashSet<CategoricPhenotypeDTO>();
 
     for (CategoricPhenotype each : phenotypes) {
-      dtos.add(this.getCategoricPhenotypeTransformer().toDTO(each));
+      dtos.add(this.categoricToDto(each));
     }
 
     return dtos;
@@ -127,5 +127,9 @@ public class PhenotypeTransformerImpl implements PhenotypeTransformer {
 
   private NumericPhenotypeDTO numericToDto(NumericPhenotype entity) {
     return this.getNumericPhenotypeTransformer().toDTO(entity);
+  }
+
+  private CategoricPhenotypeDTO categoricToDto(CategoricPhenotype entity) {
+    return this.getCategoricPhenotypeTransformer().toDTO(entity);
   }
 }

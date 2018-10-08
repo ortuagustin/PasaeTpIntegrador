@@ -3,7 +3,7 @@ package ar.edu.unlp.pasae.tp_integrador.transformers;
 import java.util.Set;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.CategoricPhenotype;
@@ -18,7 +18,7 @@ public interface PhenotypeTransformer {
 
     Set<NumericPhenotypeValueDTO> numericValuedToDtos(Set<NumericPhenotypeValue> phenotypes);
 
-    Set<CategoricPhenotypeValueRequestDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes);
+    Set<CategoricPhenotypeValueDTO> categoricValuedToDtos(Set<CategoricPhenotypeValue> phenotypes);
 
     Set<CategoricPhenotype> categoricToEntities(Set<CategoricPhenotypeDTO> phenotypes);
 

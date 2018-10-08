@@ -29,7 +29,7 @@ public class PatientDTO {
 	private CustomUserDTO user;
 	private Collection<GenotypeDTO> genotype = new ArrayList<GenotypeDTO>();
 	private Set<NumericPhenotypeValueDTO> numericPhenotypes = new HashSet<NumericPhenotypeValueDTO>();
-	private Set<CategoricPhenotypeValueRequestDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeValueRequestDTO>();
+	private Set<CategoricPhenotypeValueDTO> categoricPhenotypes = new HashSet<CategoricPhenotypeValueDTO>();
 
 	public PatientDTO(String name, String surname, String dni, String email, CustomUserDTO user) {
 		super();
@@ -151,14 +151,14 @@ public class PatientDTO {
 	/**
 	 * @return the categoricPhenotypes
 	 */
-	public Set<CategoricPhenotypeValueRequestDTO> getCategoricPhenotypes() {
+	public Set<CategoricPhenotypeValueDTO> getCategoricPhenotypes() {
 		return categoricPhenotypes;
 	}
 
 	/**
 	 * @param categoricPhenotypes the categoricPhenotypes to set
 	 */
-	public void setCategoricPhenotypes(Set<CategoricPhenotypeValueRequestDTO> categoricPhenotypes) {
+	public void setCategoricPhenotypes(Set<CategoricPhenotypeValueDTO> categoricPhenotypes) {
 		this.categoricPhenotypes = categoricPhenotypes;
 	}
 

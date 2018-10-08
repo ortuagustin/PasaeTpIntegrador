@@ -24,6 +24,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueDTO;
@@ -77,7 +78,7 @@ public class PatientTests {
 		CategoricPhenotypeDTO phenotypeRequest = new CategoricPhenotypeDTO(phenotypeName, values);
 		Long phenotypeId = this.categoricPhenotypeService.create(phenotypeRequest).getId();
 		Long valueId = 1L;
-		CategoricPhenotypeValueRequestDTO patientPhenotype = new CategoricPhenotypeValueRequestDTO(phenotypeId, valueId);
+		CategoricPhenotypeValueRequestDTO patientPhenotypeRequest = new CategoricPhenotypeValueRequestDTO(phenotypeId, valueId);
 
 		Long userId = this.user.getId();
 		String name = "Name";
@@ -86,15 +87,15 @@ public class PatientTests {
 		String email = "test@example.com";
 
 		PatientRequestDTO patientRequest = new PatientRequestDTO(userId, name, surname, dni, email);
-		patientRequest.addCategoricPhenotype(patientPhenotype);
+		patientRequest.addCategoricPhenotype(patientPhenotypeRequest);
 		Long patientId = this.patientService.create(patientRequest).getId();
 		PatientDTO patient = this.patientService.find(patientId);
 
 		Assert.assertNotNull(patient);
 		Assert.assertEquals(1, patient.getCategoricPhenotypes().size());
 
-		patientPhenotype = patient.getCategoricPhenotypes().stream().findAny().get();
-		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotypeId());
+		CategoricPhenotypeValueDTO patientPhenotype = patient.getCategoricPhenotypes().stream().findAny().get();
+		Assert.assertEquals(phenotypeId, patientPhenotype.getPhenotype().getId());
 		Assert.assertEquals(valueId, patientPhenotype.getValueId());
 	}
 
