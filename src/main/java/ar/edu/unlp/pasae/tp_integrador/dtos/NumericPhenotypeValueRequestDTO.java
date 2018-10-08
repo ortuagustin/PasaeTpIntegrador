@@ -11,7 +11,7 @@ public class NumericPhenotypeValueRequestDTO {
 
 	public NumericPhenotypeValueRequestDTO(Long id, Long value) {
 		super();
-		this.setPhenotypeId(id);
+		this.setId(id);
 		this.setValue(value);
 	}
 
