@@ -180,7 +180,8 @@ public class PhenotypePredictionServiceTests {
 		snps.add(new SnpDTO("rs111", Math.random(), Math.random()));
 		snps.add(new SnpDTO("rs4112", Math.random(), Math.random()));
 
-    this.analysisService.draft(analysisId, snps);
+		this.analysisService.draft(analysisId, snps);
+		this.analysisService.publish(analysisId);
 
     Collection<GenotypeDTO> genotypes = new ArrayList<>();
     genotypes.add(new GenotypeDTO(112, "AC"));

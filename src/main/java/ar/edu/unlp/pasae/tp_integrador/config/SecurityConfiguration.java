@@ -43,8 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 			// MEDICO CLINICO puede visualizar los analisis en estado publicado
 			.antMatchers("/analysis/published").hasAuthority(RoleName.CLINICAL_DOCTOR.toString())
-			// y correrlas para el genotipo de un paciente nuevo
-			// TODO: agregar chequeo rol para esta ultima accion
+			.antMatchers("/prediction/**").hasAuthority(RoleName.CLINICAL_DOCTOR.toString())
 
 			.antMatchers("/css/**", "/resources/**").permitAll()
 			.antMatchers("/**").authenticated()
