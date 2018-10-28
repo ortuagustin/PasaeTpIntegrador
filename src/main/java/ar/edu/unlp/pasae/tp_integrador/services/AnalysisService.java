@@ -1,5 +1,6 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 
 public interface AnalysisService {
@@ -54,10 +56,11 @@ public interface AnalysisService {
 	 * Actualiza un analisis a estado Borrador
 	 *
 	 * @param analysisId el id del analisis
+	 * @param snps coleccion de snps seleccionados por el cientifico
 	 *
 	 * @return dto con los datos del analisis actualizado
 	 */
-	AnalysisDTO draft(Long analysisId);
+	AnalysisDTO draft(Long analysisId, Collection<SnpDTO> snps);
 
 	/**
 	 * Actualiza un analisis a estado Publicado

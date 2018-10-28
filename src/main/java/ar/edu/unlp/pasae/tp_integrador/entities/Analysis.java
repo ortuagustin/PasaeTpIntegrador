@@ -1,8 +1,10 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,7 +32,7 @@ public class Analysis {
 	@ManyToMany(cascade = CascadeType.ALL)
 	private Set<Patient> patients = new HashSet<Patient>();
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Snp> snps = new HashSet<Snp>();
+	private List<Snp> snps = new ArrayList<Snp>();
 	@ManyToOne
 	private Phenotype phenotype;
 	private Long cutoffValue;
@@ -41,7 +43,6 @@ public class Analysis {
 		private Pathology pathology;
 		private String description;
 		private Collection<Patient> patients = new HashSet<Patient>();
-		private Collection<String> snps = new HashSet<String>();
 		private Phenotype phenotype;
 		private Long cutoffValue;
 
@@ -62,11 +63,6 @@ public class Analysis {
 			return this;
 		}
 
-		public AnalysisBuilder addSnps(final Collection<String> snps) {
-			this.snps = snps;
-			return this;
-		}
-
 		public AnalysisBuilder addPatients(final Set<Patient> patients) {
 			this.patients = patients;
 			return this;
@@ -83,7 +79,7 @@ public class Analysis {
 		}
 
 		public Analysis createAnalysis() {
-			final Analysis analysis = new Analysis(this.date, this.state, this.description, this.patients, this.snps, this.phenotype, this.cutoffValue);
+			final Analysis analysis = new Analysis(this.date, this.state, this.description, this.patients, this.phenotype, this.cutoffValue);
 
 			return analysis;
 		}
@@ -98,14 +94,14 @@ public class Analysis {
 		return new AnalysisBuilder();
 	}
 
-	public Analysis(Long id, Date date, AnalysisState state, String description, Set<Patient> patients, Pathology pathology, Set<String> snps,
-			Phenotype phenotype, Long cutoffValue) {
-		this(date, state, description, patients, snps, phenotype, cutoffValue);
+	public Analysis(Long id, Date date, AnalysisState state, String description, Set<Patient> patients,
+			Pathology pathology, Phenotype phenotype, Long cutoffValue) {
+		this(date, state, description, patients, phenotype, cutoffValue);
 		this.setId(id);
 	}
 
-	public Analysis(Date date, AnalysisState state, String description, Collection<Patient> patients, Collection<String> snps,
-			Phenotype phenotype, Long cutoffValue) {
+	public Analysis(Date date, AnalysisState state, String description, Collection<Patient> patients, Phenotype phenotype,
+			Long cutoffValue) {
 		super();
 		this.setDate(date);
 		this.setState(state);
@@ -175,7 +171,7 @@ public class Analysis {
 	/**
 	 * @return the snps
 	 */
-	public Set<Snp> getSnps() {
+	public List<Snp> getSnps() {
 		return this.snps;
 	}
 

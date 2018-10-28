@@ -31,12 +31,14 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisGroup;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Role;
 import ar.edu.unlp.pasae.tp_integrador.entities.RoleName;
+import ar.edu.unlp.pasae.tp_integrador.entities.Snp;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.repositories.AnalysisRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.CustomUserRepository;
@@ -230,5 +232,45 @@ public class AnalysisTests {
 		Assert.assertTrue(lowersGroup.isPresent());
 		Assert.assertEquals(1, highersGroup.get().getPatients().size());
 		Assert.assertTrue(lowersGroup.get().getPatients().isEmpty());
+	}
+
+	@Test
+	public void it_should_not_save_snps_when_creating_analysis_in_pending_state() throws GenotypeDecoderException {
+		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
+		Long analysisId = this.analysisService.create(request).getId();
+		Analysis analysis = this.analysisRepository.findById(analysisId).get();
+
+		Assert.assertTrue(analysis.getSnps().isEmpty());
+	}
+
+	@Test
+	public void it_updates_analysis_to_draft_state() throws GenotypeDecoderException {
+		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
+		Long analysisId = this.analysisService.create(request).getId();
+		Collection<SnpDTO> snps = new ArrayList<>();
+
+		SnpDTO firstSnpDto = new SnpDTO("rs111", Math.random(), Math.random());
+		SnpDTO secondSnpDto = new SnpDTO("rs4112", Math.random(), Math.random());
+
+		snps.add(firstSnpDto);
+		snps.add(secondSnpDto);
+
+		this.analysisService.draft(analysisId, snps);
+
+		Analysis analysis = this.analysisRepository.findById(analysisId).get();
+
+		Assert.assertEquals(AnalysisState.DRAFT, analysis.getState());
+		Assert.assertEquals(2, analysis.getSnps().size());
+
+		Snp firstSnp = analysis.getSnps().stream().filter(each -> each.getSnp().equals("rs111")).findFirst().get();
+		Snp secondSnp = analysis.getSnps().stream().filter(each -> each.getSnp().equals("rs4112")).findFirst().get();
+
+		Assert.assertEquals(firstSnpDto.getSnp(), firstSnp.getSnp());
+		Assert.assertEquals(firstSnpDto.getEstadistico(), firstSnp.getEstadistico());
+		Assert.assertEquals(firstSnpDto.getPvalue(), firstSnp.getPvalue());
+
+		Assert.assertEquals(secondSnpDto.getSnp(), secondSnp.getSnp());
+		Assert.assertEquals(secondSnpDto.getEstadistico(), secondSnp.getEstadistico());
+		Assert.assertEquals(secondSnpDto.getPvalue(), secondSnp.getPvalue());
 	}
 }

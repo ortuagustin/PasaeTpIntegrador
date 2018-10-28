@@ -93,9 +93,10 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	public AnalysisDTO draft(Long analysisId) {
+	public AnalysisDTO draft(Long analysisId, Collection<SnpDTO> snps) {
 		final Analysis entity = this.findAnalysisById(analysisId);
 		entity.setState(AnalysisState.DRAFT);
+		entity.setSnps(this.dtoToSnps(snps));
 
 		return this.save(entity);
 	}
@@ -187,7 +188,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return dto;
 	}
 
-	private Set<SnpDTO> snpsToDTO(Set<Snp> snps) {
+	private Collection<Snp> dtoToSnps(Collection<SnpDTO> snps) {
+		return snps
+			.stream()
+			.map(each -> new Snp(each.getSnp(), each.getEstadistico(), each.getPvalue()))
+			.collect(Collectors.toSet());
+	}
+
+	private Collection<SnpDTO> snpsToDTO(Collection<Snp> snps) {
 		return snps
 			.stream()
 			.map(each -> new SnpDTO(each.getId(), each.getSnp(), each.getPvalue(), each.getEstadistico()))

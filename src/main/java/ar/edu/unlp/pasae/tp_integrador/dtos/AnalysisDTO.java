@@ -47,7 +47,7 @@ public class AnalysisDTO {
 	/**|
 	 * @param snps the snps to set
 	 */
-	public void setSnps(Set<SnpDTO> snps) {
+	public void setSnps(Collection<SnpDTO> snps) {
 		this.snps.clear();
 		this.snps.addAll(snps);
 	}
