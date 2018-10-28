@@ -13,10 +13,10 @@ import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 @Service
 public class GenotypeDecoderServiceImpl implements GenotypeDecoderService {
   public List<String> decodeSnps(String input) throws GenotypeDecoderException {
-    Pattern pattern = Pattern.compile("(?:rs)(\\d+)\\s$", Pattern.CASE_INSENSITIVE);
+    Pattern pattern = Pattern.compile("(?:rs)(\\d+)$", Pattern.CASE_INSENSITIVE);
     List<String> snps = new ArrayList<String>();
 
-    if (snps.isEmpty()) {
+    if (input.isEmpty()) {
       return snps;
     }
 
@@ -27,7 +27,7 @@ public class GenotypeDecoderServiceImpl implements GenotypeDecoderService {
       Matcher matcher = pattern.matcher(line);
 
       if (matcher.find()) {
-        snps.add(matcher.group(1));
+        snps.add(line);
       } else {
         errors.add(new GenotypeDecoderError(line, index));
       }
