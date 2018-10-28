@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ar.edu.unlp.pasae.tp_integrador.entities.Genotype;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.services.GenotypeDecoderError;
 import ar.edu.unlp.pasae.tp_integrador.services.GenotypeDecoderService;

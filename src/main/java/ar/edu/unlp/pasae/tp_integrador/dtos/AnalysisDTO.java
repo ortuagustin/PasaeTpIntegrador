@@ -3,6 +3,7 @@ package ar.edu.unlp.pasae.tp_integrador.dtos;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
@@ -14,7 +15,7 @@ public class AnalysisDTO {
 	private String description;
 	private String phenotypeKind;
 	private Long phenotypeId;
-	private Set<String> snps;
+	private Set<SnpDTO> snps = new HashSet<>();
 	private Long cutoffValue;
 	private Collection<AnalysisGroupDTO> analysisGroups = new ArrayList<>();
 
@@ -39,15 +40,16 @@ public class AnalysisDTO {
 	/**
 	 * @return the snps
 	 */
-	public Set<String> getSnps() {
+	public Set<SnpDTO> getSnps() {
 		return snps;
 	}
 
-	/**
+	/**|
 	 * @param snps the snps to set
 	 */
-	public void setSnps(Set<String> snps) {
-		this.snps = snps;
+	public void setSnps(Set<SnpDTO> snps) {
+		this.snps.clear();
+		this.snps.addAll(snps);
 	}
 
 	/**

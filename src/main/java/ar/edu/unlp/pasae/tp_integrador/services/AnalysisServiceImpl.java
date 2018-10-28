@@ -19,12 +19,14 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisGroupDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis.AnalysisBuilder;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisGroup;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
 import ar.edu.unlp.pasae.tp_integrador.entities.Patient;
 import ar.edu.unlp.pasae.tp_integrador.entities.Phenotype;
+import ar.edu.unlp.pasae.tp_integrador.entities.Snp;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.repositories.AnalysisRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.PatientRepository;
@@ -161,13 +163,20 @@ public class AnalysisServiceImpl implements AnalysisService {
 		dto.setDate(entity.getDate());
 		dto.setState(entity.getState());
 		dto.setDescription(entity.getDescription());
-		// dto.setSnps(entity.getSnps());
+		dto.setSnps(this.snpsToDTO(entity.getSnps()));
 		dto.setCutoffValue(entity.getCutoffValue());
 		dto.setPhenotypeKind(entity.getPhenotype().getKind());
 		dto.setPhenotypeId(entity.getPhenotype().getId());
 		dto.setAnalysisGroups(this.analysisGroupsToDTO(entity.getAnalysisGroups()));
 
 		return dto;
+	}
+
+	private Set<SnpDTO> snpsToDTO(Set<Snp> snps) {
+		return snps
+			.stream()
+			.map(each -> new SnpDTO(each.getId(), each.getSnp(), each.getPvalue(), each.getEstadistico()))
+			.collect(Collectors.toSet());
 	}
 
 	private Collection<AnalysisGroupDTO> analysisGroupsToDTO(Collection<AnalysisGroup> analysisGroups) {
