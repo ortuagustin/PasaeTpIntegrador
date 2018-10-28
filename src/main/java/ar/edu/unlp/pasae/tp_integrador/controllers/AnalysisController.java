@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 
@@ -45,7 +46,7 @@ public class AnalysisController {
   public Collection<AnalysisDTO> listPublished() {
     return this.getAnalysisService().listPublished().collect(Collectors.toList());
   }
-  
+
   @GetMapping(path = "/", produces = "application/json")
 	public Page<AnalysisDTO> indexPageable(
 			@RequestParam(value="newestPage", defaultValue="0") int page,
@@ -56,7 +57,6 @@ public class AnalysisController {
 			) {
 		return this.getAnalysisService().list(page, sizePerPage, sortField, sortOrder, search);
 	}
-
 
   @GetMapping(path = "/{id}", produces = "application/json")
   public AnalysisDTO show(@PathVariable(value = "id") Long id) {
@@ -74,10 +74,10 @@ public class AnalysisController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
   }
-  
-  @PatchMapping(path = "/draft/{id}", consumes = "application/json")
-  public AnalysisDTO draft(@PathVariable(value = "id") Long id) {
-    return this.getAnalysisService().draft(id);
+
+  @PatchMapping(path = "/draft/{id}", consumes = "application/json", produces = "application/json")
+  public AnalysisDTO draft(@PathVariable(value = "id") Long id, @RequestBody Collection<SnpDTO> snps) {
+    return this.getAnalysisService().draft(id, snps);
   }
 
   @PatchMapping(path = "/publish/{id}", consumes = "application/json")
