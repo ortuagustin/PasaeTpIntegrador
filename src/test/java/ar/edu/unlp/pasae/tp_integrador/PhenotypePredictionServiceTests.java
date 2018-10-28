@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,35 +23,33 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PhenotypePredictionRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PhenotypePredictionResultDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
-import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
-import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisGroup;
-import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Role;
 import ar.edu.unlp.pasae.tp_integrador.entities.RoleName;
-import ar.edu.unlp.pasae.tp_integrador.entities.Snp;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
-import ar.edu.unlp.pasae.tp_integrador.repositories.AnalysisRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.CustomUserRepository;
 import ar.edu.unlp.pasae.tp_integrador.repositories.RoleRepository;
 import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 import ar.edu.unlp.pasae.tp_integrador.services.CategoricPhenotypeService;
 import ar.edu.unlp.pasae.tp_integrador.services.NumericPhenotypeService;
 import ar.edu.unlp.pasae.tp_integrador.services.PatientService;
+import ar.edu.unlp.pasae.tp_integrador.services.PhenotypePredictionService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
 @Rollback(true)
-public class AnalysisTests {
+public class PhenotypePredictionServiceTests {
 	@Autowired
 	private CustomUserRepository userRepository;
 	@Autowired
@@ -62,15 +59,15 @@ public class AnalysisTests {
 	@Autowired
 	private AnalysisService analysisService;
 	@Autowired
-	private AnalysisRepository analysisRepository;
-	@Autowired
 	private CategoricPhenotypeService categoricPhenotypeService;
 	@Autowired
 	private NumericPhenotypeService numericPhenotypeService;
 	@Autowired
 	private PatientService patientService;
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+  private PasswordEncoder passwordEncoder;
+  @Autowired
+  private PhenotypePredictionService predictionService;
 
 	private CustomUser admin;
 
@@ -174,106 +171,26 @@ public class AnalysisTests {
 		return this.patientService.list().map(patient -> patient.getId()).collect(Collectors.toSet());
 	}
 
-	@Test
-	public void it_creates_new_draft_analysis_with_categoric_phenotype() throws GenotypeDecoderException {
-		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Categoric", this.categoricPhenotypeId("Adenocarcinoma"), "rs111");
-		Long analysisId = this.analysisService.create(request).getId();
-		AnalysisDTO analysis = this.analysisService.find(analysisId);
-
-		Assert.assertNotNull(analysis);
-		Assert.assertNotNull(analysis.getDate());
-		Assert.assertEquals("Description", analysis.getDescription());
-		Assert.assertEquals(AnalysisState.PENDING, analysis.getState());
-		Assert.assertEquals(this.categoricPhenotypeId("Adenocarcinoma"), analysis.getPhenotypeId());
-		Assert.assertNull(analysis.getCutoffValue());
-		Assert.assertEquals("Categoric", analysis.getPhenotypeKind());
-	}
-
-	@Test
-	public void it_creates_new_draft_analysis_with_numeric_phenotype() throws GenotypeDecoderException {
-		Long cutoffValue = 10L;
-
-		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", cutoffValue);
-		Long analysisId = this.analysisService.create(request).getId();
-		AnalysisDTO analysis = this.analysisService.find(analysisId);
-
-		Assert.assertNotNull(analysis);
-		Assert.assertNotNull(analysis.getDate());
-		Assert.assertEquals("Description", analysis.getDescription());
-		Assert.assertEquals(AnalysisState.PENDING, analysis.getState());
-		Assert.assertEquals(this.numericPhenotypeId("Peso"), analysis.getPhenotypeId());
-		Assert.assertEquals("Numeric", analysis.getPhenotypeKind());
-		Assert.assertEquals(cutoffValue, analysis.getCutoffValue());
-	}
-
-	@Test
-	public void it_returns_one_analysis_groups_per_categoric_phenotype_value() throws GenotypeDecoderException {
-		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Categoric", this.categoricPhenotypeId("Adenocarcinoma"), "rs333");
-		Long analysisId = this.analysisService.create(request).getId();
-		Analysis analysis = this.analysisRepository.findById(analysisId).get();
-
-		Collection<AnalysisGroup> groups = analysis.getAnalysisGroups();
-		Assert.assertEquals(groups.size(), this.categoricPhenotype("Adenocarcinoma").getValues().size());
-
-		Optional<AnalysisGroup> group = analysis.getAnalysisGroup("micropapilar");
-		Assert.assertTrue(group.isPresent());
-		Assert.assertEquals(1, group.get().getPatients().size());
-	}
-
-	@Test
-	public void it_returns_two_analysis_groups_when_using_numeric_phenotype() throws GenotypeDecoderException {
-		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
-		Long analysisId = this.analysisService.create(request).getId();
-		Analysis analysis = this.analysisRepository.findById(analysisId).get();
-
-		Collection<AnalysisGroup> groups = analysis.getAnalysisGroups();
-		Assert.assertEquals(groups.size(), 2);
-
-		Optional<AnalysisGroup> highersGroup = analysis.getAnalysisGroup(">=");
-		Optional<AnalysisGroup> lowersGroup = analysis.getAnalysisGroup("<");
-		Assert.assertTrue(highersGroup.isPresent());
-		Assert.assertTrue(lowersGroup.isPresent());
-		Assert.assertEquals(1, highersGroup.get().getPatients().size());
-		Assert.assertTrue(lowersGroup.get().getPatients().isEmpty());
-	}
-
-	@Test
-	public void it_should_not_save_snps_when_creating_analysis_in_pending_state() throws GenotypeDecoderException {
-		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
-		Long analysisId = this.analysisService.create(request).getId();
-		Analysis analysis = this.analysisRepository.findById(analysisId).get();
-
-		Assert.assertTrue(analysis.getSnps().isEmpty());
-	}
-
-	@Test
-	public void it_updates_analysis_to_draft_state() throws GenotypeDecoderException {
+  @Test
+	public void it_predicts_categoric_phenotype_value() throws GenotypeDecoderException {
 		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
 		Long analysisId = this.analysisService.create(request).getId();
 		Collection<SnpDTO> snps = new ArrayList<>();
 
-		SnpDTO firstSnpDto = new SnpDTO("rs111", Math.random(), Math.random());
-		SnpDTO secondSnpDto = new SnpDTO("rs4112", Math.random(), Math.random());
+		snps.add(new SnpDTO("rs111", Math.random(), Math.random()));
+		snps.add(new SnpDTO("rs4112", Math.random(), Math.random()));
 
-		snps.add(firstSnpDto);
-		snps.add(secondSnpDto);
+    this.analysisService.draft(analysisId, snps);
 
-		this.analysisService.draft(analysisId, snps);
+    Collection<GenotypeDTO> genotypes = new ArrayList<>();
+    genotypes.add(new GenotypeDTO(112, "AC"));
+    genotypes.add(new GenotypeDTO(4131, "TG"));
 
-		Analysis analysis = this.analysisRepository.findById(analysisId).get();
+    PhenotypePredictionRequestDTO predictionRequest = new PhenotypePredictionRequestDTO(analysisId, genotypes);
+    PhenotypePredictionResultDTO predictionResult = this.predictionService.predict(predictionRequest);
 
-		Assert.assertEquals(AnalysisState.DRAFT, analysis.getState());
-		Assert.assertEquals(2, analysis.getSnps().size());
-
-		Snp firstSnp = analysis.getSnps().stream().filter(each -> each.getSnp().equals("rs111")).findFirst().get();
-		Snp secondSnp = analysis.getSnps().stream().filter(each -> each.getSnp().equals("rs4112")).findFirst().get();
-
-		Assert.assertEquals(firstSnpDto.getSnp(), firstSnp.getSnp());
-		Assert.assertEquals(firstSnpDto.getEstadistico(), firstSnp.getEstadistico());
-		Assert.assertEquals(firstSnpDto.getPvalue(), firstSnp.getPvalue());
-
-		Assert.assertEquals(secondSnpDto.getSnp(), secondSnp.getSnp());
-		Assert.assertEquals(secondSnpDto.getEstadistico(), secondSnp.getEstadistico());
-		Assert.assertEquals(secondSnpDto.getPvalue(), secondSnp.getPvalue());
+    Assert.assertEquals(this.numericPhenotypeId("Peso"), predictionResult.getPhenotypeId());
+    Assert.assertEquals("Numeric", predictionResult.getPhenotypeKind());
+    Assert.assertNotNull(predictionResult.getPhenotypeValue());
 	}
 }

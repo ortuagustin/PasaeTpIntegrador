@@ -4,7 +4,6 @@ public class NumericPhenotypeValueDTO {
 	private NumericPhenotypeDTO phenotype;
 	private Long value;
 
-	@SuppressWarnings("unused")
 	private NumericPhenotypeValueDTO() {
 		super();
 	}
