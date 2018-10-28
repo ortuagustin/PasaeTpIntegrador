@@ -70,9 +70,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public AnalysisDTO create(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
 		Analysis entity = this.buildAnalysis(analysis);
 
-		System.out.println("ACA::: " + entity.getPatients());
-		System.out.println("ACA::: " + entity.getDescription());
-
 		return this.save(entity);
 	}
 
