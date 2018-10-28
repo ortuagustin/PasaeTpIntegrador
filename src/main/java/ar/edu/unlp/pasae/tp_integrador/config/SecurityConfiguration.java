@@ -28,10 +28,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.csrf().disable() // Necesario porque sino ignora los request que no son GET (ncesita el CRSF token)
 		.authorizeRequests()
 			.antMatchers("/login").permitAll()
-			.antMatchers("/patients/**").hasAuthority(RoleName.ADMIN.toString())
-			.antMatchers("/scientist/**").hasAuthority(RoleName.SCIENTIST.toString())
+
+			// ADMINISTRADOR gestiona patologías, fenotipos y usuarios
+			.antMatchers("/pathologies/**").hasAuthority(RoleName.ADMIN.toString())
+			.antMatchers("/numeric-phenotypes/**").hasAuthority(RoleName.ADMIN.toString())
+			.antMatchers("/categoric-phenotypes/**").hasAuthority(RoleName.ADMIN.toString())
 			.antMatchers("/admin/**").hasAuthority(RoleName.ADMIN.toString())
-			.antMatchers("/clinical-doctor/**").permitAll()//hasAuthority(RoleName.CLINICAL_DOCTOR.toString())
+
+			// REGISTRANTE gestiona los pacientes
+			.antMatchers("/patients/**").hasAuthority(RoleName.REGISTER.toString())
+
+			// CIENTIFICO gestiona los analisis
+			.antMatchers("/analysis/**").hasAuthority(RoleName.SCIENTIST.toString())
+
+			// MEDICO CLINICO puede visualizar los analisis en estado publicado
+			.antMatchers("/analysis/published").hasAuthority(RoleName.CLINICAL_DOCTOR.toString())
+			// y correrlas para el genotipo de un paciente nuevo
+			// TODO: agregar chequeo rol para esta ultima accion
+
 			.antMatchers("/css/**", "/resources/**").permitAll()
 			.antMatchers("/**").authenticated()
 			//.antMatchers("/secured-admin/**").hasAnyAuthority(RoleName.ADMIN.toString(), RoleName.SCIENTIST.toString()) // Multiples roles
