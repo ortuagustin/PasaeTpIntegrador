@@ -140,31 +140,34 @@ public class AppStartupRunner implements ApplicationRunner {
 	}
 
 	private void createUsers() {
-		// Declaro los roles
-		Role r1 = new Role(RoleName.SCIENTIST.toString());
-		Role r2 = new Role(RoleName.ADMIN.toString());
-		Role r3 = new Role(RoleName.CLINICAL_DOCTOR.toString());
-		Role r4 = new Role(RoleName.REGISTER.toString());
+		Role rol_cientifico = new Role(RoleName.SCIENTIST.toString());
+		Role rol_admin = new Role(RoleName.ADMIN.toString());
+		Role rol_medico_clinico = new Role(RoleName.CLINICAL_DOCTOR.toString());
+		Role rol_registrante = new Role(RoleName.REGISTER.toString());
 
-		// Usuario cientifico de prueba
-		List<Role> roles = new ArrayList<Role>();
-		roles.add(r1);
+		this.roleRepository.save(rol_cientifico);
+		this.roleRepository.save(rol_admin);
+		this.roleRepository.save(rol_medico_clinico);
+		this.roleRepository.save(rol_registrante);
 
-		// Usuario admin de prueba
-		List<Role> roles2 = new ArrayList<Role>();
-		roles2.add(r2);
+		List<Role> roles_cientifico = new ArrayList<>();
+		roles_cientifico.add(rol_cientifico);
 
-		// Guardo los elementos
+		List<Role> roles_registrante = new ArrayList<>();
+		roles_registrante.add(rol_registrante);
 
-		// Guardo los roles
-		this.roleRepository.save(r1);
-		this.roleRepository.save(r2);
-		this.roleRepository.save(r3);
-		this.roleRepository.save(r4);
+		List<Role> roles_medico_clinico = new ArrayList<>();
+		roles_registrante.add(rol_medico_clinico);
 
-		// Guardo los usuarios de prueba
-		this.admin = this.userRepository.save(new CustomUser("admin", passwordEncoder.encode("admin"), "admin@hotmail.com", "admin", "admin", roles2));
-		this.userRepository.save(new CustomUser("genaro", passwordEncoder.encode("prueba"), "genarocamele@hotmail.com", "genaro", "camele", roles));
-		this.userRepository.save(new CustomUser("admin2", passwordEncoder.encode("admin2"), "admin2@hotmail.com", "admin2", "admin2", roles2));
+		List<Role> todos = new ArrayList<>();
+		todos.add(rol_cientifico);
+		todos.add(rol_admin);
+		todos.add(rol_medico_clinico);
+		todos.add(rol_registrante);
+
+		this.admin = this.userRepository.save(new CustomUser("admin", passwordEncoder.encode("admin"), "admin@hotmail.com", "admin", "admin", todos));
+		this.userRepository.save(new CustomUser("genaro", passwordEncoder.encode("genaro"), "genarocamele@hotmail.com", "genaro", "camele", roles_cientifico));
+		this.userRepository.save(new CustomUser("agus", passwordEncoder.encode("agus"), "agus@gmail.com", "agus", "agus", roles_registrante));
+		this.userRepository.save(new CustomUser("mati", passwordEncoder.encode("mati"), "mati@gmail.com", "mati", "mati", roles_medico_clinico));
 	}
 }
