@@ -71,8 +71,25 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Override
 	public AnalysisDTO create(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
 		Analysis entity = this.buildAnalysis(analysis);
+		AnalysisDTO dto = this.save(entity);
+		final Collection<String> snps = this.getGenotypeDecoderService().decodeSnps(analysis.getSnps());
 
-		return this.save(entity);
+		for (String each : snps) {
+			SnpDTO snp = new SnpDTO(each, this.getEstadistico(), this.getPValue());
+			dto.getSnps().add(snp);
+		}
+
+		return dto;
+	}
+
+	private Double getPValue() {
+		// TODO: esto hay que sacarlo de python
+		return Math.random();
+	}
+
+	private Double getEstadistico() {
+		// TODO: esto hay que sacarlo de python
+		return Math.random();
 	}
 
 	@Override
@@ -118,13 +135,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	private Analysis buildAnalysis(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
 		final AnalysisBuilder builder = Analysis.builder();
-		final Collection<String> snps = this.getGenotypeDecoderService().decodeSnps(analysis.getSnps());
 
 		 return builder
 		 	.addDate(new Date())
 			.addState(AnalysisState.PENDING)
 			.addPatients(this.findPatients(analysis.getPatientsIds()))
-			.addSnps(snps)
 			.addCutoffValue(analysis.getCutoffValue())
 			.addDescription(analysis.getDescription())
 			.addPhenotype(this.findPhenotype(analysis.getPhenotypeId()))

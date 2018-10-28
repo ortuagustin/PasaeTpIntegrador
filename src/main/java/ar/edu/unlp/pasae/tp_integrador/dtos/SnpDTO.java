@@ -10,12 +10,16 @@ public class SnpDTO {
 		super();
 	}
 
-	public SnpDTO(Long id, String snp, Double pvalue, Double estadistico) {
+	public SnpDTO(String snp, Double pvalue, Double estadistico) {
 		super();
-		this.setId(id);
 		this.setSnp(snp);
 		this.setPvalue(pvalue);
 		this.setEstadistico(estadistico);
+	}
+
+	public SnpDTO(Long id, String snp, Double pvalue, Double estadistico) {
+		this(snp, pvalue, estadistico);
+		this.setId(id);
 	}
 
 	/**

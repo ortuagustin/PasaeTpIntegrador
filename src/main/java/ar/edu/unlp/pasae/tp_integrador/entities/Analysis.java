@@ -1,15 +1,12 @@
 package ar.edu.unlp.pasae.tp_integrador.entities;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,10 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
-
-import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 
 @Entity
 @SuppressWarnings("unused")
@@ -117,24 +111,8 @@ public class Analysis {
 		this.setState(state);
 		this.setPatients(patients);
 		this.setDescription(description);
-		this.createSnps(snps);
 		this.setPhenotype(phenotype);
 		this.setCutoffValue(cutoffValue);
-	}
-
-	private void createSnps(Collection<String> snps) {
-		for (String each : snps) {
-			Snp snp = new Snp(each, this.getEstadistico(), this.getPValue());
-			this.snps.add(snp);
-		}
-	}
-
-	private Double getPValue() {
-		return Math.random();
-	}
-
-	private Double getEstadistico() {
-		return Math.random();
 	}
 
 	private Analysis() {
