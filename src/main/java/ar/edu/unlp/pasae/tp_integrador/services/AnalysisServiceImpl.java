@@ -234,4 +234,11 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public void setGenotypeDecoderService(GenotypeDecoderService genotypeDecoderService) {
 		this.genotypeDecoderService = genotypeDecoderService;
 	}
+	
+	@Override
+	public void delete(Long analysisId) throws EntityNotFoundException {
+		final Analysis analysis = this.findAnalysisById(analysisId);
+
+		this.getAnalysisRepository().delete(analysis);
+	}
 }

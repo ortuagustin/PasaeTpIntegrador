@@ -81,4 +81,10 @@ public interface AnalysisService {
 	 * @return pagina de paotologias
 	 */
 	Page<AnalysisDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
+	
+	/**
+	 * Elimina un analisis
+	 * @param analysisId el id del analisis
+	 */
+	void delete(Long analysisId) throws EntityNotFoundException;
 }
