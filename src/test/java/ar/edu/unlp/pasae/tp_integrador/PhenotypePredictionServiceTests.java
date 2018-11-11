@@ -194,6 +194,7 @@ public class PhenotypePredictionServiceTests {
     PhenotypePredictionResultDTO predictionResult = this.predictionService.predict(predictionRequest);
 
     Assert.assertEquals(this.numericPhenotypeId("Peso"), predictionResult.getPhenotypeId());
+    Assert.assertEquals("Peso", predictionResult.getPhenotypeName());
     Assert.assertEquals("Numeric", predictionResult.getPhenotypeKind());
     Assert.assertNotNull(predictionResult.getPhenotypeValue());
 	}

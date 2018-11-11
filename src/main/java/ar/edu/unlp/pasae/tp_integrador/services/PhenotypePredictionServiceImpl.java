@@ -34,7 +34,7 @@ public class PhenotypePredictionServiceImpl implements PhenotypePredictionServic
 			predictedValue = Double.toString(Math.random());
 		}
 
-		PhenotypePredictionResultDTO result = new PhenotypePredictionResultDTO(phenotype.getId(), phenotype.getKind(), predictedValue);
+		PhenotypePredictionResultDTO result = new PhenotypePredictionResultDTO(phenotype.getId(), phenotype.getKind(), predictedValue, phenotype.getName());
 
 		return result;
 	}

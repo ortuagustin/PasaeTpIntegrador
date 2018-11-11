@@ -3,17 +3,19 @@ package ar.edu.unlp.pasae.tp_integrador.dtos;
 public class PhenotypePredictionResultDTO {
   private Long phenotypeId;
   private String phenotypeKind;
+  private String phenotypeName;
   private String phenotypeValue;
 
   public PhenotypePredictionResultDTO() {
     super();
   }
 
-  public PhenotypePredictionResultDTO(Long phenotypeId, String phenotypeKind, String phenotypeValue) {
+  public PhenotypePredictionResultDTO(Long phenotypeId, String phenotypeKind, String phenotypeValue, String phenotypeName) {
     super();
     this.setPhenotypeId(phenotypeId);
     this.setPhenotypeKind(phenotypeKind);
     this.setPhenotypeValue(phenotypeValue);
+    this.setPhenotypeName(phenotypeName);
   }
 
   /**
@@ -56,5 +58,19 @@ public class PhenotypePredictionResultDTO {
    */
   public void setPhenotypeId(Long phenotypeId) {
     this.phenotypeId = phenotypeId;
+  }
+
+  /**
+   * @return the phenotypeName
+   */
+  public String getPhenotypeName() {
+    return phenotypeName;
+  }
+
+  /**
+   * @param phenotypeName the phenotypeName to set
+   */
+  public void setPhenotypeName(String phenotypeName) {
+    this.phenotypeName = phenotypeName;
   }
 }
