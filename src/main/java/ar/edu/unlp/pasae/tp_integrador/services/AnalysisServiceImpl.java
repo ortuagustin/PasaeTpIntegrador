@@ -54,16 +54,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return this.toDTO(analysis);
 	}
 
-	@Override
-	public Stream<AnalysisDTO> listDraft() {
-		return this.listByState(AnalysisState.DRAFT);
-	}
-
-	@Override
-	public Stream<AnalysisDTO> listPublished() {
-		return this.listByState(AnalysisState.PUBLISHED);
-	}
-
 	private Double getPValue() {
 		// TODO: esto hay que sacarlo de python
 		return Math.random();
@@ -106,6 +96,25 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 	private PageRequest gotoPage(int page, int sizePerPage, String sortField, Sort.Direction sortDirection) {
 		return PageRequest.of(page, sizePerPage, sortDirection, sortField);
+	}
+
+
+	@Override
+	public Page<AnalysisDTO> listDraft(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
+		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
+		Page<Analysis> result = this.getAnalysisRepository().findByState(AnalysisState.DRAFT, pageRequest);
+
+		return result.map(each -> this.toDTO(each));
+	}
+
+	@Override
+	public Page<AnalysisDTO> listPublished(int page, int sizePerPage, String sortField, String sortOrder, String search) {
+		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
+		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
+		Page<Analysis> result = this.getAnalysisRepository().findByState(AnalysisState.PUBLISHED, pageRequest);
+
+		return result.map(each -> this.toDTO(each));
 	}
 
 	@Override
@@ -167,10 +176,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return this.patientRepository.findAllById(patientsIds)
 			.stream()
 			.collect(Collectors.toSet());
-	}
-
-	private Stream<AnalysisDTO> listByState(AnalysisState state) {
-		return this.getAnalysisRepository().findByState(state).stream().map(each -> this.toDTO(each));
 	}
 
 	private Analysis findAnalysisById(Long analysisId) throws EntityNotFoundException {

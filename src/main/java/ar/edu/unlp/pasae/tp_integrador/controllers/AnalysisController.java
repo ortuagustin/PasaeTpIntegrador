@@ -34,13 +34,25 @@ public class AnalysisController {
 	private AnalysisService analysisService;
 
 	@GetMapping(path = "/draft", produces = "application/json")
-	public Collection<AnalysisDTO> listDraft() {
-		return this.getAnalysisService().listDraft().collect(Collectors.toList());
+	public Page<AnalysisDTO> listDraft(
+		@RequestParam(value="newestPage", defaultValue="0") int page,
+		@RequestParam(value="newestSizePerPage", defaultValue="10") int sizePerPage,
+		@RequestParam(value="newestSortField", defaultValue="date") String sortField,
+		@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder,
+		@RequestParam(value="search", defaultValue="") String search
+	) {
+		return this.getAnalysisService().listDraft(page, sizePerPage, sortField, sortOrder, search);
 	}
 
 	@GetMapping(path = "/published", produces = "application/json")
-	public Collection<AnalysisDTO> listPublished() {
-		return this.getAnalysisService().listPublished().collect(Collectors.toList());
+	public Page<AnalysisDTO> listPublished(
+		@RequestParam(value="newestPage", defaultValue="0") int page,
+		@RequestParam(value="newestSizePerPage", defaultValue="10") int sizePerPage,
+		@RequestParam(value="newestSortField", defaultValue="date") String sortField,
+		@RequestParam(value="newestSortOrder", defaultValue="asc") String sortOrder,
+		@RequestParam(value="search", defaultValue="") String search
+	) {
+		return this.getAnalysisService().listPublished(page, sizePerPage, sortField, sortOrder, search);
 	}
 
 	@GetMapping(path = "/", produces = "application/json")
