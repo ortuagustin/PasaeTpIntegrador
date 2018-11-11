@@ -103,7 +103,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public Page<AnalysisDTO> listDraft(int page, int sizePerPage, String sortField, String sortOrder, String search) {
 		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
 		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
-		Page<Analysis> result = this.getAnalysisRepository().findByState(AnalysisState.DRAFT, pageRequest);
+		Page<Analysis> result;
+
+		if (search.equals("")) {
+			result = this.getAnalysisRepository().findByState(AnalysisState.DRAFT, pageRequest);
+		} else {
+			result = this.getAnalysisRepository().findByStateAndDescriptionContainingIgnoreCase(AnalysisState.DRAFT, search, pageRequest);
+		}
+
 
 		return result.map(each -> this.toDTO(each));
 	}
@@ -112,7 +119,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public Page<AnalysisDTO> listPublished(int page, int sizePerPage, String sortField, String sortOrder, String search) {
 		Sort.Direction sortDirection = (sortOrder.toLowerCase().equals("asc")) ? Sort.Direction.ASC : Sort.Direction.DESC;
 		PageRequest pageRequest = this.gotoPage(page, sizePerPage, sortField, sortDirection); // Genero la pagina solicitada
-		Page<Analysis> result = this.getAnalysisRepository().findByState(AnalysisState.PUBLISHED, pageRequest);
+		Page<Analysis> result;
+
+		if (search.equals("")) {
+			result = this.getAnalysisRepository().findByState(AnalysisState.PUBLISHED, pageRequest);
+		} else {
+			result = this.getAnalysisRepository().findByStateAndDescriptionContainingIgnoreCase(AnalysisState.PUBLISHED, search, pageRequest);
+		}
+
 
 		return result.map(each -> this.toDTO(each));
 	}
