@@ -11,30 +11,30 @@ public class PhenotypePredictionRequestDTO {
 	@NotNull
 	private Long analysisId;
 	@NotEmpty
-	private Collection<GenotypeDTO> genotypes = new ArrayList<>();
+	private Collection<GenotypeDTO> snps = new ArrayList<>();
 
 	public PhenotypePredictionRequestDTO() {
 		super();
 	}
 
-	public PhenotypePredictionRequestDTO(Long analysisId, Collection<GenotypeDTO> genotypes) {
+	public PhenotypePredictionRequestDTO(Long analysisId, Collection<GenotypeDTO> snps) {
 		super();
 		this.setAnalysisId(analysisId);
-		this.setGenotypes(genotypes);
+		this.setSnps(snps);
 	}
 
 	/**
-	 * @return the genotypes
+	 * @return the Snps
 	 */
-	public Collection<GenotypeDTO> getGenotypes() {
-		return genotypes;
+	public Collection<GenotypeDTO> getSnps() {
+		return snps;
 	}
 
 	/**
-	 * @param genotypes the genotypes to set
+	 * @param snps the Snps to set
 	 */
-	public void setGenotypes(Collection<GenotypeDTO> genotypes) {
-		this.genotypes = genotypes;
+	public void setSnps(Collection<GenotypeDTO> snps) {
+		this.snps = snps;
 	}
 
 	/**
