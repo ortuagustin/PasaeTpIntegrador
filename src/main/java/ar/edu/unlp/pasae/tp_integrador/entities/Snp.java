@@ -11,18 +11,18 @@ public class Snp {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String snp;
-	private Double estadistico;
+	private Double statistical;
 	private Double pvalue;
 
-	public Snp(String snp, Double estadistico, Double pvalue) {
+	public Snp(String snp, Double statistical, Double pvalue) {
 		super();
 		this.setSnp(snp);
-		this.setEstadistico(estadistico);
+		this.setStatistical(statistical);
 		this.setPvalue(pvalue);
 	}
 
-	public Snp(Long id, String snp, Double estadistico, Double pvalue) {
-		this(snp, estadistico, pvalue);
+	public Snp(Long id, String snp, Double statistical, Double pvalue) {
+		this(snp, statistical, pvalue);
 		this.setId(id);
 	}
 
@@ -59,17 +59,17 @@ public class Snp {
 	}
 
 	/**
-	 * @return the estadistico
+	 * @return the statistical
 	 */
-	public Double getEstadistico() {
-		return estadistico;
+	public Double getStatistical() {
+		return statistical;
 	}
 
 	/**
-	 * @param estadistico the estadistico to set
+	 * @param statistical the statistical to set
 	 */
-	public void setEstadistico(Double estadistico) {
-		this.estadistico = estadistico;
+	public void setStatistical(Double statistical) {
+		this.statistical = statistical;
 	}
 
 	/**

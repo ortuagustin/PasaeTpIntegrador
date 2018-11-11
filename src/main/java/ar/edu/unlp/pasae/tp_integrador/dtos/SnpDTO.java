@@ -3,37 +3,37 @@ package ar.edu.unlp.pasae.tp_integrador.dtos;
 public class SnpDTO {
 	private Long id;
 	private String snp;
-	private Double estadistico;
+	private Double statistical;
 	private Double pvalue;
 
 	public SnpDTO() {
 		super();
 	}
 
-	public SnpDTO(String snp, Double pvalue, Double estadistico) {
+	public SnpDTO(String snp, Double pvalue, Double statistical) {
 		super();
 		this.setSnp(snp);
 		this.setPvalue(pvalue);
-		this.setEstadistico(estadistico);
+		this.setStatistical(statistical);
 	}
 
-	public SnpDTO(Long id, String snp, Double pvalue, Double estadistico) {
-		this(snp, pvalue, estadistico);
+	public SnpDTO(Long id, String snp, Double pvalue, Double statistical) {
+		this(snp, pvalue, statistical);
 		this.setId(id);
 	}
 
 	/**
-	 * @return the estadistico
+	 * @return the statistical
 	 */
-	public Double getEstadistico() {
-		return estadistico;
+	public Double getStatistical() {
+		return statistical;
 	}
 
 	/**
-	 * @param estadistico the estadistico to set
+	 * @param statistical the statistical to set
 	 */
-	public void setEstadistico(Double estadistico) {
-		this.estadistico = estadistico;
+	public void setStatistical(Double statistical) {
+		this.statistical = statistical;
 	}
 
 	/**

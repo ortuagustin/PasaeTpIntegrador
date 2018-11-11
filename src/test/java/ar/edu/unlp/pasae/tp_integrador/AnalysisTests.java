@@ -199,11 +199,11 @@ public class AnalysisTests {
 		Snp secondSnp = analysis.getSnps().stream().filter(each -> each.getSnp().equals("rs4112")).findFirst().get();
 
 		Assert.assertEquals(firstSnpDto.getSnp(), firstSnp.getSnp());
-		Assert.assertEquals(firstSnpDto.getEstadistico(), firstSnp.getEstadistico());
+		Assert.assertEquals(firstSnpDto.getStatistical(), firstSnp.getStatistical());
 		Assert.assertEquals(firstSnpDto.getPvalue(), firstSnp.getPvalue());
 
 		Assert.assertEquals(secondSnpDto.getSnp(), secondSnp.getSnp());
-		Assert.assertEquals(secondSnpDto.getEstadistico(), secondSnp.getEstadistico());
+		Assert.assertEquals(secondSnpDto.getStatistical(), secondSnp.getStatistical());
 		Assert.assertEquals(secondSnpDto.getPvalue(), secondSnp.getPvalue());
 	}
 }

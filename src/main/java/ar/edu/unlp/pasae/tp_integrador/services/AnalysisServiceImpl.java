@@ -69,7 +69,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return Math.random();
 	}
 
-	private Double getEstadistico() {
+	private Double getStatistical() {
 		// TODO: esto hay que sacarlo de python
 		return Math.random();
 	}
@@ -81,7 +81,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 		final Collection<String> snps = this.getGenotypeDecoderService().decodeSnps(analysis.getSnps());
 
 		for (String each : snps) {
-			SnpDTO snp = new SnpDTO(each, this.getEstadistico(), this.getPValue());
+			SnpDTO snp = new SnpDTO(each, this.getStatistical(), this.getPValue());
 			dto.getSnps().add(snp);
 		}
 
@@ -199,14 +199,14 @@ public class AnalysisServiceImpl implements AnalysisService {
 	private Collection<Snp> dtoToSnps(Collection<SnpDTO> snps) {
 		return snps
 			.stream()
-			.map(each -> new Snp(each.getSnp(), each.getEstadistico(), each.getPvalue()))
+			.map(each -> new Snp(each.getSnp(), each.getStatistical(), each.getPvalue()))
 			.collect(Collectors.toSet());
 	}
 
 	private Collection<SnpDTO> snpsToDTO(Collection<Snp> snps) {
 		return snps
 			.stream()
-			.map(each -> new SnpDTO(each.getId(), each.getSnp(), each.getPvalue(), each.getEstadistico()))
+			.map(each -> new SnpDTO(each.getId(), each.getSnp(), each.getPvalue(), each.getStatistical()))
 			.collect(Collectors.toSet());
 	}
 
