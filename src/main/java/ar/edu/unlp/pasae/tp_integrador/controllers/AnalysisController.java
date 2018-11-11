@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.DraftAnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PendingAnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 
@@ -32,11 +32,6 @@ import ar.edu.unlp.pasae.tp_integrador.services.AnalysisService;
 public class AnalysisController {
 	@Autowired
 	private AnalysisService analysisService;
-
-	@GetMapping(path = "/pending", produces = "application/json")
-	public Collection<AnalysisDTO> listPending() {
-		return this.getAnalysisService().listPending().collect(Collectors.toList());
-	}
 
 	@GetMapping(path = "/draft", produces = "application/json")
 	public Collection<AnalysisDTO> listDraft() {
@@ -64,10 +59,15 @@ public class AnalysisController {
 		return this.getAnalysisService().find(id);
 	}
 
+	@DeleteMapping(path = "/{id}")
+	public void delete(@PathVariable(value = "id") Long id) {
+		this.getAnalysisService().delete(id);
+	}
+
 	@PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-	public Object create(@RequestBody @Valid AnalysisRequestDTO analysis) {
+	public Object pending(@RequestBody @Valid PendingAnalysisRequestDTO analysis) {
 		try {
-			return this.getAnalysisService().create(analysis);
+			return this.getAnalysisService().pending(analysis);
 		} catch (GenotypeDecoderException e) {
 			Map<String, Object> response = new HashMap<String, Object>();
 			response.put("genotype_error", true);
@@ -75,15 +75,17 @@ public class AnalysisController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 		}
 	}
-	
-	@DeleteMapping(path = "/{id}")
-	public void delete(@PathVariable(value = "id") Long id) {
-		this.getAnalysisService().delete(id);
-	}
 
-	@PatchMapping(path = "/draft/{id}", consumes = "application/json", produces = "application/json")
-	public AnalysisDTO draft(@PathVariable(value = "id") Long id, @RequestBody Collection<SnpDTO> snps) {
-		return this.getAnalysisService().draft(id, snps);
+	@PatchMapping(path = "/draft", consumes = "application/json", produces = "application/json")
+	public Object draft(@RequestBody @Valid DraftAnalysisRequestDTO analysis) {
+		try {
+			return this.getAnalysisService().draft(analysis);
+		} catch (GenotypeDecoderException e) {
+			Map<String, Object> response = new HashMap<String, Object>();
+			response.put("genotype_error", true);
+			response.put("errors", e.getErrors());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+		}
 	}
 
 	@PatchMapping(path = "/publish/{id}", consumes = "application/json")

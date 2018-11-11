@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisGroupDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PendingAnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.DraftAnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
@@ -54,11 +55,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	public Stream<AnalysisDTO> listPending() {
-		return this.listByState(AnalysisState.PENDING);
-	}
-
-	@Override
 	public Stream<AnalysisDTO> listDraft() {
 		return this.listByState(AnalysisState.DRAFT);
 	}
@@ -66,20 +62,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 	@Override
 	public Stream<AnalysisDTO> listPublished() {
 		return this.listByState(AnalysisState.PUBLISHED);
-	}
-
-	@Override
-	public AnalysisDTO create(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
-		Analysis entity = this.buildAnalysis(analysis);
-		AnalysisDTO dto = this.save(entity);
-		final Collection<String> snps = this.getGenotypeDecoderService().decodeSnps(analysis.getSnps());
-
-		for (String each : snps) {
-			SnpDTO snp = new SnpDTO(each, this.getEstadistico(), this.getPValue());
-			dto.getSnps().add(snp);
-		}
-
-		return dto;
 	}
 
 	private Double getPValue() {
@@ -93,10 +75,23 @@ public class AnalysisServiceImpl implements AnalysisService {
 	}
 
 	@Override
-	public AnalysisDTO draft(Long analysisId, Collection<SnpDTO> snps) {
-		final Analysis entity = this.findAnalysisById(analysisId);
-		entity.setState(AnalysisState.DRAFT);
-		entity.setSnps(this.dtoToSnps(snps));
+	public AnalysisDTO pending(PendingAnalysisRequestDTO analysis) throws GenotypeDecoderException {
+		Analysis entity = this.buildAnalysis(analysis);
+		AnalysisDTO dto = this.toDTO(entity);
+		final Collection<String> snps = this.getGenotypeDecoderService().decodeSnps(analysis.getSnps());
+
+		for (String each : snps) {
+			SnpDTO snp = new SnpDTO(each, this.getEstadistico(), this.getPValue());
+			dto.getSnps().add(snp);
+		}
+
+		return dto;
+	}
+
+	@Override
+	public AnalysisDTO draft(DraftAnalysisRequestDTO analysis) throws GenotypeDecoderException {
+		Analysis entity = this.buildAnalysis(analysis);
+		entity.setSnps(this.dtoToSnps(analysis.getSnps()));
 
 		return this.save(entity);
 	}
@@ -134,12 +129,25 @@ public class AnalysisServiceImpl implements AnalysisService {
 		return this.toDTO(analysis);
 	}
 
-	private Analysis buildAnalysis(AnalysisRequestDTO analysis) throws GenotypeDecoderException {
+	private Analysis buildAnalysis(PendingAnalysisRequestDTO analysis) throws GenotypeDecoderException {
 		final AnalysisBuilder builder = Analysis.builder();
 
 		 return builder
 		 	.addDate(new Date())
 			.addState(AnalysisState.PENDING)
+			.addPatients(this.findPatients(analysis.getPatientsIds()))
+			.addCutoffValue(analysis.getCutoffValue())
+			.addDescription(analysis.getDescription())
+			.addPhenotype(this.findPhenotype(analysis.getPhenotypeId()))
+			.createAnalysis();
+	}
+
+	private Analysis buildAnalysis(DraftAnalysisRequestDTO analysis) throws GenotypeDecoderException {
+		final AnalysisBuilder builder = Analysis.builder();
+
+		 return builder
+		 	.addDate(new Date())
+			.addState(AnalysisState.DRAFT)
 			.addPatients(this.findPatients(analysis.getPatientsIds()))
 			.addCutoffValue(analysis.getCutoffValue())
 			.addDescription(analysis.getDescription())
@@ -234,7 +242,7 @@ public class AnalysisServiceImpl implements AnalysisService {
 	public void setGenotypeDecoderService(GenotypeDecoderService genotypeDecoderService) {
 		this.genotypeDecoderService = genotypeDecoderService;
 	}
-	
+
 	@Override
 	public void delete(Long analysisId) throws EntityNotFoundException {
 		final Analysis analysis = this.findAnalysisById(analysisId);

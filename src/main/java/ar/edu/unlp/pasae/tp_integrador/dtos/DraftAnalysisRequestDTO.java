@@ -1,11 +1,13 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
 @SuppressWarnings("unused")
-public class AnalysisRequestDTO {
+public class DraftAnalysisRequestDTO {
 	@NotEmpty
 	private Set<Long> patientsIds;
 	@NotEmpty
@@ -13,10 +15,10 @@ public class AnalysisRequestDTO {
 	@NotEmpty
 	private String phenotypeKind;
 	private Long phenotypeId;
-	private String snps = "";
+	private Collection<SnpDTO> snps = new ArrayList<>();
 	private Long cutoffValue;
 
-	public AnalysisRequestDTO(String description, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, String snps) {
+	public DraftAnalysisRequestDTO(String description, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Collection<SnpDTO> snps) {
 		super();
 		this.setDescription(description);
 		this.setPatientsIds(patientsIds);
@@ -26,26 +28,26 @@ public class AnalysisRequestDTO {
 		this.setCutoffValue(null);
 	}
 
-	public AnalysisRequestDTO(String description, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, String snps, Long cutoffValue) {
+	public DraftAnalysisRequestDTO(String description, Set<Long> patientsIds, String phenotypeKind, Long phenotypeId, Collection<SnpDTO> snps, Long cutoffValue) {
 		this(description, patientsIds, phenotypeKind, phenotypeId, snps);
 		this.setCutoffValue(cutoffValue);
 	}
 
-	public AnalysisRequestDTO() {
+	public DraftAnalysisRequestDTO() {
 		super();
 	}
 
 	/**
 	 * @return the snps
 	 */
-	public String getSnps() {
+	public Collection<SnpDTO> getSnps() {
 		return snps;
 	}
 
 	/**
 	 * @param snps the snps to set
 	 */
-	public void setSnps(String snps) {
+	public void setSnps(Collection<SnpDTO> snps) {
 		this.snps = snps;
 	}
 

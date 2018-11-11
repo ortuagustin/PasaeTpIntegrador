@@ -23,9 +23,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PendingAnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.DraftAnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.GenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
@@ -173,14 +174,16 @@ public class PhenotypePredictionServiceTests {
 
   @Test
 	public void it_predicts_categoric_phenotype_value() throws GenotypeDecoderException {
-		AnalysisRequestDTO request = new AnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
-		Long analysisId = this.analysisService.create(request).getId();
+		PendingAnalysisRequestDTO request = new PendingAnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
+		 this.analysisService.pending(request);
 		Collection<SnpDTO> snps = new ArrayList<>();
 
 		snps.add(new SnpDTO("rs111", Math.random(), Math.random()));
 		snps.add(new SnpDTO("rs4112", Math.random(), Math.random()));
 
-		this.analysisService.draft(analysisId, snps);
+		DraftAnalysisRequestDTO draftRequest = new DraftAnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), snps, 50L);
+		Long analysisId = this.analysisService.draft(draftRequest).getId();
+
 		this.analysisService.publish(analysisId);
 
     Collection<GenotypeDTO> genotypes = new ArrayList<>();

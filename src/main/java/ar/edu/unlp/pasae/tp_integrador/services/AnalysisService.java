@@ -1,6 +1,5 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
-import java.util.Collection;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
@@ -8,8 +7,8 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 
 import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisRequestDTO;
-import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.DraftAnalysisRequestDTO;
+import ar.edu.unlp.pasae.tp_integrador.dtos.PendingAnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.exceptions.GenotypeDecoderException;
 
 public interface AnalysisService {
@@ -21,13 +20,6 @@ public interface AnalysisService {
 	 * @return dto con los datos del analisis solicitado
 	 */
 	AnalysisDTO find(Long analysisId) throws EntityNotFoundException;
-
-	/**
-	 * Devuelve un Stream con todos los analisis en estado Pendiente
-	 *
-	 * @return stream de analisis
-	 */
-	Stream<AnalysisDTO> listPending();
 
 	/**
 	 * Devuelve un Stream con todos los analisis en estado Borrador
@@ -50,17 +42,16 @@ public interface AnalysisService {
 	 *
 	 * @return dto con los datos del analisis persistido
 	 */
-	AnalysisDTO create(AnalysisRequestDTO analysis) throws GenotypeDecoderException;
+	AnalysisDTO pending(PendingAnalysisRequestDTO analysis) throws GenotypeDecoderException;
 
 	/**
 	 * Actualiza un analisis a estado Borrador
 	 *
 	 * @param analysisId el id del analisis
-	 * @param snps coleccion de snps seleccionados por el cientifico
 	 *
 	 * @return dto con los datos del analisis actualizado
 	 */
-	AnalysisDTO draft(Long analysisId, Collection<SnpDTO> snps);
+	AnalysisDTO draft(DraftAnalysisRequestDTO analysis) throws GenotypeDecoderException;
 
 	/**
 	 * Actualiza un analisis a estado Publicado
@@ -81,7 +72,7 @@ public interface AnalysisService {
 	 * @return pagina de paotologias
 	 */
 	Page<AnalysisDTO> list(int page, int sizePerPage, String sortField, String sortOrder, String search);
-	
+
 	/**
 	 * Elimina un analisis
 	 * @param analysisId el id del analisis
