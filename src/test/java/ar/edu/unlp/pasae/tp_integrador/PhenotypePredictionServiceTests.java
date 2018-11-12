@@ -1,5 +1,7 @@
 package ar.edu.unlp.pasae.tp_integrador;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -173,7 +175,7 @@ public class PhenotypePredictionServiceTests {
 	}
 
   @Test
-	public void it_predicts_categoric_phenotype_value() throws GenotypeDecoderException {
+	public void it_predicts_categoric_phenotype_value() throws GenotypeDecoderException, NumberFormatException, IOException, URISyntaxException {
 		PendingAnalysisRequestDTO request = new PendingAnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
 		 this.analysisService.pending(request);
 		Collection<SnpDTO> snps = new ArrayList<>();

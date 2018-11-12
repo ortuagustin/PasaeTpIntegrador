@@ -1,5 +1,6 @@
 package ar.edu.unlp.pasae.tp_integrador.dtos;
 
+@SuppressWarnings("unused")
 public class NumericPhenotypeValueDTO {
 	private NumericPhenotypeDTO phenotype;
 	private Long value;

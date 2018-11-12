@@ -1,11 +1,12 @@
 package ar.edu.unlp.pasae.tp_integrador;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import ar.edu.unlp.pasae.tp_integrador.dtos.AnalysisDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PendingAnalysisRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.CategoricPhenotypeValueRequestDTO;
@@ -34,7 +34,6 @@ import ar.edu.unlp.pasae.tp_integrador.dtos.NumericPhenotypeValueRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.PatientRequestDTO;
 import ar.edu.unlp.pasae.tp_integrador.dtos.SnpDTO;
 import ar.edu.unlp.pasae.tp_integrador.entities.Analysis;
-import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisGroup;
 import ar.edu.unlp.pasae.tp_integrador.entities.AnalysisState;
 import ar.edu.unlp.pasae.tp_integrador.entities.CustomUser;
 import ar.edu.unlp.pasae.tp_integrador.entities.Role;
@@ -176,7 +175,7 @@ public class AnalysisTests {
 	}
 
 	@Test
-	public void it_updates_analysis_to_draft_state() throws GenotypeDecoderException {
+	public void it_updates_analysis_to_draft_state() throws GenotypeDecoderException, NumberFormatException, IOException, URISyntaxException {
 		PendingAnalysisRequestDTO request = new PendingAnalysisRequestDTO("Description", this.patientsIds(), "Numeric", this.numericPhenotypeId("Peso"), "rs111", 50L);
 		this.analysisService.pending(request);
 		Collection<SnpDTO> snps = new ArrayList<>();

@@ -1,8 +1,5 @@
 package ar.edu.unlp.pasae.tp_integrador.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -111,30 +108,6 @@ public class AdminController {
 	@DeleteMapping(path = "/users/{id}")
 	public void addAction(@PathVariable(value = "id") Long id) {
 		this.getCustomUserService().delete(id);
-	}
-
-	/**
-	 * PRUEBA: Ejecuta el script en python
-	 * @return Resultado del script de python
-	 * @throws URISyntaxException 
-	 */
-	@GetMapping(path="/prueba-python")
-	public String pruebaAction() throws URISyntaxException {
-		String response = "";
-		Process p;
-		try {
-			String pythonScriptURL = this.getClass().getClassLoader().getResource("script_prueba.py").toURI().getPath();
-			System.out.println(pythonScriptURL);
-			p = Runtime.getRuntime().exec("python " + pythonScriptURL);
-			InputStream is = p.getInputStream();
-
-			try(java.util.Scanner s = new java.util.Scanner(is)) {
-				return s.useDelimiter("\\A").hasNext() ? s.next() : "";
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return response;
 	}
 
 	/**

@@ -1,11 +1,13 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -53,19 +55,49 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 		return this.toDTO(analysis);
 	}
-
-	private Double getPValue() {
-		// TODO: esto hay que sacarlo de python
-		return Math.random();
+	
+	/**
+	 * Llama al script en Python para obtener el p-valor o el valor estadistico
+	 * para un analisis
+	 * @param field 'pvalue' | 'statistical' Para saber que se le solicita al script de python
+	 * @return Salida del script
+	 * @throws IOException 
+	 * @throws URISyntaxException 
+	 */
+	private String callPythonScript(String field) throws IOException, URISyntaxException {
+		String pythonScriptURL = this.getClass().getClassLoader().getResource("random_generator.py").toURI().getPath();
+		Process process = Runtime.getRuntime().exec("python " + pythonScriptURL + " " + field);
+		InputStream input = process.getInputStream();
+		java.util.Scanner scanner = new java.util.Scanner(input);
+		String response = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+		scanner.close();
+		return response;
 	}
 
-	private Double getStatistical() {
-		// TODO: esto hay que sacarlo de python
-		return Math.random();
+	/**
+	 * Obtiene el P-valor
+	 * @return P-valor
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
+	private Double getPValue() throws NumberFormatException, IOException, URISyntaxException {
+		return Double.parseDouble(this.callPythonScript("pvalue"));
+	}
+
+	/**
+	 * Obtiene el stadistico
+	 * @return valor estadistico
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 * @throws URISyntaxException
+	 */
+	private Double getStatistical() throws NumberFormatException, IOException, URISyntaxException {
+		return Double.parseDouble(this.callPythonScript("statistical"));
 	}
 
 	@Override
-	public AnalysisDTO pending(PendingAnalysisRequestDTO analysis) throws GenotypeDecoderException {
+	public AnalysisDTO pending(PendingAnalysisRequestDTO analysis) throws GenotypeDecoderException, NumberFormatException, IOException, URISyntaxException {
 		Analysis entity = this.buildAnalysis(analysis);
 		AnalysisDTO dto = this.toDTO(entity);
 		final Collection<String> snps = this.getGenotypeDecoderService().decodeSnps(analysis.getSnps());
