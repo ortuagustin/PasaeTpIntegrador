@@ -30,12 +30,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/login").permitAll()
 
 			// ADMINISTRADOR gestiona patologías, fenotipos y usuarios
-			.antMatchers("/pathologies/**").hasAuthority(RoleName.ADMIN.toString())
-			.antMatchers("/numeric-phenotypes/**").hasAuthority(RoleName.ADMIN.toString())
-			.antMatchers("/categoric-phenotypes/**").hasAuthority(RoleName.ADMIN.toString())
+			.antMatchers("/pathologies/**").hasAnyAuthority(RoleName.ADMIN.toString(), RoleName.REGISTER.toString())
+			.antMatchers("/numeric-phenotypes/**").hasAnyAuthority(RoleName.ADMIN.toString(), RoleName.REGISTER.toString())
+			.antMatchers("/categoric-phenotypes/**").hasAnyAuthority(RoleName.ADMIN.toString(), RoleName.REGISTER.toString())
 			.antMatchers("/admin/**").hasAuthority(RoleName.ADMIN.toString())
 
-			// REGISTRANTE gestiona los pacientes
+			// REGISTRANTE gestiona los pacientes; necesita acceso a patologías y fenotipos
 			.antMatchers("/patients/**").hasAuthority(RoleName.REGISTER.toString())
 
 			// CIENTIFICO gestiona los analisis

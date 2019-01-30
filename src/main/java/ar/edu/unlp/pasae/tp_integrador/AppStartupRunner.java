@@ -157,7 +157,7 @@ public class AppStartupRunner implements ApplicationRunner {
 		roles_registrante.add(rol_registrante);
 
 		List<Role> roles_medico_clinico = new ArrayList<>();
-		roles_registrante.add(rol_medico_clinico);
+		roles_medico_clinico.add(rol_medico_clinico);
 
 		List<Role> todos = new ArrayList<>();
 		todos.add(rol_cientifico);
