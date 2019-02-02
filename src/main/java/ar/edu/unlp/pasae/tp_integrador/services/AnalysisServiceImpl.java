@@ -55,26 +55,22 @@ public class AnalysisServiceImpl implements AnalysisService {
 
 		return this.toDTO(analysis);
 	}
-
+	
 	/**
 	 * Llama al script en Python para obtener el p-valor o el valor estadistico
 	 * para un analisis
 	 * @param field 'pvalue' | 'statistical' Para saber que se le solicita al script de python
 	 * @return Salida del script
-	 * @throws IOException
-	 * @throws URISyntaxException
+	 * @throws IOException 
+	 * @throws URISyntaxException 
 	 */
 	private String callPythonScript(String field) throws IOException, URISyntaxException {
-		System.out.println("Entro a callPythonScript >>>>>>>>>>>>>");
 		String pythonScriptURL = this.getClass().getClassLoader().getResource("random_generator.py").toURI().getPath();
-		System.out.println("pythonScriptURL >>>>>>>>>>>>>" + pythonScriptURL);
 		Process process = Runtime.getRuntime().exec("python " + pythonScriptURL + " " + field);
 		InputStream input = process.getInputStream();
 		java.util.Scanner scanner = new java.util.Scanner(input);
 		String response = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
 		scanner.close();
-		System.out.println("response >>>>>>>>>>>>>" + response);
-
 		return response;
 	}
 
@@ -86,7 +82,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 	 * @throws URISyntaxException
 	 */
 	private Double getPValue() throws NumberFormatException, IOException, URISyntaxException {
-		System.out.println("Llamando a python para obtener pvalue");
 		return Double.parseDouble(this.callPythonScript("pvalue"));
 	}
 
@@ -98,7 +93,6 @@ public class AnalysisServiceImpl implements AnalysisService {
 	 * @throws URISyntaxException
 	 */
 	private Double getStatistical() throws NumberFormatException, IOException, URISyntaxException {
-		System.out.println("Llamando a python para obtener statistical");
 		return Double.parseDouble(this.callPythonScript("statistical"));
 	}
 
