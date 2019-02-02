@@ -1,9 +1,8 @@
 package ar.edu.unlp.pasae.tp_integrador.controllers;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +75,7 @@ public class AnalysisController {
 	}
 
 	@PutMapping(path = "/", consumes = "application/json", produces = "application/json")
-	public Object pending(@RequestBody @Valid PendingAnalysisRequestDTO analysis) throws NumberFormatException, IOException, URISyntaxException {
+	public Object pending(@RequestBody @Valid PendingAnalysisRequestDTO analysis) {
 		try {
 			return this.getAnalysisService().pending(analysis);
 		} catch (GenotypeDecoderException e) {

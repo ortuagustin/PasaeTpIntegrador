@@ -1,8 +1,5 @@
 package ar.edu.unlp.pasae.tp_integrador.services;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.data.domain.Page;
@@ -28,11 +25,8 @@ public interface AnalysisService {
 	 * @param analysis dto con los datos del analisis
 	 *
 	 * @return dto con los datos del analisis persistido
-	 * @throws URISyntaxException 
-	 * @throws IOException 
-	 * @throws NumberFormatException 
 	 */
-	AnalysisDTO pending(PendingAnalysisRequestDTO analysis) throws GenotypeDecoderException, NumberFormatException, IOException, URISyntaxException;
+	AnalysisDTO pending(PendingAnalysisRequestDTO analysis) throws GenotypeDecoderException;
 
 	/**
 	 * Actualiza un analisis a estado Borrador
